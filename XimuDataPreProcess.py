@@ -28,15 +28,27 @@ class XimuDataPreProcess:
                 df = [[float(x) for x in line[:4]] for line in lines[1:]]
 
                 '''
-                self.data_index =  np.loadtxt(file_dir + "/" + file_name,delimiter=',',dtype='str')
-                self.data_index = self.data_index[1:,:].astype('float')
+                # self.data_index =  np.loadtxt(file_dir + "/" + file_name,delimiter=',',dtype='str')
+                # self.data_index = self.data_index[1:,:].astype('float')
 
+                the_lines = [line.split(',') for line in open(file_dir + '/' + file_name)]
 
-                print(self.data_index.shape)
-                print(self.data_index[0,:])
+                the_lines = the_lines[1:]
+                self.data_index = np.asarray(the_lines,dtype=float)
+                # print(self.data_index.shape)
+                # print(self.data_index[0,:])
 
             elif 'Time' in file_name:
                 print("time",file_name)
+                the_lines = [line.split(',') for line in open(file_dir + '/' + file_name)]
+
+                the_lines = the_lines[1:]
+
+                self.time_index = np.asarray(the_lines,dtype=float)
+
+                print(self.time_index.shape)
+                print(self.time_index[0,:])
+
 
 
 

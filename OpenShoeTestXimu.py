@@ -45,10 +45,10 @@ if __name__ == '__main__':
     setting.min_rud_sep = int(1/setting.Ts)
     setting.range_constraint_on = False
 
-    setting.time_Window_size = 5
-    setting.gamma = 0.4e7
-    setting.sigma_a = 0.05
-    setting.sigma_g = 0.35 * np.pi / 180.0
+    setting.time_Window_size = 10
+    setting.gamma = 0.225e7
+    # setting.sigma_a = 0.05
+    # setting.sigma_g = 0.35 * np.pi / 180.0
 
     '''
     Zero-volocity Detector
@@ -74,13 +74,13 @@ if __name__ == '__main__':
     '''
     ins_filter = PdrEkf.ZUPTaidedIns(setting)
 
-    ins_filter.init_Nav_eq(source_data[1:20,1:],source_data[1:20,1:])
+    ins_filter.init_Nav_eq(source_data[1:40,1:7],source_data[1:40,1:7])
 
     '''
     Run filter
     '''
-    u1 = source_data[:,1:]
-    u2 = source_data[:,1:]
+    u1 = source_data[:,1:7]
+    u2 = source_data[:,1:7]
 
     zupt1 = zupt2 = ZUPT1
 
@@ -103,14 +103,15 @@ if __name__ == '__main__':
 
     # SHOW RESULT
     plt.figure(1)
-    plt.grid()
+    plt.grid(True)
 
     # plt.plot(all_x[0, :], all_x[1, :], all_x[2, :], 'r')
     # plt.plot(all_x[9, :], all_x[10, :], all_x[11, :], 'b')
 
-    plt.plot(all_x[0, :], all_x[1, :], 'r+')
+    plt.plot(all_x[0, :], all_x[1, :], 'r+-')
 
     plt.figure(2)
+    plt.grid(True)
     plt.plot(all_x[2,:],'y-+')
 
     # plt.figure(12)

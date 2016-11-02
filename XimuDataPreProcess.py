@@ -67,6 +67,16 @@ class XimuDataPreProcess:
         print(self.sec_index)
 
         # Test synchronic
+        # plt.figure(1)
+        # plt.plot(self.sec_index[:,0],'r+-')
+        # plt.grid(True)
+        #
+        # plt.figure(2)
+        # plt.plot(self.sec_index[:,1],'r+-')
+        #
+        # plt.show()
+        
+
 
 
 

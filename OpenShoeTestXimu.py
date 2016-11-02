@@ -40,14 +40,15 @@ if __name__ == '__main__':
     setting = Setting.settings()
     # setting.Ts = 1.0/128.0
 
-    setting.Ts = 0.025974
+    setting.Ts = np.mean(source_data[1:,0]-source_data[0:-1,0])
+    print("settin:",setting.Ts)
     setting.min_rud_sep = int(1/setting.Ts)
-
-    setting.time_Window_size = 5
-
     setting.range_constraint_on = False
 
-    # setting.gamma = 1.0
+    setting.time_Window_size = 5
+    setting.gamma = 0.4e7
+    setting.sigma_a = 0.05
+    setting.sigma_g = 0.35 * np.pi / 180.0
 
     '''
     Zero-volocity Detector
@@ -57,7 +58,7 @@ if __name__ == '__main__':
     # print(source_data[:,1:7])
     #
     plt.figure(1)
-    plt.plot(ZUPT1*100,'r-')
+    plt.plot(ZUPT1*50,'r-')
     plt.plot(source_data[:,1],'g-+')
     plt.plot(source_data[:,2],'y-+')
     plt.plot(source_data[:,3],'b-+')

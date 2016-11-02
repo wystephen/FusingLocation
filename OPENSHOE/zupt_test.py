@@ -34,6 +34,10 @@ class zupte_test:
         T = T / W
 
         zupt = np.zeros([u.shape[0], 1])
+        # import matplotlib.pyplot as plt
+        # plt.figure(1)
+        # plt.plot(T)
+        # plt.show()
         for k in range(T.shape[0]):
             if T[k] < self.setting.gamma:
                 zupt[k:k + W] = np.ones([W, 1])

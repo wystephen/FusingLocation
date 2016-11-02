@@ -94,9 +94,9 @@ class XimuDataPreProcess:
                 last_second_point = i+1
         self.sec_index = self.sec_index[first_use_point:last_second_point,:]
 
-        # plt.figure(1)
-        # plt.plot(self.sec_index[:,1],self.sec_index[:,0],'r+-')
-        # plt.show()
+        plt.figure(1)
+        plt.plot(self.sec_index[:,1],self.sec_index[:,0],'r+-')
+        plt.show()
 
         # Add time to acc and gyrl
 
@@ -118,4 +118,4 @@ if __name__ == '__main__':
     '''
     Just for Test
     '''
-    xdpp = XimuDataPreProcess("test3")
+    xdpp = XimuDataPreProcess("test6")

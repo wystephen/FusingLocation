@@ -1,11 +1,11 @@
 # -*- coding:utf-8 -*-
 # Create by steve in 16-10-20 at 上午10:50
 
-from PdrEkf import ZUPTaidedIns
+from OPENSHOE.PdrEkf import ZUPTaidedIns
 
-from Setting import settings
+from OPENSHOE.Setting import settings
 
-from zupt_test import zupte_test
+from OPENSHOE.zupt_test import zupte_test
 
 import numpy as np
 

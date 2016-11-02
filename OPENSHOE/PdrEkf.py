@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 # Create by steve in 16-9-21 at 上午9:22
 
-from Setting import settings
+from OPENSHOE.Setting import settings
 #
 import numpy as np
 

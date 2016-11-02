@@ -102,9 +102,10 @@ class XimuDataPreProcess:
         # print(self.data_index.shape)
         start_index = -10
         end_index = -1000000
+        speed_up_index = 0
         for i in range(self.data_index.shape[0]):
             index_tmp = self.data_index[i,0]
-            for j in range(self.sec_index.shape[0]):
+            for j in range(speed_up_index,self.sec_index.shape[0]):
                 if 0 < (index_tmp - self.sec_index[j,1]) < 5:
                     # print("shot on.")
                     if start_index < 0 :
@@ -116,6 +117,7 @@ class XimuDataPreProcess:
                                 (index_tmp-self.sec_index[j,1])/(self.sec_index[j,1]-self.sec_index[j-1,1]) * \
                                 (self.sec_index[j,0]-self.sec_index[j-1,0])
                     self.data_index[i,0] = time_tmp
+                    speed_up_index = j-1
                     continue
         self.data_index = self.data_index[start_index:end_index,:]
         #

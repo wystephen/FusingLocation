@@ -65,17 +65,36 @@ class XimuDataPreProcess:
             self.sec_index[index,1]= self.time_index[index,0]
 
         print(self.sec_index)
+        # np.savetxt('sec_index.txt',self.sec_index.astype('int'))
 
         # Test synchronic
         # plt.figure(1)
-        # plt.plot(self.sec_index[:,0],'r+-')
+        # plt.plot(self.sec_index[:,1],'b+-')
         # plt.grid(True)
         #
         # plt.figure(2)
         # plt.plot(self.sec_index[:,1],'r+-')
         #
         # plt.show()
-        
+
+        last_second_point = 0
+        last_second_point = 0
+
+        for i in range(self.sec_index.shape[0]):
+            if i == self.sec_index.shape[0] or self.sec_index[i,0] < self.sec_index[i+1,0] - 0.8:
+                # Don't use the first second's data.
+
+                if last_second_point == 0:
+
+                    last_second_point = i+1
+                    continue
+                index_offset = self.data_index[i,1] - self.data_index[last_second_point,1]
+
+                print(1.0 / float(index_offset))
+
+                last_second_point = i+1
+
+
 
 
 

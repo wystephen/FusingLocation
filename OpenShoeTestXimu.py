@@ -53,7 +53,9 @@ if __name__ == '__main__':
 
     # For Ekf Filter
     setting.init_heading1 = setting.init_heading2
-    
+
+    setting.sigma_acc = setting.sigma_acc / 2.0
+
 
     '''
     Zero-volocity Detector

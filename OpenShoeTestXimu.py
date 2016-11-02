@@ -41,14 +41,19 @@ if __name__ == '__main__':
     # setting.Ts = 1.0/128.0
 
     setting.Ts = np.mean(source_data[1:,0]-source_data[0:-1,0])
-    print("settin:",setting.Ts)
+    print("setting:",setting.Ts)
     setting.min_rud_sep = int(1/setting.Ts)
     setting.range_constraint_on = False
 
-    setting.time_Window_size = 10
+    # For Zero Velocity Detector
+    setting.time_Window_size = 5
     setting.gamma = 0.225e7
     # setting.sigma_a = 0.05
     # setting.sigma_g = 0.35 * np.pi / 180.0
+
+    # For Ekf Filter
+    setting.init_heading1 = setting.init_heading2
+    
 
     '''
     Zero-volocity Detector
@@ -102,17 +107,28 @@ if __name__ == '__main__':
     print(np.linalg.norm(all_x[9:12, u1.shape[0] - 1]))
 
     # SHOW RESULT
-    plt.figure(1)
+    # plt.figure(1)
+    # plt.grid(True)
+    #
+    # # plt.plot(all_x[0, :], all_x[1, :], all_x[2, :], 'r')
+    # # plt.plot(all_x[9, :], all_x[10, :], all_x[11, :], 'b')
+    #
+    # plt.plot(all_x[0, :], all_x[1, :], 'r+-')
+    #
+    # plt.figure(2)
+    # plt.grid(True)
+    # plt.plot(all_x[2,:],'y-+')
+    '''
+    3D PLOT
+    '''
+    from mpl_toolkits.mplot3d import Axes3D
+
+    fig = plt.figure(1)
+
+    ax = fig.gca(projection='3d')
+    ax.plot(all_x[0,:],all_x[1,:],all_x[2,:],'r+-')
+    ax.plot(all_x[9,:],all_x[10,:],all_x[11,:],'b+-')
     plt.grid(True)
-
-    # plt.plot(all_x[0, :], all_x[1, :], all_x[2, :], 'r')
-    # plt.plot(all_x[9, :], all_x[10, :], all_x[11, :], 'b')
-
-    plt.plot(all_x[0, :], all_x[1, :], 'r+-')
-
-    plt.figure(2)
-    plt.grid(True)
-    plt.plot(all_x[2,:],'y-+')
 
     # plt.figure(12)
     #

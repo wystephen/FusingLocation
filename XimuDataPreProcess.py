@@ -78,19 +78,19 @@ class XimuDataPreProcess:
         # plt.show()
 
         last_second_point = 0
-        last_second_point = 0
 
         for i in range(self.sec_index.shape[0]):
-            if i == self.sec_index.shape[0] or self.sec_index[i,0] < self.sec_index[i+1,0] - 0.8:
+            if i == self.sec_index.shape[0]-1 or self.sec_index[i,0] < self.sec_index[i+1,0] - 0.8:
                 # Don't use the first second's data.
 
                 if last_second_point == 0:
 
                     last_second_point = i+1
                     continue
-                index_offset = self.data_index[i,1] - self.data_index[last_second_point,1]
+                index_offset = self.sec_index[i,1] - self.sec_index[last_second_point,1]
 
-                print(1.0 / float(index_offset))
+                print(1/(index_offset))
+                # print(self.data_index[i,1],self.data_index[last_second_point,1])
 
                 last_second_point = i+1
 
@@ -111,4 +111,4 @@ if __name__ == '__main__':
     '''
     Just for Test
     '''
-    xdpp = XimuDataPreProcess("test4")
+    xdpp = XimuDataPreProcess("test3")

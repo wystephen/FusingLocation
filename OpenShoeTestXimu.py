@@ -15,7 +15,7 @@ if __name__ == '__main__':
     '''
     Load Data
     '''
-    xdpp = XimuDataPreProcess.XimuDataPreProcess("test14")
+    xdpp = XimuDataPreProcess.XimuDataPreProcess("test13")
 
     source_data = xdpp.data_index
 
@@ -50,8 +50,8 @@ if __name__ == '__main__':
     setting.range_constraint_on = False
 
     # For Zero Velocity Detector
-    setting.time_Window_size = 10
-    # setting.gamma = 0.2e7
+    setting.time_Window_size = 5
+    setting.gamma = 360
     # setting.sigma_a = 0.05
     # setting.sigma_g = 0.35 * np.pi / 180.0
 

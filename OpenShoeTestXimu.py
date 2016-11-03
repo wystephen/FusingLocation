@@ -15,7 +15,7 @@ if __name__ == '__main__':
     '''
     Load Data
     '''
-    xdpp = XimuDataPreProcess.XimuDataPreProcess("test8")
+    xdpp = XimuDataPreProcess.XimuDataPreProcess("test14")
 
     source_data = xdpp.data_index
 
@@ -102,8 +102,8 @@ if __name__ == '__main__':
     for index in range(u1.shape[0]):
         if (index % 100 == 0):
             print(float(index) / u1.shape[0])
-        # if index <1:
-        #     ins_filter.para.Ts  = source_data[index,0]-source_data[index-1,0]
+        if index > 1:
+            ins_filter.para.Ts  = source_data[index,0]-source_data[index-1,0]
         all_x[:, index] = ins_filter.GetPosition(u1[index, :],
                                                  u2[index, :],
                                                  zupt1[index],
@@ -117,11 +117,11 @@ if __name__ == '__main__':
     print(np.linalg.norm(all_x[9:12, u1.shape[0] - 1]))
 
     # SHOW RESULT
-    # plt.figure(1)
-    # plt.grid(True)
-    #
-    # # plt.plot(all_x[0, :], all_x[1, :], all_x[2, :], 'r')
-    # # plt.plot(all_x[9, :], all_x[10, :], all_x[11, :], 'b')
+    plt.figure(1)
+    plt.grid(True)
+
+    plt.plot(all_x[0, :], all_x[1, :], 'r')
+    # plt.plot(all_x[9, :], all_x[10, :], all_x[11, :], 'b')
     #
     # plt.plot(all_x[0, :], all_x[1, :], 'r+-')
     #
@@ -133,7 +133,7 @@ if __name__ == '__main__':
     '''
     from mpl_toolkits.mplot3d import Axes3D
 
-    fig = plt.figure(1)
+    fig = plt.figure(2)
 
     ax = fig.gca(projection='3d')
     ax.plot(all_x[0,:],all_x[1,:],all_x[2,:],'r+-')

@@ -15,7 +15,7 @@ if __name__ == '__main__':
     '''
     Load Data
     '''
-    xdpp = XimuDataPreProcess.XimuDataPreProcess("test5")
+    xdpp = XimuDataPreProcess.XimuDataPreProcess("test12")
 
     source_data = xdpp.data_index
 
@@ -24,16 +24,20 @@ if __name__ == '__main__':
     PreProcessData
     '''
 
+    print("first mean:",np.mean(source_data[:,1:7],axis=0))
     #deg to rad
     source_data[:,1:4] = source_data[:,1:4] * np.pi / 180.0
 
     # g to m/s^2
     source_data[:,4:7] = source_data[:,4:7] * 9.80
 
-    tsource_data = source_data
+    tsource_data = source_data.copy()
     #Exchange acc and gyr
-    source_data[:,1:4] ,source_data[:,4:7] = tsource_data[:,4:7],tsource_data[:,1:4]
+    # source_data[:,1:4] ,source_data[:,4:7] = tsource_data[:,4:7],tsource_data[:,1:4]
+    source_data[:,1:4] = tsource_data[:,4:7]
+    source_data[:,4:7] = tsource_data[:,1:4]
 
+    print("mean:",np.mean(source_data[:,1:7],axis=0))
     '''
     Set parameter
     '''
@@ -46,15 +50,15 @@ if __name__ == '__main__':
     setting.range_constraint_on = False
 
     # For Zero Velocity Detector
-    setting.time_Window_size = 5
-    setting.gamma = 0.225e7
+    setting.time_Window_size = 10
+    # setting.gamma = 0.2e7
     # setting.sigma_a = 0.05
     # setting.sigma_g = 0.35 * np.pi / 180.0
 
     # For Ekf Filter
     setting.init_heading1 = setting.init_heading2
 
-    setting.sigma_acc = setting.sigma_acc / 2.0
+    # setting.sigma_acc = setting.sigma_acc / 2.0
 
 
     '''
@@ -89,6 +93,8 @@ if __name__ == '__main__':
     u1 = source_data[:,1:7]
     u2 = source_data[:,1:7]
 
+    # ZUPT1 = np.zeros_like(ZUPT1)
+
     zupt1 = zupt2 = ZUPT1
 
     all_x = np.zeros([18,source_data.shape[0]])
@@ -96,6 +102,8 @@ if __name__ == '__main__':
     for index in range(u1.shape[0]):
         if (index % 100 == 0):
             print(float(index) / u1.shape[0])
+        # if index <1:
+        #     ins_filter.para.Ts  = source_data[index,0]-source_data[index-1,0]
         all_x[:, index] = ins_filter.GetPosition(u1[index, :],
                                                  u2[index, :],
                                                  zupt1[index],

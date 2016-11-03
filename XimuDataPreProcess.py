@@ -35,6 +35,9 @@ class XimuDataPreProcess:
 
                 the_lines = the_lines[1:]
                 self.data_index = np.asarray(the_lines,dtype=float)
+                # plt.figure(1)
+                # plt.plot(self.data_index[1:,0]-self.data_index[0:-1,0],'r+-')
+                # plt.show()
                 # print(self.data_index.shape)
                 # print(self.data_index[0,:])
 

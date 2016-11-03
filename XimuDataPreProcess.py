@@ -31,9 +31,13 @@ class XimuDataPreProcess:
                 # self.data_index =  np.loadtxt(file_dir + "/" + file_name,delimiter=',',dtype='str')
                 # self.data_index = self.data_index[1:,:].astype('float')
 
-                the_lines = [line.split(',') for line in open(file_dir + '/' + file_name)]
+                the_lines = [line.split(',')[:-1] for line in open(file_dir + '/' + file_name)]
 
+                # print(the_lines)
                 the_lines = the_lines[1:]
+                # print(the_lines)
+
+
                 self.data_index = np.asarray(the_lines,dtype=float)
                 # plt.figure(1)
                 # plt.plot(self.data_index[1:,0]-self.data_index[0:-1,0],'r+-')
@@ -43,14 +47,12 @@ class XimuDataPreProcess:
 
             elif 'Time' in file_name:
                 # print("time",file_name)
-                the_lines = [line.split(',') for line in open(file_dir + '/' + file_name)]
+                the_lines = [line.split(',')  for line in open(file_dir + '/' + file_name)]
+                print(the_lines)
 
                 the_lines = the_lines[1:]
 
                 self.time_index = np.asarray(the_lines,dtype=int)
-                # print(self.time_index.shape)
-                # print(self.time_index[0,:])
-
         '''
         For synchronic.
         '''

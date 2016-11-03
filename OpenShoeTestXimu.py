@@ -15,7 +15,7 @@ if __name__ == '__main__':
     '''
     Load Data
     '''
-    xdpp = XimuDataPreProcess.XimuDataPreProcess("test13")
+    xdpp = XimuDataPreProcess.XimuDataPreProcess("test14")
 
     source_data = xdpp.data_index
 
@@ -51,7 +51,7 @@ if __name__ == '__main__':
 
     # For Zero Velocity Detector
     setting.time_Window_size = 5
-    setting.gamma = 360
+    setting.gamma = 580
     # setting.sigma_a = 0.05
     # setting.sigma_g = 0.35 * np.pi / 180.0
 
@@ -59,6 +59,7 @@ if __name__ == '__main__':
     setting.init_heading1 = setting.init_heading2
 
     # setting.sigma_acc = setting.sigma_acc / 2.0
+    # setting.sigma_gyro = 4.0 * 10.0 * np.ones([3,1]) * 0.0 * np.pi / 180.0
 
 
     '''

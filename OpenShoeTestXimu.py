@@ -15,7 +15,7 @@ if __name__ == '__main__':
     '''
     Load Data
     '''
-    xdpp = XimuDataPreProcess.XimuDataPreProcess("test13")
+    xdpp = XimuDataPreProcess.XimuDataPreProcess("test20")
 
     source_data = xdpp.data_index
 

@@ -51,7 +51,7 @@ if __name__ == '__main__':
 
     # For Zero Velocity Detector
     setting.time_Window_size = 5
-    setting.gamma = 580
+    setting.gamma = 6580
     # setting.sigma_a = 0.05
     # setting.sigma_g = 0.35 * np.pi / 180.0
 
@@ -137,8 +137,8 @@ if __name__ == '__main__':
     fig = plt.figure(2)
 
     ax = fig.gca(projection='3d')
-    ax.plot(all_x[0,:],all_x[1,:],all_x[2,:],'r+-')
-    ax.plot(all_x[9,:],all_x[10,:],all_x[11,:],'b+-')
+    ax.plot(all_x[0,:],all_x[1,:],all_x[2,:],'r-')
+    ax.plot(all_x[9,:],all_x[10,:],all_x[11,:],'b-')
     plt.grid(True)
 
     # plt.figure(12)

@@ -24,9 +24,9 @@ if __name__ == '__main__':
 
     SCREEN_SIZE=[1680,980]
 
-    OFFSET = [300,300] # piexels
+    OFFSET = [150,150] # piexels
 
-    ScaleFactor = 80.0 #Real(m) to piexels
+    ScaleFactor = 120.0 #Real(m) to piexels
 
 
     pygame.init()

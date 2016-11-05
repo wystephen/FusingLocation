@@ -48,7 +48,7 @@ class XimuDataPreProcess:
             elif 'Time' in file_name:
                 # print("time",file_name)
                 the_lines = [line.split(',')  for line in open(file_dir + '/' + file_name)]
-                print(the_lines)
+                # print(the_lines)
 
                 the_lines = the_lines[1:]
 

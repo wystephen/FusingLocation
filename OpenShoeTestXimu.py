@@ -94,6 +94,15 @@ if __name__ == '__main__':
     u1 = source_data[:,1:7]
     u2 = source_data[:,1:7]
 
+    '''plot g'''
+    all_g = np.zeros(u1.shape)
+
+    all_g = np.linalg.norm(u1[:,0:3],axis=0)
+
+    plt.figure(11111)
+    plt.plot(all_g,'r-+')
+    plt.grid(True)
+
     # ZUPT1 = np.zeros_like(ZUPT1)
 
     zupt1 = zupt2 = ZUPT1

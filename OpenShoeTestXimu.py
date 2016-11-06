@@ -97,7 +97,7 @@ if __name__ == '__main__':
     '''plot g'''
     all_g = np.zeros(u1.shape)
 
-    all_g = np.linalg.norm(u1[:,0:3],axis=0)
+    all_g = np.linalg.norm(u1[:,0:3],axis=1)
 
     plt.figure(11111)
     plt.plot(all_g,'r-+')

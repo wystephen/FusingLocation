@@ -19,6 +19,7 @@ class XimuDataPreProcess:
                     continue
                 self.data_index = np.loadtxt('tmp_data_index.txt')
                 self.time_index = np.loadtxt('tmp_time_index.txt')
+                break
 
             elif 'Inertial' in file_name:
                 # print(file_name)

@@ -25,6 +25,53 @@ class gCalibration:
     def SelectData(self):
         data_size = np.sum(self.zupt)
         print(data_size)
+        self.zerovdata = np.zeros([int(data_size),3])
+        the_index = 0
+
+        for i in range(self.zupt.shape[0]):
+            if self.zupt[i] > 0.6:
+                '''
+                '''
+                self.zerovdata[the_index,:] = self.source_data[i,1:4]
+                the_index += 1
+
+    def CostFunction(self,theta_acc):
+        '''
+
+        :param theta_acc:
+        :return:
+        '''
+        ka,ta,ba = self.Theta2Matrix(theta_acc)
+
+        tmp_data = np.zeros_like(self.zerovdata)
+
+        
+
+
+
+
+
+
+
+
+
+    def Theta2Matrix(self,theta):
+        ka = np.diag(theta[0:3])
+
+        ta = np.zeros([1,1,1])
+        ta[0,1] = - theta[3]
+        ta[0,2] = theta[5]
+        ta[1,2] = theta[4]
+
+        ba = theta[6:9]
+
+        return ka,ta,ba
+
+
+
+
+
+
 
 
 
@@ -91,3 +138,12 @@ if __name__ == '__main__':
 
     gca = gCalibration(ZUPT1,source_data)
     gca.SelectData()
+
+    print(gca.zerovdata.shape)
+    plt.figure(1)
+    plt.plot(gca.zerovdata[:,0],'r-+')
+    plt.plot(gca.zerovdata[:,1],'g-+')
+    plt.plot(gca.zerovdata[:,2],'b-+')
+
+    plt.show()
+

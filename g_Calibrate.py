@@ -45,6 +45,8 @@ class gCalibration:
 
         tmp_data = np.zeros_like(self.zerovdata)
 
+        print(tmp_data.shape)
+
 
 
 
@@ -80,7 +82,7 @@ if __name__ == '__main__':
 
     import XimuDataPreProcess
 
-    xdpp = XimuDataPreProcess.XimuDataPreProcess("test23")
+    xdpp = XimuDataPreProcess.XimuDataPreProcess("test21")
 
     source_data = xdpp.data_index
 

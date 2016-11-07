@@ -45,7 +45,7 @@ class gCalibration:
 
         tmp_data = np.zeros_like(self.zerovdata)
 
-        
+
 
 
 

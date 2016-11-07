@@ -15,7 +15,18 @@ if __name__ == '__main__':
     '''
     Load Data
     '''
-    xdpp = XimuDataPreProcess.XimuDataPreProcess("test23")
+
+
+    # xdpp = XimuDataPreProcess.XimuDataPreProcess("01-03-01-01-01")
+    xdpp = XimuDataPreProcess.XimuDataPreProcess("02-02-02-01-01")
+    # xdpp = XimuDataPreProcess.XimuDataPreProcess("03-02-02-01-00")
+    # xdpp = XimuDataPreProcess.XimuDataPreProcess("04-02-02-01-01")
+    # xdpp = XimuDataPreProcess.XimuDataPreProcess("05-02-01-01-01")
+    # xdpp = XimuDataPreProcess.XimuDataPreProcess("06-03-02-01-01")
+    # xdpp = XimuDataPreProcess.XimuDataPreProcess("07-02-04-01-01")
+    # xdpp = XimuDataPreProcess.XimuDataPreProcess("08-03-04-01-01")
+    # xdpp = XimuDataPreProcess.XimuDataPreProcess("09-02-04-00-01")
+    # xdpp = XimuDataPreProcess.XimuDataPreProcess("10-03-04-00-01")
 
     source_data = xdpp.data_index
 

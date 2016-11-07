@@ -15,7 +15,7 @@ if __name__ == '__main__':
     '''
     Load Data
     '''
-    xdpp = XimuDataPreProcess.XimuDataPreProcess("test24")
+    xdpp = XimuDataPreProcess.XimuDataPreProcess("test23")
 
     source_data = xdpp.data_index
 
@@ -69,7 +69,7 @@ if __name__ == '__main__':
     ZUPT1 = zupt_detector.GLRT_Detector(source_data[:,1:7])
     # print(source_data[:,1:7])
     #
-    plt.figure(1)
+    plt.figure(110)
     plt.plot(ZUPT1*50,'r-')
     plt.plot(source_data[:,1],'g-+')
     plt.plot(source_data[:,2],'y-+')
@@ -77,7 +77,7 @@ if __name__ == '__main__':
 
     plt.grid(True)
 
-    plt.show()
+    # plt.show()
 
 
 

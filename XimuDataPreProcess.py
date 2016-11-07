@@ -17,11 +17,13 @@ class XimuDataPreProcess:
             if 'tmp' in file_name:
                 if not use_tmp:
                     continue
-                self.data_index = np.loadtxt('tmp_data_index.txt')
-                self.time_index = np.loadtxt('tmp_time_index.txt')
+                self.data_index = np.loadtxt(file_dir + "/" +'tmp_data_index.txt')
+                self.time_index = np.loadtxt(file_dir + "/" +'tmp_time_index.txt')
                 break
+        for file_name in file_lists:
 
-            elif 'Inertial' in file_name:
+
+            if 'Inertial' in file_name:
                 # print(file_name)
                 # data_file  = open(file_dir + "/" + file_name,'r')
                 # data_file = data_file.readlines()
@@ -51,7 +53,7 @@ class XimuDataPreProcess:
                 # plt.show()
                 # print(self.data_index.shape)
                 # print(self.data_index[0,:])
-                np.savetxt('tmp_data_index.txt',self.data_index)
+                np.savetxt(file_dir + '/' + 'tmp_data_index.txt',self.data_index)
 
             elif 'Time' in file_name:
                 # print("time",file_name)
@@ -61,7 +63,7 @@ class XimuDataPreProcess:
                 the_lines = the_lines[1:]
 
                 self.time_index = np.asarray(the_lines,dtype=int)
-                np.savetxt('tmp_time_index.txt',self.time_index)
+                np.savetxt(file_dir + '/' + 'tmp_time_index.txt',self.time_index)
 
         '''
         For synchronic.

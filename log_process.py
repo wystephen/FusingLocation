@@ -56,6 +56,7 @@ class seq_process:
                     aadis[2] = jdata['range']
 
             elif jdata['type'] == 'c':
+                print(jdata['time'])
                 if (not (jdata['seq'] == atseq)):
                     if not atseq == 0:
                         atrange.write("{0} {1} {2} {3}\n".format(atdis[0], atdis[1], atdis[2], atdis[3]))
@@ -70,4 +71,4 @@ Some error when use python 3.5 collectoed data.
 '''
 if __name__ == '__main__':
     se = seq_process()
-    se.process_file(file_name='LOGBig/LOG_2016_10_19_16_1_18.data')
+    se.process_file(file_name='10-03-04-00-01/LOG_2016_11_7_15_50_12.data')

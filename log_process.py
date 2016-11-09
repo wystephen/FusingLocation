@@ -29,9 +29,9 @@ class seq_process:
         for i in range(len(all_file)):
             # print(i)
             if all_file[i] == '\\' and all_file[i + 1] == 'n':
-                tmp_log.write(all_file[last_i:i] + '\n')
+                tmp_log.write(all_file[last_i:i].replace('\"b\"','') + '\n')
                 last_i = i + 2
-                print("new line")
+                # print("new line")
         tmp_log.close()
 
     def process_file(self,file_name='LOG_2016_10_12_10_15_17.data',out_aa='aarange.txt',out_at='atrange.txt'):

@@ -28,14 +28,20 @@ class DataChronic:
 
         import  os
         for file_name in os.listdir(dir_name):
-            if 'data' in file_name:
-                print("file__name :", file_name)
+            if '.data' in file_name:
+                # print("file__name :", file_name)
                 se.process_file(file_name=dir_name + '/' + file_name)
 
         self.UwbData = np.loadtxt('atrange.txt')
 
         print(self.UwbData.shape)
         print(self.ImuSourceData.shape)
+    def RunOpenshoe(self):
+        self.openshoeresult = np.zeros([self.UwbData.shape[0],3])
+
+        '''
+        Run Openshoe output the result.
+        '''
 
 
 

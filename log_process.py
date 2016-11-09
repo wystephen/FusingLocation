@@ -35,7 +35,9 @@ class seq_process:
         tmp_log.close()
 
     def process_file(self,file_name='LOG_2016_10_12_10_15_17.data',out_aa='aarange.txt',out_at='atrange.txt'):
-        logf = open(file_name, 'r')
+
+        self.file_pre_process(file_name)
+        logf = open('log.data', 'r')
 
         aarange = open(out_aa, 'w')
         atrange = open(out_at, 'w')
@@ -47,7 +49,6 @@ class seq_process:
         atdis = np.zeros([4])
 
         logf_all = logf.readlines()
-        self.file_pre_process(file_name)
 
         for ll in logf_all:
             if ll[0] == 'I' or  True:
@@ -74,10 +75,10 @@ class seq_process:
                     aadis[2] = jdata['range']
 
             elif jdata['type'] == 'c':
-                print(jdata['time'])
+                # print(jdata['time'])
                 if (not (jdata['seq'] == atseq)):
                     if not atseq == 0:
-                        atrange.write("{0} {1} {2} {3}\n".format(atdis[0], atdis[1], atdis[2], atdis[3]))
+                        atrange.write("{0} {1} {2} {3} {4}\n".format(jdata['time'],atdis[0], atdis[1], atdis[2], atdis[3]))
                     atseq = jdata['seq']
 
                 atdis[jdata['beacon_id']] = jdata['range']

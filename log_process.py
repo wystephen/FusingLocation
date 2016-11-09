@@ -57,7 +57,7 @@ class seq_process:
                     # print("ll is :",ll,"can not found a {")
                     return True
                 ll = ll[start::]
-            print(ll)
+            # print(ll)
             jdata = demjson.decode(ll)
 
             if jdata['type'] == 'a':

@@ -16,6 +16,23 @@ class seq_process:
         #
         # self.aadis = np.zeros([3])
         # self.atdis = np.zeros([4])
+    def file_pre_process(self,name):
+        # print("frame")
+        import os
+        fa = open(name)
+        tmp_log = open("log.data", 'w')
+
+        all_file = fa.readline()
+        print(len(all_file))
+
+        last_i = 0
+        for i in range(len(all_file)):
+            # print(i)
+            if all_file[i] == '\\' and all_file[i + 1] == 'n':
+                tmp_log.write(all_file[last_i:i] + '\n')
+                last_i = i + 2
+                print("new line")
+        tmp_log.close()
 
     def process_file(self,file_name='LOG_2016_10_12_10_15_17.data',out_aa='aarange.txt',out_at='atrange.txt'):
         logf = open(file_name, 'r')

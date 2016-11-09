@@ -47,6 +47,7 @@ class seq_process:
         atdis = np.zeros([4])
 
         logf_all = logf.readlines()
+        self.file_pre_process(file_name)
 
         for ll in logf_all:
             if ll[0] == 'I' or  True:

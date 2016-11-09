@@ -15,6 +15,14 @@ from log_process import seq_process
 
 class DataChronic:
     def __init__(self,dir_name):
+        '''
+
+        :param dir_name:
+        '''
+
+        '''
+        Load imu data
+        '''
         xdpp = XimuDataPreProcess.XimuDataPreProcess(dir_name)
 
         self.ImuSourceData = xdpp.data_index
@@ -24,6 +32,10 @@ class DataChronic:
         self.ImuSourceData[:,1:4] = tmp_data[:,4:7] * 9.8
         self.ImuSourceData[:,4:7] = tmp_data[:,1:4] * np.pi / 180.0
 
+
+        '''
+        Load uwb data
+        '''
         se = seq_process()
 
         import  os

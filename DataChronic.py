@@ -54,6 +54,18 @@ class DataChronic:
         '''
         Run Openshoe output the result.
         '''
+        setting = Setting.settings()
+        
+        setting.Ts = 0.01
+
+        setting.min_rud_sep = int(1/setting.Ts)
+
+        setting.time_Window_size = 5
+        setting.gamma = 6580
+
+        setting.init_heading2 = setting.init_heading1
+
+
 
 
 

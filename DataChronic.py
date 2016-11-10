@@ -77,7 +77,3 @@ if __name__ == '__main__':
         print(dir_name)
     dc = DataChronic('10-03-04-00-01')
 
-
-
-
-

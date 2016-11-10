@@ -55,11 +55,14 @@ class DataChronic:
         Run Openshoe output the result.
         '''
 
-        
+
 
 
 
 if __name__ == '__main__':
+    import os
+    for dir_name in os.listdir('./'):
+        print(dir_name)
     dc = DataChronic('10-03-04-00-01')
 
 

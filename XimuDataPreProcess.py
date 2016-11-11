@@ -142,6 +142,7 @@ class XimuDataPreProcess:
         # plt.plot(self.data_index[:,0],'r-+')
         # plt.show()
         # print(start_index,end_index)
+        print(self.data_index[:,0])
 
 
 

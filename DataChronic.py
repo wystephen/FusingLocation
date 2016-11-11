@@ -46,6 +46,8 @@ class DataChronic:
                 se.process_file(file_name=dir_name + '/' + file_name)
 
         self.UwbData = np.loadtxt('atrange.txt')
+        self.BeaconSet = np.loadtxt(dir_name + '/' + 'beaconset')
+
 
         print(self.UwbData.shape)
         print(self.ImuSourceData.shape)
@@ -101,7 +103,7 @@ class DataChronic:
                  'r+-')
         plt.grid(True)
 
-        plt.show()
+        # plt.show()
 
     def UWBRun(self):
         '''
@@ -109,12 +111,30 @@ class DataChronic:
         :return:
         '''
 
+        '''
+        Synchronize
+        '''
 
+        self.ImuResultSyn = np.zeros([self.UwbData.shape[0],3])
 
+        index = 0
+        for i in range(self.UwbData.shape[0]):
+            uwb_time = self.UwbData[i,0]
+            print(uwb_time)
+            while(np.abs(uwb_time-self.openshoeresult[index,0])>0.1):
+                print(uwb_time,self.openshoeresult[index,0])
+                index += 1
+                if(index == self.openshoeresult.shape[0]):
+                    index -= 1
+                    print("Unexpected to run to much times.")
+                    break
+            self.ImuResultSyn[i,:] = self.openshoeresult[index,1:4]
+        print('ImuResultSyn shape:',self.ImuResultSyn.shape)
 
+        plt.figure(11)
+        plt.plot(self.ImuResultSyn[:,0],self.ImuResultSyn[:,1],'b-+')
 
-
-
+        plt.show()
 
 if __name__ == '__main__':
     import os
@@ -122,4 +142,5 @@ if __name__ == '__main__':
         print(dir_name)
     dc = DataChronic('10-03-04-00-01')
     dc.RunOpenshoe()
+    dc.UWBRun()
 

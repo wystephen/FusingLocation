@@ -58,9 +58,6 @@ if __name__ == '__main__':
     se = seq_process
     se.process_file(se,file_name='log/log.data',out_aa='aarange.txt',out_at='atrange.txt')
     beacon_range = np.loadtxt("atrange.txt")
-    # gt = np.loadtxt("gt.csv",delimiter=",")
-
-    # gt=np.zeros_like(gt)
 
 
     time_step = 0
@@ -128,12 +125,6 @@ if __name__ == '__main__':
         if not IsPause:
             time_step += 1
         if time_step == beacon_range.shape[0]-1:
-            # print("AVE ERR:",err.mean())
-            # plt.figure(1)
-            # plt.grid(True)
-            # plt.plot(err,"-+r")
-            # plt.show()
-            # err = np.zeros_like(err)
             time_step = 0
 
         for event in pygame.event.get():
@@ -144,7 +135,6 @@ if __name__ == '__main__':
                 print(event.key)
                 if event.key == 115:
                     pf.InitialPose([((pose[0]-OFFSET[0])*1.0/ScaleFactor),((pose[1]-OFFSET[1])*1.0/ScaleFactor)])
-                    # print("test pose:",[((pose[0]-OFFSET[0])*1.0/ScaleFactor),((pose[1]-OFFSET[1])*1.0/ScaleFactor)])
 
                 elif event.key == 100:
                     IsPause = not IsPause
@@ -152,72 +142,28 @@ if __name__ == '__main__':
             continue
 
         screen.fill(BLACK)
-        # pygame.draw.circle(screen,[110,10,155],pose,20,3)
         '''
         Draw likelihood distribution.
         '''
-        # pf.DrawLikeliHood(screen,beacon_range[time_step,:],[pose[0]-100,pose[0]+100,pose[1]-100,pose[1]+100])
 
-
-        # tmp_pose = np.asarray(pose)
-        # for i in range(len(pose)):
-        #     tmp_pose[i] = (pose[i] - OFFSET[i])/ScaleFactor
-        # pose = tmp_pose
-        # tmp_beacon.ComputeRange(pose)
-        # tmp_beacon2.ComputeRange(pose)
-        # tmp_beacon3.ComputeRange(pose)
-        # print(time_step)
-        # print(gt[time_step,:])
-        # print(beacon_range[time_step,:])
-        # print(beacon_range.shape)
         tmp_beacon.SetRange(beacon_range[time_step,0])
         tmp_beacon2.SetRange(beacon_range[time_step,1])
         tmp_beacon3.SetRange(beacon_range[time_step,2])
         tmp_beacon4.SetRange(beacon_range[time_step,3])
 
-        # tmp_beacon.SetRange(pose[1]+2)
         tmp_beacon.Draw(screen)
         tmp_beacon2.Draw(screen)
         tmp_beacon3.Draw(screen)
         tmp_beacon4.Draw(screen)
 
-        #Robot draw
-        # tmp_robo.SetPose(pose)
-        # tmp_robo.SetPose(gt[time_step,:])
-        # tmp_robo.Draw(screen)
-
-
-
         pf.Sample(0.5)
-        # print("real range:" ,[tmp_beacon.GetRange(pose,0.1),
-        #               tmp_beacon2.GetRange(pose,0.1),
-        #               tmp_beacon3.GetRange(pose,0.1)])
-
-        # pf.Evaluated([tmp_beacon.GetRange([((pose[0]-OFFSET[0])*1.0/ScaleFactor),((pose[1]-OFFSET[1])*1.0/ScaleFactor)],0.1)*1.0,
-        #               tmp_beacon2.GetRange([((pose[0]-OFFSET[0])*1.0/ScaleFactor),((pose[1]-OFFSET[1])*1.0/ScaleFactor)],0.1)*1.0,
-        #               tmp_beacon3.GetRange([((pose[0]-OFFSET[0])*1.0/ScaleFactor),((pose[1]-OFFSET[1])*1.0/ScaleFactor)],0.1)*1.0])
-
         pf.Evaluated(beacon_range[time_step,:])
 
         pf.ReSample()
 
         result = pf.GetResult()
 
-        # print("RESULAT:",result)
-        # print(result.shape,gt[time_step,:].shape)
-        # print(result-gt[time_step,:])
-        # print(err.shape)
-
-        # err[time_step] = np.linalg.norm(result-gt[time_step,:])
-
-
         pf.Draw(screen)
-
-
-
-
-
-        # pygame.draw.rect(screen,[0,100,100],[pose[0],pose[1],10,10],10)
 
         pygame.display.flip()
 

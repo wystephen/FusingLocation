@@ -34,9 +34,11 @@ class seq_process:
                 # print("new line")
         tmp_log.close()
 
-    def process_file(self,file_name='LOG_2016_10_12_10_15_17.data',out_aa='aarange.txt',out_at='atrange.txt'):
+    def process_file(self,file_name='LOG_2016_10_12_10_15_17.data',
+                     out_aa='aarange.txt',
+                     out_at='atrange.txt'):
 
-        self.file_pre_process(file_name)
+        self.file_pre_process(name=file_name)
         logf = open('log.data', 'r')
 
         aarange = open(out_aa, 'w')

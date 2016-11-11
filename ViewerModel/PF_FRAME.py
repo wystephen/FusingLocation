@@ -54,6 +54,13 @@ class PF_Frame:
 
         self.P_state += rand_pose_offset
 
+    def OdometrySample(self,delta_pose,sigma):
+        for i in range(self.P_state.shape[1]):
+            self.P_state[:,i] += np.random.normal(delta_pose[i],
+                                                  sigma,
+                                                  self.P_state.shape[0])
+
+
     def Evaluated(self,Ranges):
         # print("P_state_shape [0] :",self.P_state.shape[0])
         # print("Ranges:",Ranges)

@@ -16,6 +16,7 @@ from log_process import seq_process
 class DataChronic:
     def __init__(self,dir_name):
         '''
+        Load and preprocess data.
 
         :param dir_name:
         '''
@@ -49,7 +50,11 @@ class DataChronic:
         print(self.UwbData.shape)
         print(self.ImuSourceData.shape)
     def RunOpenshoe(self):
-        self.openshoeresult = np.zeros([self.UwbData.shape[0],3])
+        '''
+        Run Open shoe ,get path compute by imu.
+        :return:
+        '''
+        self.openshoeresult = np.zeros([self.ImuSourceData.shape[0],19])
 
         '''
         Run Openshoe output the result.
@@ -91,14 +96,12 @@ class DataChronic:
         '''
         Test openshoe result.
         '''
-        
+        plt.figure(1)
+        plt.plot(self.openshoeresult[:,1],self.openshoeresult[:,2],
+                 'r+-')
+        plt.grid(True)
 
-        '''
-        Prepare UWB Filter
-        '''
-
-
-
+        plt.show()
 
 
 
@@ -110,4 +113,5 @@ if __name__ == '__main__':
     for dir_name in os.listdir('./'):
         print(dir_name)
     dc = DataChronic('10-03-04-00-01')
+    dc.RunOpenshoe()
 

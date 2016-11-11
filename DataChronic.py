@@ -49,8 +49,6 @@ class DataChronic:
         self.BeaconSet = np.loadtxt(dir_name + '/' + 'beaconset')
 
 
-        print(self.UwbData.shape)
-        print(self.ImuSourceData.shape)
     def RunOpenshoe(self):
         '''
         Run Open shoe ,get path compute by imu.
@@ -76,6 +74,8 @@ class DataChronic:
         zupt_detector = zupt_test.zupte_test(setting)
 
         zupt1 = zupt_detector.GLRT_Detector(self.ImuSourceData[:,1:7])
+
+        print("MARK1",self.ImuSourceData[:,0])
 
         ins_filter = PdrEkf.ZUPTaidedIns(setting)
 
@@ -120,9 +120,9 @@ class DataChronic:
         index = 0
         for i in range(self.UwbData.shape[0]):
             uwb_time = self.UwbData[i,0]
-            print(uwb_time)
+            # print(uwb_time)
             while(np.abs(uwb_time-self.openshoeresult[index,0])>0.1):
-                print(uwb_time,self.openshoeresult[index,0])
+                # print(uwb_time,self.openshoeresult[index,0])
                 index += 1
                 if(index == self.openshoeresult.shape[0]):
                     index -= 1

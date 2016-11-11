@@ -56,7 +56,8 @@ class DataChronic:
         '''
         setting = Setting.settings()
         
-        setting.Ts = 0.01
+        setting.Ts = np.mean(self.ImuSourceData[1:,0]-self.ImuSourceData[0:-1,0])
+        print("Ts:",setting.Ts)
 
         setting.min_rud_sep = int(1/setting.Ts)
 
@@ -64,6 +65,39 @@ class DataChronic:
         setting.gamma = 6580
 
         setting.init_heading2 = setting.init_heading1
+
+        zupt_detector = zupt_test.zupte_test(setting)
+
+        zupt1 = zupt_detector.GLRT_Detector(self.ImuSourceData[:,1:7])
+
+        ins_filter = PdrEkf.ZUPTaidedIns(setting)
+
+        ins_filter.init_Nav_eq(self.ImuSourceData[1:40,1:7],
+                               self.ImuSourceData[1:40,1:7])
+
+        for index in range(self.ImuSourceData.shape[0]):
+            if(index %100 == 0):
+                print('finished openshoe:',float(index)/
+                      self.ImuSourceData.shape[0])
+            if index>1:
+                ins_filter.para.Ts = self.ImuSourceData[index,0] - \
+                    self.ImuSourceData[index-1,0]
+            self.openshoeresult[index,0] = self.ImuSourceData[index,0]
+            self.openshoeresult[index,1:] = ins_filter.GetPosition(
+                self.ImuSourceData[index,1:7],
+                self.ImuSourceData[index,1:7],
+                zupt1[index],
+                zupt1[index]).reshape([18])
+        '''
+        Test openshoe result.
+        '''
+        
+
+        '''
+        Prepare UWB Filter
+        '''
+
+
 
 
 

@@ -34,6 +34,6 @@ if __name__ == '__main__':
             uwb_time_app.append(dc.UwbData[-1,0])
 
     np.save('imutime',np.asarray(imu_time_app,dtype=float))
-    np.save('uwbtime',np.asaarray(uwb_time_app,dtype = float))
+    np.save('uwbtime',np.asarray(uwb_time_app,dtype = float))
 
 

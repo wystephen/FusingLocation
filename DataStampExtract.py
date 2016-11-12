@@ -14,3 +14,13 @@ import XimuDataPreProcess
 
 from log_process import seq_process
 
+from DataChronic import DataChronic
+
+if __name__ == '__main__':
+    import os
+    for dir_name  in os.listdir('./'):
+        if '-' in dir_name:
+            dc = DataChronic(dir_name)
+
+            print(dc.ImuSourceData[0,0],dc.ImuSourceData[-1,0],
+                  dc.UwbData[0,0],dc.UwbData[-1,0])

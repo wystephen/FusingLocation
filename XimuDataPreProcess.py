@@ -19,7 +19,7 @@ class XimuDataPreProcess:
                     continue
                 self.data_index = np.loadtxt(file_dir + "/" +'tmp_data_index.txt')
                 self.time_index = np.loadtxt(file_dir + "/" +'tmp_time_index.txt')
-                return
+                break
         for file_name in file_lists:
 
 

@@ -22,5 +22,5 @@ if __name__ == '__main__':
         if '-' in dir_name:
             dc = DataChronic(dir_name)
 
-            print(dc.ImuSourceData[0,0],dc.ImuSourceData[-1,0],
+            print(dir_name,dc.ImuSourceData[0,0],dc.ImuSourceData[-1,0],
                   dc.UwbData[0,0],dc.UwbData[-1,0])

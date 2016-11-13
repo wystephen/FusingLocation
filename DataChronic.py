@@ -22,6 +22,12 @@ class DataChronic:
         '''
 
         '''
+        OFFSET
+        '''
+
+        self.time_offset =  531844066.535
+
+        '''
         Load imu data
         '''
         xdpp = XimuDataPreProcess.XimuDataPreProcess(dir_name)
@@ -33,6 +39,13 @@ class DataChronic:
 
         self.ImuSourceData[:, 1:4] = tmp_data[:, 4:7] * 9.8
         self.ImuSourceData[:, 4:7] = tmp_data[:, 1:4] * np.pi / 180.0
+
+
+        '''
+        Add Time offset
+        '''
+        self.ImuSourceData[:,0] += self.time_offset
+
 
         '''
         Load uwb data
@@ -125,7 +138,7 @@ class DataChronic:
                 index += 1
                 if (index == self.openshoeresult.shape[0]):
                     index -= 1
-                    print("Unexpected to run to much times.")
+                    # print("Unexpected to run to much times.")
                     break
             self.ImuResultSyn[i, :] = self.openshoeresult[index, 1:4]
         print('ImuResultSyn shape:', self.ImuResultSyn.shape)

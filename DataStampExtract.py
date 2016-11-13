@@ -21,7 +21,7 @@ if __name__ == '__main__':
     imu_time_app = list()
     uwb_time_app = list()
     for dir_name  in os.listdir('./'):
-        if '-' in dir_name and (not '06' in dir_name):
+        if '-' in dir_name and (not '06' in dir_name) and (not '04' in dir_name):
             dc = DataChronic(dir_name)
 
             print(dir_name,dc.ImuSourceData[0,0],dc.ImuSourceData[-1,0],

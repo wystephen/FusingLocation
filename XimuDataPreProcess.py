@@ -13,14 +13,18 @@ class XimuDataPreProcess:
         file_lists = os.listdir(file_dir)
         # print(file_list)
         # print(type(file_lists))
+        IsTMPFile = False
         for file_name in file_lists:
             if 'tmp' in file_name:
                 if not use_tmp:
                     continue
                 self.data_index = np.loadtxt(file_dir + "/" +'tmp_data_index.txt')
                 self.time_index = np.loadtxt(file_dir + "/" +'tmp_time_index.txt')
+                IsTMPFile = True
                 break
         for file_name in file_lists:
+            if IsTMPFile:
+                break
 
 
             if 'Inertial' in file_name:
@@ -63,19 +67,22 @@ class XimuDataPreProcess:
                 the_lines = the_lines[1:]
 
                 self.time_index = np.asarray(the_lines,dtype=int)
-                np.savetxt(file_dir + '/' + 'tmp_time_index.txt',self.time_index)
+                np.savetxt(file_dir + '/' + 'tmp_time_index.txt',self.time_index.astype(int))
 
         '''
         For synchronic.
         '''
         # test time array to time that units is s.
         import time
+
+        # self.time_index.astype(dtype='int')
+
         self.sec_index = np.zeros([self.time_index.shape[0],2])
         for index in range(self.time_index.shape[0]):
             ISFORMAT = "%Y-%m-%d-%H-%M-%S"
-            tmp_time_str = '{0}-{1}-{2}-{3}-{4}-{5}'.format(self.time_index[index,1],self.time_index[index,2],
-                   self.time_index[index,3],self.time_index[index,4],self.time_index[index,5],
-                   self.time_index[index,6])
+            tmp_time_str = '{0}-{1}-{2}-{3}-{4}-{5}'.format(int(self.time_index[index,1]),int(self.time_index[index,2]),
+                   int(self.time_index[index,3]),int(self.time_index[index,4]),int(self.time_index[index,5]),
+                   int(self.time_index[index,6]))
 
 
             self.sec_index[index,0]=(time.mktime(time.strptime(tmp_time_str,ISFORMAT)))

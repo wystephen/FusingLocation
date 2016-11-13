@@ -21,8 +21,4 @@ if __name__ == '__main__':
 
     print('time offset:',np.mean(uwbtime)-np.mean(imutime))
 
-
-
-
-
     plt.show()

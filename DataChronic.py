@@ -117,7 +117,7 @@ class DataChronic:
 
         # plt.show()
 
-    def UWBRun(self):
+    def SynData(self):
         '''
 
         :return:
@@ -158,6 +158,10 @@ class DataChronic:
 
         plt.show()
 
+    def OnlyPF(self,particle_num = 200):
+        print(self.BeaconSet)
+
+
 
 if __name__ == '__main__':
     import os
@@ -167,4 +171,5 @@ if __name__ == '__main__':
         if '07-0' in dir_name:
             dc = DataChronic(dir_name)
             dc.RunOpenshoe()
-            dc.UWBRun()
+            dc.SynData()
+            dc.OnlyPF()

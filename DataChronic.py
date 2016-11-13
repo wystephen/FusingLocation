@@ -27,7 +27,7 @@ class DataChronic:
         OFFSET
         '''
 
-        self.z_offset = 0.5
+        self.z_offset = 0.65
 
         self.time_offset =  531844066.535
 
@@ -190,18 +190,19 @@ class DataChronic:
 
         self.UwbData[:,1:] = (self.UwbData[:,1:] ** 2.0 - self.z_offset)
 
-        self.UwbData[:,1:] = np.sqrt(self.UwbData[:,1:])
+        self.UwbData[:,1:] = np.sqrt(np.abs(self.UwbData[:,1:]))
+
 
 
         plt.figure(2222)
         for i in range(self.UwbData.shape[1]):
             if i >0:
-                plt.plot(self.UwbData[:,i])
+                plt.plot(self.UwbData[:, i])
         # plt.show()
 
         for i in range(self.UwbData.shape[0]):
             self.pf.Sample(0.3)
-            self.pf.Evaluated(self.UwbData[i,1:5])
+            self.pf.Evaluated(self.UwbData[i, 1:5])
 
             self.pf.ReSample()
 

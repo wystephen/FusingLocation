@@ -193,11 +193,11 @@ class DataChronic:
         self.UwbData[:,1:] = np.sqrt(self.UwbData[:,1:])
 
 
-        # plt.figure(2222)
+        plt.figure(2222)
         for i in range(self.UwbData.shape[1]):
             if i >0:
                 plt.plot(self.UwbData[:,i])
-        plt.show()
+        # plt.show()
 
         for i in range(self.UwbData.shape[0]):
             self.pf.Sample(0.3)

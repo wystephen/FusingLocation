@@ -190,7 +190,10 @@ class DataChronic:
 
         self.UwbData[:,1:] = (self.UwbData[:,1:] ** 2.0 - self.z_offset)
 
-        plt.figure(2222)
+        self.UwbData[:,1:] = np.sqrt(self.UwbData[:,1:])
+
+
+        # plt.figure(2222)
         for i in range(self.UwbData.shape[1]):
             if i >0:
                 plt.plot(self.UwbData[:,i])
@@ -222,7 +225,7 @@ if __name__ == '__main__':
             dc = DataChronic(dir_name)
             dc.RunOpenshoe()
             dc.SynData()
-            dc.OnlyPF()
+            dc.OnlyPF(100)
 
 
             plt.show()

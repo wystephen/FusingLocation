@@ -27,7 +27,7 @@ class DataChronic:
         OFFSET
         '''
 
-        self.z_offset = 0.7
+        self.z_offset = 0.5
 
         self.time_offset =  531844066.535
 
@@ -163,6 +163,15 @@ class DataChronic:
         # plt.show()
 
     def OnlyPF(self,particle_num = 200):
+        '''
+
+        :param particle_num:
+        :return:
+        '''
+
+        '''
+        PF ONLY USE UWB DATA
+        '''
         print(self.BeaconSet)
 
         self.pf = PF_FRAME.PF_Frame([1000,1000],[10,10],10,particle_num)
@@ -171,15 +180,21 @@ class DataChronic:
         self.pf.InitialPose([0.0,0.0])
 
         self.UWBResult = np.zeros([self.UwbData.shape[0],2])
-        print(self.UwbData,self.UwbData.shape)
+        # print(self.UwbData,self.UwbData.shape)
 
         self.UwbData /= 1000.0
+        #
+        # self.UwbData = self.UwbData ** 2.0
+        # self.UwbData -= self.z_offset
+        # self.UwbData = self.UwbData ** 0.5
 
-        self.UwbData = self.UwbData ** 2.0
-        self.UwbData -= self.z_offset
-        self.UwbData = self.UwbData ** 0.5
+        self.UwbData[:,1:] = (self.UwbData[:,1:] ** 2.0 - self.z_offset)
 
-
+        plt.figure(2222)
+        for i in range(self.UwbData.shape[1]):
+            if i >0:
+                plt.plot(self.UwbData[:,i])
+        plt.show()
 
         for i in range(self.UwbData.shape[0]):
             self.pf.Sample(0.3)
@@ -203,7 +218,7 @@ if __name__ == '__main__':
 
     for dir_name in os.listdir('./'):
         print(dir_name)
-        if '06-0' in dir_name:
+        if '05-0' in dir_name:
             dc = DataChronic(dir_name)
             dc.RunOpenshoe()
             dc.SynData()

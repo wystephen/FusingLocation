@@ -117,6 +117,7 @@ class PF_Frame:
         #             break
 
         # RESAMPLE METHOND 2
+        # print(self.Wight.sum())
         for i in range(self.P_state.shape[0]):
             tmp_rnd = np.random.uniform(0.0, self.Wight.sum())
             i_index = -1

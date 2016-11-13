@@ -130,18 +130,26 @@ class DataChronic:
         self.ImuResultSyn = np.zeros([self.UwbData.shape[0], 3])
 
         index = 0
+        # for i in range(self.UwbData.shape[0]):
+        #     uwb_time = self.UwbData[i, 0]
+        #     # print(uwb_time)
+        #     while (np.abs(uwb_time - self.openshoeresult[index, 0]) > 0.1):
+        #         print(uwb_time,self.openshoeresult[index,0])
+        #         index += 1
+        #         if (index == self.openshoeresult.shape[0]):
+        #             index -= 1
+        #             # print("Unexpected to run to much times.")
+        #             break
+        #     self.ImuResultSyn[i, :] = self.openshoeresult[index, 1:4]
+        # print('ImuResultSyn shape:', self.ImuResultSyn.shape)
+
         for i in range(self.UwbData.shape[0]):
-            uwb_time = self.UwbData[i, 0]
-            # print(uwb_time)
-            while (np.abs(uwb_time - self.openshoeresult[index, 0]) > 0.1):
-                # print(uwb_time,self.openshoeresult[index,0])
-                index += 1
-                if (index == self.openshoeresult.shape[0]):
-                    index -= 1
-                    # print("Unexpected to run to much times.")
+            uwb_time = self.UwbData[i,0]
+
+            for j in range(index-5,self.openshoeresult.shape[0]):
+                if np.abs(uwb_time-self.openshoeresult[j,0])<0.2:
+                    self.ImuResultSyn[i,:] = self.openshoeresult[j,1:4]
                     break
-            self.ImuResultSyn[i, :] = self.openshoeresult[index, 1:4]
-        print('ImuResultSyn shape:', self.ImuResultSyn.shape)
 
         plt.figure(11)
         plt.plot(self.ImuResultSyn[:, 0], self.ImuResultSyn[:, 1], 'b-+')

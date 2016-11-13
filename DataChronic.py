@@ -12,6 +12,8 @@ import XimuDataPreProcess
 
 from log_process import seq_process
 
+from ViewerModel import PF_FRAME
+
 
 class DataChronic:
     def __init__(self, dir_name):
@@ -24,6 +26,8 @@ class DataChronic:
         '''
         OFFSET
         '''
+
+        self.z_offset = 0.7
 
         self.time_offset =  531844066.535
 
@@ -156,10 +160,41 @@ class DataChronic:
         plt.figure(11)
         plt.plot(self.ImuResultSyn[:, 0], self.ImuResultSyn[:, 1], 'b-+')
 
-        plt.show()
+        # plt.show()
 
     def OnlyPF(self,particle_num = 200):
         print(self.BeaconSet)
+
+        self.pf = PF_FRAME.PF_Frame([1000,1000],[10,10],10,particle_num)
+
+        self.pf.SetBeaconSet(self.BeaconSet[:,0:2])
+        self.pf.InitialPose([0.0,0.0])
+
+        self.UWBResult = np.zeros([self.UwbData.shape[0],2])
+        print(self.UwbData,self.UwbData.shape)
+
+        self.UwbData /= 1000.0
+
+        self.UwbData = self.UwbData ** 2.0
+        self.UwbData -= self.z_offset
+        self.UwbData = self.UwbData ** 0.5
+
+
+
+        for i in range(self.UwbData.shape[0]):
+            self.pf.Sample(0.3)
+            self.pf.Evaluated(self.UwbData[i,1:5])
+
+            self.pf.ReSample()
+
+
+            self.UWBResult[i,:]  = self.pf.GetResult()
+
+        plt.figure(22)
+        plt.plot(self.UWBResult[:,0],self.UWBResult[:,1],'g+-')
+        plt.grid(True)
+
+
 
 
 
@@ -168,8 +203,11 @@ if __name__ == '__main__':
 
     for dir_name in os.listdir('./'):
         print(dir_name)
-        if '07-0' in dir_name:
+        if '06-0' in dir_name:
             dc = DataChronic(dir_name)
             dc.RunOpenshoe()
             dc.SynData()
             dc.OnlyPF()
+
+
+            plt.show()

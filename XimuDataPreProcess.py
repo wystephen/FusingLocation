@@ -88,7 +88,7 @@ class XimuDataPreProcess:
             self.sec_index[index,0]=(time.mktime(time.strptime(tmp_time_str,ISFORMAT)))
             self.sec_index[index,1]= self.time_index[index,0]
 
-        print(self.sec_index)
+        # print(self.sec_index)
         # np.savetxt('sec_index.txt',self.sec_index.astype('int'))
 
         # Test synchronic(index to time)

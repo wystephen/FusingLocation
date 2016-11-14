@@ -24,7 +24,7 @@ if __name__ == '__main__':
     '''
     import os
     for dir_name in os.listdir('./'):
-        if '10-' in dir_name:
+        if '04-' in dir_name:
             for the_file_name in os.listdir(dir_name):
                 if '.data' in the_file_name:
                     beaconpose = np.loadtxt(dir_name+"/beaconset")
@@ -33,6 +33,8 @@ if __name__ == '__main__':
                     beacon_range = np.loadtxt("atrange.txt")
                     break
             break
+    # print('Range size:',beacon_range.shape)
+    beacon_range = beacon_range[:,1:]
 
 
     BLACK=(0,0,0)

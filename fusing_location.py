@@ -54,7 +54,7 @@ class fusing_location:
         '''
         PF ONLY USE UWB DATA
         '''
-        print(self.BeaconSet)
+        # print(self.BeaconSet)
 
         self.pf = PF_FRAME.PF_Frame([1000, 1000], [10, 10], 10, particle_num)
 
@@ -97,5 +97,7 @@ class fusing_location:
 
 if __name__ == '__main__':
     for dir_name in os.listdir('./'):
-        if '10-' in dir_name or '-0'in dir_name:
+        if '04-' in dir_name or '-0'in dir_name:
+            print(dir_name)
             location = fusing_location(dir_name)
+

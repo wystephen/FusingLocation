@@ -30,7 +30,8 @@ class seq_process:
         for i in range(len(all_file)):
             # print(i)
             if all_file[i] == '\\' and all_file[i + 1] == 'n':
-                tmp_log.write(all_file[last_i:i].replace('\"b\"','') + '\n')
+                tmp_log.write(all_file[last_i:i].replace('\"b\"','').replace('\"b\'', '')
+                              + '\n')
                 last_i = i + 2
                 # print("new line")
         tmp_log.close()
@@ -61,7 +62,7 @@ class seq_process:
                     # print("ll is :",ll,"can not found a {")
                     return True
                 ll = ll[start::]
-            # print(ll)
+            print(ll)
             jdata = demjson.decode(ll)
 
             if jdata['type'] == 'a':

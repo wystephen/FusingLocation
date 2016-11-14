@@ -205,17 +205,11 @@ class DataChronic:
             self.pf.Evaluated(self.UwbData[i, 1:5])
 
             self.pf.ReSample()
-
-
             self.UWBResult[i,:]  = self.pf.GetResult()
 
         plt.figure(22)
         plt.plot(self.UWBResult[:,0],self.UWBResult[:,1],'g+-')
         plt.grid(True)
-
-
-
-
 
 if __name__ == '__main__':
     import os

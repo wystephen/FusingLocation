@@ -114,7 +114,7 @@ class DataChronic:
         '''
         Test openshoe result.
         '''
-        plt.figure(1)
+        plt.figure(1111102)
         plt.plot(self.openshoeresult[:, 1], self.openshoeresult[:, 2],
                  'r+-')
         plt.grid(True)
@@ -157,7 +157,7 @@ class DataChronic:
                 if j == self.openshoeresult.shape[0]-1:
                     print("MAYBE SOME ERROR HERE")
 
-        plt.figure(11)
+        plt.figure(111101)
         plt.plot(self.ImuResultSyn[:, 0], self.ImuResultSyn[:, 1], 'b-+')
 
         # plt.show()
@@ -194,7 +194,7 @@ class DataChronic:
 
 
 
-        plt.figure(2222)
+        plt.figure(111104)
         for i in range(self.UwbData.shape[1]):
             if i >0:
                 plt.plot(self.UwbData[:, i])
@@ -221,12 +221,13 @@ if __name__ == '__main__':
     import os
 
     for dir_name in os.listdir('./'):
-        print(dir_name)
+        # print(dir_name)
         if '05-0' in dir_name:
+            print(dir_name)
             dc = DataChronic(dir_name)
             dc.RunOpenshoe()
             dc.SynData()
-            dc.OnlyPF(100)
+            dc.OnlyPF(200)
 
 
             plt.show()

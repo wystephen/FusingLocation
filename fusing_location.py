@@ -30,13 +30,15 @@ class fusing_location:
         self.UwbData = self.dc.UwbData
         self.ImuResultSyn = self.dc.ImuResultSyn
 
+        self.UwbData[:,1:] = self.UwbData[:,1:] / 1000.0
+
 
         '''
         Need to compute:
         1. Z_OFFSET and INITIAL POINT
         2.
         '''
-        tp  = tranglepose(self.BeaconSet,self.UwbData[0:10,1:])
+        tp  = tranglepose(self.BeaconSet,self.UwbData[2:10,1:])
 
 
 
@@ -62,7 +64,7 @@ class fusing_location:
         self.UWBResult = np.zeros([self.UwbData.shape[0], 2])
         # print(self.UwbData,self.UwbData.shape)
 
-        self.UwbData /= 1000.0
+        # self.UwbData /= 1000.0
         #
         # self.UwbData = self.UwbData ** 2.0
         # self.UwbData -= self.z_offset

@@ -10,16 +10,25 @@ class tranglepose:
         self.pose = [0,0,0]
         self.beaconset = beaconset
         self.range_list= range_list
+        print("size of beaconset",self.beaconset.shape,self.range_list.shape)
 
         init_pose = [0.0,0.0,0.0]
-        res = minimize(self.costfunction_multi_range,init_pose)
+        print("cost func:",self.costfunction_multi_range(init_pose))
+        res = minimize(self.costfunction_multi_range,
+                       self.pose,
+                       method='L-BFGS-B',
+                       bounds=((-100,100),
+                               (-100,100),
+                               (0.0,4.0)
+                       ),
+                       jac=False)
 
         print(res.x)
 
     def costfunction_single_range(self,pose):
         val = 0.0
         for i in range(self.beaconset.shape[0]):
-            val += np.abs(np.linalg.norm(self.beaconset[i,:]-self.pose)
+            val += np.abs(np.linalg.norm(self.beaconset[i,:]-pose)
                     -self.range_list[i])
         return val
 
@@ -29,7 +38,8 @@ class tranglepose:
             for i in range(self.beaconset.shape[0]):
                 val += np.abs(np.linalg.norm(self.beaconset[i,:]-self.pose)
                               - self.range_list[j,i])
-        return val * 1.0 / float(self.range_list.shape[0])
+        print("val:",val)
+        return val * 1.0 / float(self.range_list.shape[0])/float(self.beaconset.shape[0])
 
 
 

@@ -24,7 +24,7 @@ class seq_process:
         tmp_log = open("log.data", 'w')
 
         all_file = fa.readline()
-        print(len(all_file))
+        # print(len(all_file))
 
         last_i = 0
         for i in range(len(all_file)):
@@ -62,7 +62,7 @@ class seq_process:
                     # print("ll is :",ll,"can not found a {")
                     return True
                 ll = ll[start::]
-            print(ll)
+            # print(ll)
             jdata = demjson.decode(ll)
 
             if jdata['type'] == 'a':

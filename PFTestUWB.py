@@ -40,9 +40,9 @@ if __name__ == '__main__':
 
     SCREEN_SIZE=[1680,980]
 
-    OFFSET = [750,750] # piexels
+    OFFSET = [450,450] # piexels
 
-    ScaleFactor = 40.0 #Real(m) to piexels
+    ScaleFactor = 30.0 #Real(m) to piexels
 
 
     pygame.init()
@@ -83,7 +83,7 @@ if __name__ == '__main__':
 
     # z_offset = beaconpose[:,2] - 1.12
     z_offset = np.ones_like(beacon_range)
-    z_offset *= 0.5
+    z_offset *= 0.01
 
     # print("beacons 223",beacon_range[223,:])
 

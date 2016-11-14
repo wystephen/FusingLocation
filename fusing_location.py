@@ -15,6 +15,8 @@ from XimuDataPreProcess import XimuDataPreProcess
 from DataChronic import DataChronic
 from ViewerModel import PF_FRAME
 
+from TranglePose import tranglepose
+
 class fusing_location:
     def __init__(self,dir_name):
         #---
@@ -34,6 +36,9 @@ class fusing_location:
         1. Z_OFFSET and INITIAL POINT
         2.
         '''
+        tp  = tranglepose(self.BeaconSet,self.UwbData[0:10,1:])
+
+
 
 
 

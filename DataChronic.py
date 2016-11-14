@@ -201,7 +201,7 @@ class DataChronic:
         # plt.show()
 
         for i in range(self.UwbData.shape[0]):
-            self.pf.Sample(0.3)
+            self.pf.Sample(0.2)
             self.pf.Evaluated(self.UwbData[i, 1:5])
 
             self.pf.ReSample()
@@ -227,7 +227,7 @@ if __name__ == '__main__':
             dc = DataChronic(dir_name)
             dc.RunOpenshoe()
             dc.SynData()
-            dc.OnlyPF(200)
+            dc.OnlyPF(500)
 
 
             plt.show()

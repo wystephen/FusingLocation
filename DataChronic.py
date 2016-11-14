@@ -99,7 +99,7 @@ class DataChronic:
                                self.ImuSourceData[1:40, 1:7])
 
         for index in range(self.ImuSourceData.shape[0]):
-            if (index % 100 == 0):
+            if (index % 2000 == 0):
                 print('finished openshoe:', float(index) /
                       self.ImuSourceData.shape[0])
             if index > 1:

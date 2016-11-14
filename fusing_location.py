@@ -97,5 +97,5 @@ class fusing_location:
 
 if __name__ == '__main__':
     for dir_name in os.listdir('./'):
-        if '10-' in dir_name:
+        if '10-' in dir_name or '-0'in dir_name:
             location = fusing_location(dir_name)

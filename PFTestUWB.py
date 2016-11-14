@@ -24,7 +24,7 @@ if __name__ == '__main__':
     '''
     import os
     for dir_name in os.listdir('./'):
-        if '05-' in dir_name:
+        if '10-' in dir_name:
             for the_file_name in os.listdir(dir_name):
                 if '.data' in the_file_name:
                     beaconpose = np.loadtxt(dir_name+"/beaconset")

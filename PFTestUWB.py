@@ -24,7 +24,7 @@ if __name__ == '__main__':
     '''
     import os
     for dir_name in os.listdir('./'):
-        if '01-03' in dir_name:
+        if '05-' in dir_name:
             for the_file_name in os.listdir(dir_name):
                 if '.data' in the_file_name:
                     beaconpose = np.loadtxt(dir_name+"/beaconset")
@@ -40,9 +40,9 @@ if __name__ == '__main__':
 
     SCREEN_SIZE=[1680,980]
 
-    OFFSET = [150,150] # piexels
+    OFFSET = [750,750] # piexels
 
-    ScaleFactor = 120.0 #Real(m) to piexels
+    ScaleFactor = 40.0 #Real(m) to piexels
 
 
     pygame.init()
@@ -83,7 +83,7 @@ if __name__ == '__main__':
 
     # z_offset = beaconpose[:,2] - 1.12
     z_offset = np.ones_like(beacon_range)
-    z_offset *= 2.5
+    z_offset *= 0.5
 
     # print("beacons 223",beacon_range[223,:])
 
@@ -110,6 +110,7 @@ if __name__ == '__main__':
     tmp_beacon.SetRangeMethond(1)
     tmp_beacon2.SetRangeMethond(1)
     tmp_beacon3.SetRangeMethond(1)
+    tmp_beacon4.SetRangeMethond(1)
 
     tmp_robo = Robo(SCREEN_SIZE,OFFSET,ScaleFactor)
 

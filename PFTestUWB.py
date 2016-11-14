@@ -19,6 +19,22 @@ if __name__ == '__main__':
     # --- Clobals ---
     # Colors
 
+    '''
+    Select file only according to first several letters.
+    '''
+    import os
+    for dir_name in os.listdir('./'):
+        if '01-03' in dir_name:
+            for the_file_name in os.listdir(dir_name):
+                if '.data' in the_file_name:
+                    beaconpose = np.loadtxt(dir_name+"/beaconset")
+                    se = seq_process()
+                    se.process_file(file_name=dir_name + '/'+the_file_name)
+                    beacon_range = np.loadtxt("atrange.txt")
+                    break
+            break
+
+
     BLACK=(0,0,0)
     WHITE=(255,255,255)
 
@@ -45,7 +61,7 @@ if __name__ == '__main__':
     tmp_beacon3 = BeaconWithRange(SCREEN_SIZE,OFFSET,ScaleFactor)
     tmp_beacon4 = BeaconWithRange(SCREEN_SIZE,OFFSET,ScaleFactor)
 
-    beaconpose = np.loadtxt("log/beaconset")
+    # beaconpose = np.loadtxt("log/beaconset")
     print(beaconpose)
     tmp_beacon.SetPose(beaconpose[0,0],beaconpose[0,1])
     tmp_beacon2.SetPose(beaconpose[1,0],beaconpose[1,1])
@@ -55,9 +71,9 @@ if __name__ == '__main__':
 
     # Data Load
 
-    se = seq_process
-    se.process_file(se,file_name='log/log.data',out_aa='aarange.txt',out_at='atrange.txt')
-    beacon_range = np.loadtxt("atrange.txt")
+    # se = seq_process
+    # se.process_file(se,file_name='log/log.data',out_aa='aarange.txt',out_at='atrange.txt')
+    # beacon_range = np.loadtxt("atrange.txt")
 
 
     time_step = 0

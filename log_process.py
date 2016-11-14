@@ -16,6 +16,7 @@ class seq_process:
         #
         # self.aadis = np.zeros([3])
         # self.atdis = np.zeros([4])
+
     def file_pre_process(self,name):
         # print("frame")
         import os
@@ -33,6 +34,7 @@ class seq_process:
                 last_i = i + 2
                 # print("new line")
         tmp_log.close()
+        return None
 
     def process_file(self,file_name='LOG_2016_10_12_10_15_17.data',
                      out_aa='aarange.txt',

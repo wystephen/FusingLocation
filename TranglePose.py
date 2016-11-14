@@ -10,11 +10,11 @@ class tranglepose:
         self.pose = [5.2, -0.4, 2.0]
         self.beaconset = beaconset
         self.range_list = range_list
-        print("size of beaconset", self.beaconset.shape, self.range_list.shape)
+        # print("size of beaconset", self.beaconset.shape, self.range_list.shape)
 
         print("cost func:", self.costfunction_multi_range(self.pose))
 
-        print("range list ", self.range_list)
+        # print("range list ", self.range_list)
         res = minimize(self.costfunction_multi_range,
                        self.pose,
                        method='L-BFGS-B',

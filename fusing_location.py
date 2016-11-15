@@ -15,7 +15,7 @@ from XimuDataPreProcess import XimuDataPreProcess
 from DataChronic import DataChronic
 from ViewerModel import PF_FRAME
 
-from TranglePose import tranglepose
+from TranglePose import trianglepose
 
 class fusing_location:
     def __init__(self,dir_name):
@@ -38,7 +38,9 @@ class fusing_location:
         1. Z_OFFSET and INITIAL POINT
         2.
         '''
-        tp  = tranglepose(self.BeaconSet,self.UwbData[2:10,1:])
+        tp  = trianglepose(self.BeaconSet, self.UwbData[2:10, 1:])
+        self.z_offset = tp.pose[2]-self.BeaconSet[1,2]
+        self.initialpose = tp.pose[0:2]
 
 
 
@@ -59,7 +61,8 @@ class fusing_location:
         self.pf = PF_FRAME.PF_Frame([1000, 1000], [10, 10], 10, particle_num)
 
         self.pf.SetBeaconSet(self.BeaconSet[:, 0:2])
-        self.pf.InitialPose([0.0, 0.0])
+        self.pf.InitialPose(self.initialpose)
+        # self.pf.InitialPose([0.0, 0.0])
 
         self.UWBResult = np.zeros([self.UwbData.shape[0], 2])
         # print(self.UwbData,self.UwbData.shape)
@@ -70,7 +73,8 @@ class fusing_location:
         # self.UwbData -= self.z_offset
         # self.UwbData = self.UwbData ** 0.5
 
-        self.UwbData[:, 1:] = (self.UwbData[:, 1:] ** 2.0 - self.z_offset)
+        self.UwbData[:, 1:] = np.abs(self.UwbData[:, 1:] ** 2.0 - self.z_offset)
+
 
         self.UwbData[:, 1:] = np.sqrt(np.abs(self.UwbData[:, 1:]))
 
@@ -81,12 +85,15 @@ class fusing_location:
         # plt.show()
 
         for i in range(self.UwbData.shape[0]):
-            self.pf.Sample(0.3)
+            self.pf.Sample(0.5)
             self.pf.Evaluated(self.UwbData[i, 1:5])
 
             self.pf.ReSample()
 
             self.UWBResult[i, :] = self.pf.GetResult()
+        plt.figure(1)
+        plt.plot(self.UWBResult[:,0],self.UWBResult[:,1],'r-+')
+        plt.show()
 
 
 
@@ -95,4 +102,5 @@ if __name__ == '__main__':
         if '04-' in dir_name or '-0'in dir_name:
             print(dir_name)
             location = fusing_location(dir_name)
+            location.OnlyPF()
 

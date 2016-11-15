@@ -5,7 +5,7 @@ import numpy as np
 from scipy.optimize import minimize
 
 
-class tranglepose:
+class trianglepose:
     def __init__(self, beaconset, range_list):
         self.pose = np.array([5.2, -0.4, 1.12])
         self.beaconset = beaconset

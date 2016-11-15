@@ -221,7 +221,7 @@ if __name__ == '__main__':
 
     for dir_name in os.listdir('./'):
         # print(dir_name)
-        if '09-0' in dir_name:
+        if '08-0' in dir_name:
             print(dir_name)
             dc = DataChronic(dir_name)
             dc.RunOpenshoe()

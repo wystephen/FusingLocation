@@ -11,14 +11,14 @@ if __name__ == '__main__':
 
     plt.figure(1)
 
-    plt.plot(imutime+ np.mean(uwbtime)-np.mean(imutime),'r-+')
+    plt.plot(imutime+ np.mean(uwbtime[2:])-np.mean(imutime[2:]),'r-+')
     plt.plot(uwbtime,'b-+')
 
     plt.figure(2)
-    plt.plot(uwbtime-imutime-np.mean(uwbtime)+np.mean(imutime),'g-+')
+    plt.plot(uwbtime-imutime-np.mean(uwbtime[2:])+np.mean(imutime[2:]),'g-+')
     plt.grid(True)
 
 
-    print('time offset:',np.mean(uwbtime)-np.mean(imutime))
+    print('time offset:',np.mean(uwbtime[2:])-np.mean(imutime[2:]))
 
     plt.show()

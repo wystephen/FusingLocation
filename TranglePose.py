@@ -7,7 +7,7 @@ from scipy.optimize import minimize
 
 class tranglepose:
     def __init__(self, beaconset, range_list):
-        self.pose = np.array([5.2, -0.4, 2.0])
+        self.pose = np.array([5.2, -0.4, 1.12])
         self.beaconset = beaconset
         self.range_list = range_list
         # print("size of beaconset", self.beaconset.shape, self.range_list.shape)
@@ -20,7 +20,7 @@ class tranglepose:
                        method='L-BFGS-B',
                        bounds=((-30, 30),
                                (-30, 30),
-                               (1.00, 2.4)
+                               (1.00, 2.6)
                                ),
                        jac=False)
 

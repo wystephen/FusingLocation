@@ -90,11 +90,6 @@ class fusing_location:
 
 
 
-
-
-
-
-
 if __name__ == '__main__':
     for dir_name in os.listdir('./'):
         if '04-' in dir_name or '-0'in dir_name:

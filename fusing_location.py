@@ -99,7 +99,7 @@ class fusing_location:
 
 if __name__ == '__main__':
     for dir_name in os.listdir('./'):
-        if '04-' in dir_name or '-0'in dir_name:
+        if '02-02-02-01-' in dir_name :#or '-0'in dir_name:
             print(dir_name)
             location = fusing_location(dir_name)
             location.OnlyPF()

@@ -20,7 +20,7 @@ class tranglepose:
                        method='L-BFGS-B',
                        bounds=((-30, 30),
                                (-30, 30),
-                               (1.00, 2.6)
+                               (1.00, 3.0)
                                ),
                        jac=False)
 

@@ -221,11 +221,11 @@ if __name__ == '__main__':
 
     for dir_name in os.listdir('./'):
         # print(dir_name)
-        if '06-0' in dir_name:
+        if '09-0' in dir_name:
             print(dir_name)
             dc = DataChronic(dir_name)
             dc.RunOpenshoe()
             dc.SynData()
-            dc.OnlyPF(500)
+            dc.OnlyPF(200)
 
             plt.show()

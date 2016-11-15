@@ -43,7 +43,8 @@ class PF_Frame:
         for i in range(len(pose)):
             self.Pose[i] = pose[i]
 
-            self.IntPose[i] = int(self.Pose[i] * 1.0 * self.SCALEFACTOR) + self.OFFSET[i]
+            self.IntPose[i] = int(self.Pose[i] * 1.0 * self.SCALEFACTOR) \
+                              + self.OFFSET[i]
 
         for k in range(self.P_state.shape[0]):
             self.P_state[k, :] = self.Pose
@@ -145,14 +146,19 @@ class PF_Frame:
         for k in range(self.P_state.shape[0]):
             IntPose = [0, 0]
             for i in range(self.P_state.shape[1]):
-                IntPose[i] = int(self.P_state[k, i] * self.SCALEFACTOR) + self.OFFSET[i]
+                IntPose[i] = int(self.P_state[k, i] * self.SCALEFACTOR) \
+                             + self.OFFSET[i]
             # pygame.draw.circle(screen,[200,200,2,20],IntPose,int(self.Wight[k]*self.P_state.shape[0] * 10),int(self.Wight[k]*self.P_state.shape[0] * 10))
-            pygame.draw.circle(screen, [200, 200, 2, 20], IntPose, int(2), int(2))
+            pygame.draw.circle(screen,
+                               [200, 200, 2, 20],
+                               IntPose,
+                               int(2), int(2))
             # print(k)
         IntPose = [0, 0]
 
         for i in range(self.P_state.shape[1]):
-            IntPose[i] = int(self.EstimatePose[i] * self.SCALEFACTOR) + self.OFFSET[i]
+            IntPose[i] = int(self.EstimatePose[i] * self.SCALEFACTOR) \
+                         + self.OFFSET[i]
         self.path.append([IntPose[0], IntPose[1]])
         if len(self.path) > 20:
             self.path.pop(0)
@@ -169,7 +175,10 @@ class PF_Frame:
 
         for i in range(RECT_POSE[0], RECT_POSE[1]):
             for j in range(RECT_POSE[2], RECT_POSE[3]):
-                score = self.Score(Ranges, (np.asarray([i, j]) - np.asarray(self.OFFSET)) * 1.0 / self.SCALEFACTOR)
+                score = self.Score(Ranges,
+                                   (np.asarray([i, j]) -
+                                    np.asarray(self.OFFSET)) * 1.0 /
+                                   self.SCALEFACTOR)
                 score = int(score / 3.0 * 255.0)
                 pixObj[i][j] = (score, score, score)
                 # i += 20

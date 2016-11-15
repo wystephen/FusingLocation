@@ -153,7 +153,8 @@ if __name__ == '__main__':
             elif event.type == pygame.KEYDOWN:
                 print(event.key)
                 if event.key == 115:
-                    pf.InitialPose([((pose[0]-OFFSET[0])*1.0/ScaleFactor),((pose[1]-OFFSET[1])*1.0/ScaleFactor)])
+                    pf.InitialPose([((pose[0]-OFFSET[0])*1.0/ScaleFactor),
+                                    ((pose[1]-OFFSET[1])*1.0/ScaleFactor)])
 
                 elif event.key == 100:
                     IsPause = not IsPause

@@ -156,6 +156,8 @@ class DataChronic:
                     break
                 if j == self.openshoeresult.shape[0]-1:
                     print("MAYBE SOME ERROR HERE")
+                    self.ImuResultSyn = self.ImuResultSyn[:i,:]
+                    break
 
         plt.figure(111101)
         plt.plot(self.ImuResultSyn[:, 0], self.ImuResultSyn[:, 1], 'b-+')

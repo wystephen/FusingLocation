@@ -100,7 +100,7 @@ class fusing_location:
         from reference_transform import reftransform
         tf = reftransform()
         # print(self.ImuResultSyn.shape)
-        tf.SetOffset(self.ImuResultSyn[0,-2:])
+        tf.SetOffset(self.UWBResult[0, 0:2])
         tf.EstimateTheta(self.ImuResultSyn,self.UWBResult)
 
 
@@ -109,7 +109,7 @@ class fusing_location:
 
 if __name__ == '__main__':
     for dir_name in os.listdir('./'):
-        if '05' in dir_name :#or '-0'in dir_name:
+        if '06' in dir_name:  # or '-0'in dir_name:
             print(dir_name)
             location = fusing_location(dir_name)
             location.OnlyPF()

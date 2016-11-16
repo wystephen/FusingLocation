@@ -8,6 +8,8 @@ import scipy as sp
 from scipy.optimize import minimize
 
 import matplotlib.pyplot as plt
+
+
 class reftransform:
     def __init__(self):
         self.theta = 0.0
@@ -19,7 +21,7 @@ class reftransform:
     def SetTheta(self, theta):
         self.theta = theta
 
-    def EstimateTheta(self,pointlist,reference_pointlist):
+    def EstimateTheta(self, pointlist, reference_pointlist):
         '''
 
         :param pointlist:
@@ -30,9 +32,9 @@ class reftransform:
         # print(referent_vec.shape)
         # print("---------------")
 
-        #````
+        # ````
         self.imu_path = pointlist[:, 0:2]
-        self.uwb_path = reference_pointlist[:,-2:]
+        self.uwb_path = reference_pointlist[:, -2:]
         self.imu_path += self.offset
 
         # print(self.imu_path.shape)
@@ -40,11 +42,11 @@ class reftransform:
 
 
         plt.figure(1123)
-        plt.plot(self.imu_path[:,0],self.imu_path[:,1],'r-+')
-        plt.plot(self.uwb_path[:,0],self.uwb_path[:,1],'b-+')
+        plt.plot(self.imu_path[:, 0], self.imu_path[:, 1], 'r-+')
+        plt.plot(self.uwb_path[:, 0], self.uwb_path[:, 1], 'b-+')
         plt.grid(True)
 
-        init_theta = 0.0
+        init_theta = 90.0 * np.pi / 180.0
         res = minimize(self.theta_costfunc,
                        init_theta,
                        method='L-BFGS-B',
@@ -67,13 +69,16 @@ class reftransform:
         Compute tMatrix
         '''
         tMatrix = np.asarray([
-            [np.cos(self.theta), np.sin(self.theta)],
-            [-np.sin(self.theta), np.cos(self.theta)]
+            np.cos(self.theta), np.sin(self.theta),
+            -np.sin(self.theta), np.cos(self.theta)
         ], dtype=float)
+
+        tMatrix = tMatrix.reshape([2, 2])
 
         tmp_imu = tMatrix.dot(self.imu_path.transpose()).transpose()
 
         val = np.sum(np.abs(tmp_imu[0:20, :] - self.uwb_path[0:20, :]))
+        print("val:", val, "theta:", theta)
 
         return val
 
@@ -85,8 +90,8 @@ class reftransform:
             '''
             Check the value range of theta.
             '''
-            if not(-np.pi < self.theta < np.pi):
-                print("self.theta is out of range:",self.theta)
+            if not (-np.pi < self.theta < np.pi):
+                print("self.theta is out of range:", self.theta)
 
             '''
             Compute tMatrix
@@ -95,11 +100,12 @@ class reftransform:
                 [np.cos(self.theta), np.sin(self.theta)],
                 [-np.sin(self.theta), np.cos(self.theta)]
             ], dtype=float)
+            tMatrix = tMatrix.reshape([2, 2])
 
             '''
             Check Order and transform
             '''
-            pointlist = tMatrix.dot(pointlist.transpose())
+            pointlist = tMatrix.dot(pointlist.transpose()).transpose()
             # pointlist += self.offset
 
 

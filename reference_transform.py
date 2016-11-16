@@ -46,7 +46,7 @@ class ReferenceTransform:
         plt.plot(self.uwb_path[:, 0], self.uwb_path[:, 1], 'b-+')
         plt.grid(True)
 
-        init_theta_pose = [-135.0 * np.pi / 180.0, 0.0, 0.0]  # 90.0 * np.pi / 180.0
+        init_theta_pose = [135.0 * np.pi / 180.0, 0.0, 0.0]  # 90.0 * np.pi / 180.0
         res = minimize(self.theta_costfunc,
                        init_theta_pose,
                        method='L-BFGS-B',
@@ -56,7 +56,7 @@ class ReferenceTransform:
         self.theta = res.x[0]
         tmp_imu_path = self.Transform(self.imu_path) + res.x[1:3]
         plt.plot(tmp_imu_path[:, 0], tmp_imu_path[:, 1], 'g-+')
-        for i in range(0, tmp_imu_path.shape[0], 5):
+        for i in range(0, tmp_imu_path.shape[0], 15):
             plt.plot([tmp_imu_path[i, 0], self.uwb_path[i, 0]],
                      [tmp_imu_path[i, 1], self.uwb_path[i, 1]],
                      'y-')

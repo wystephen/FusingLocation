@@ -31,6 +31,7 @@ class DataChronic:
 
         self.time_offset =  531844066.535
 
+        # self.time_offset += 2
         '''
         Load imu data
         '''
@@ -91,6 +92,10 @@ class DataChronic:
 
         zupt1 = zupt_detector.GLRT_Detector(self.ImuSourceData[:, 1:7])
 
+        plt.figure(1110112)
+        plt.plot(self.ImuSourceData[:, 0], zupt1 * 12000, 'r+')
+        plt.plot(self.UwbData[:, 0], self.UwbData[:, 1], 'g+')
+
         # print("MARK1",self.ImuSourceData[:,0])
 
         ins_filter = PdrEkf.ZUPTaidedIns(setting)
@@ -120,6 +125,10 @@ class DataChronic:
         plt.grid(True)
 
         # plt.show()
+
+    def SmoothPath(self):
+        # self.openshoeresult *= 1.0
+        print('aa')
 
     def SynData(self):
         '''
@@ -224,7 +233,7 @@ if __name__ == '__main__':
 
     for dir_name in os.listdir('./'):
         # print(dir_name)
-        if '08-0' in dir_name:
+        if '02-02-' in dir_name:
             print(dir_name)
             dc = DataChronic(dir_name)
             dc.RunOpenshoe()

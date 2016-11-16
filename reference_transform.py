@@ -46,18 +46,25 @@ class reftransform:
         plt.plot(self.uwb_path[:, 0], self.uwb_path[:, 1], 'b-+')
         plt.grid(True)
 
-        init_theta = 90.0 * np.pi / 180.0
+        init_theta_pose = [0.0, 0.0, 0.0]  # 90.0 * np.pi / 180.0
         res = minimize(self.theta_costfunc,
-                       init_theta,
+                       init_theta_pose,
                        method='L-BFGS-B',
                        # bounds=((-np.pi,np.pi)),
                        jac=False)
         print(res.x)
-        self.theta = res.x
-        tmp_imu_path = self.Transform(self.imu_path)
+        self.theta = res.x[0]
+        tmp_imu_path = self.Transform(self.imu_path) + res.x[1:3]
         plt.plot(tmp_imu_path[:, 0], tmp_imu_path[:, 1], 'g-+')
+        for i in range(tmp_imu_path.shape[0]):
+            i += 5
+            plt.plot([tmp_imu_path[i, 0], self.uwb_path[i, 0]],
+                     [tmp_imu_path[i, 1], self.uwb_path[i, 1]],
+                     'y-')
 
-    def theta_costfunc(self, theta):
+    def theta_costfunc(self, thetapose):
+        theta = thetapose[0]
+        pose = thetapose[1:3]
         val = 0.0
         '''
         Check the value range of theta.
@@ -76,9 +83,10 @@ class reftransform:
         tMatrix = tMatrix.reshape([2, 2])
 
         tmp_imu = tMatrix.dot(self.imu_path.transpose()).transpose()
+        tmp_imu += pose
 
-        val = np.sum(np.abs(tmp_imu[0:20, :] - self.uwb_path[0:20, :]))
-        print("val:", val, "theta:", theta)
+        val = np.sum(np.abs(tmp_imu[0:8, :] - self.uwb_path[0:8, :]))
+        print("val:", val, "theta:", thetapose)
 
         return val
 

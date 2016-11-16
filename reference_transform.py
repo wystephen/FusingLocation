@@ -84,8 +84,8 @@ class ReferenceTransform:
         tmp_imu = tMatrix.dot(self.imu_path.transpose()).transpose()
         tmp_imu += pose
 
-        val = np.sum((tmp_imu[0:8, :] - self.uwb_path[0:8, :]) ** 2.0)
-        print("val:", val, "theta:", thetapose)
+        val = np.sum((tmp_imu[0:20, :] - self.uwb_path[0:20, :]) ** 2.0)
+        print("val:", val, "thetapose:", thetapose)
 
         return val
 

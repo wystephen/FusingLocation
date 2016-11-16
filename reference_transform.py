@@ -10,7 +10,7 @@ from scipy.optimize import minimize
 import matplotlib.pyplot as plt
 
 
-class reftransform:
+class ReferenceTransform:
     def __init__(self):
         self.theta = 0.0
         self.offset = np.asarray([0.0, 0.0])
@@ -46,7 +46,7 @@ class reftransform:
         plt.plot(self.uwb_path[:, 0], self.uwb_path[:, 1], 'b-+')
         plt.grid(True)
 
-        init_theta_pose = [0.0, 0.0, 0.0]  # 90.0 * np.pi / 180.0
+        init_theta_pose = [-135.0 * np.pi / 180.0, 0.0, 0.0]  # 90.0 * np.pi / 180.0
         res = minimize(self.theta_costfunc,
                        init_theta_pose,
                        method='L-BFGS-B',
@@ -56,8 +56,7 @@ class reftransform:
         self.theta = res.x[0]
         tmp_imu_path = self.Transform(self.imu_path) + res.x[1:3]
         plt.plot(tmp_imu_path[:, 0], tmp_imu_path[:, 1], 'g-+')
-        for i in range(tmp_imu_path.shape[0]):
-            i += 5
+        for i in range(0, tmp_imu_path.shape[0], 5):
             plt.plot([tmp_imu_path[i, 0], self.uwb_path[i, 0]],
                      [tmp_imu_path[i, 1], self.uwb_path[i, 1]],
                      'y-')
@@ -85,7 +84,7 @@ class reftransform:
         tmp_imu = tMatrix.dot(self.imu_path.transpose()).transpose()
         tmp_imu += pose
 
-        val = np.sum(np.abs(tmp_imu[0:8, :] - self.uwb_path[0:8, :]))
+        val = np.sum((tmp_imu[0:8, :] - self.uwb_path[0:8, :]) ** 2.0)
         print("val:", val, "theta:", thetapose)
 
         return val

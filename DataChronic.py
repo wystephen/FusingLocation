@@ -171,8 +171,8 @@ class DataChronic:
             # if i == self.UwbData.shape[0] and i:
             #     break
         tmp = self.ImuResultSyn.copy()
-        self.ImuResultSyn[:, 0] = -1.0 * tmp[:, 0]
-        self.ImuResultSyn[:, 1] = tmp[:, 1]
+        self.ImuResultSyn[:, 0] = tmp[:, 1]
+        self.ImuResultSyn[:, 1] = tmp[:, 0]
 
         plt.figure(111101)
         plt.plot(self.ImuResultSyn[:, 0], self.ImuResultSyn[:, 1], 'b-+')

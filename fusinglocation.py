@@ -18,7 +18,7 @@ from ViewerModel import PF_FRAME
 from TranglePose import trianglepose
 
 
-class fusing_location:
+class FusingLocation:
     def __init__(self,dir_name):
         #---
         self.dc = DataChronic(dir_name)
@@ -99,8 +99,8 @@ class fusing_location:
         # plt.show()
 
     def Transform(self):
-        from reference_transform import reftransform
-        tf = reftransform()
+        from reference_transform import ReferenceTransform
+        tf = ReferenceTransform()
         # print(self.ImuResultSyn.shape)
         tf.SetOffset(self.UWBResult[0, 0:2])
         tf.EstimateTheta(self.ImuResultSyn,self.UWBResult)
@@ -111,9 +111,9 @@ class fusing_location:
 
 if __name__ == '__main__':
     for dir_name in os.listdir('./'):
-        if '07' in dir_name:  # or '-0'in dir_name:
+        if '06' in dir_name:  # or '-0'in dir_name:
             print(dir_name)
-            location = fusing_location(dir_name)
+            location = FusingLocation(dir_name)
             location.OnlyPF()
             location.Transform()
 

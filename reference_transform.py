@@ -6,7 +6,7 @@ import numpy as np
 
 import scipy as sp
 
-
+import matplotlib.pyplot as plt
 class reftransform:
     def __init__(self):
         self.theta = 0.0
@@ -18,21 +18,36 @@ class reftransform:
     def SetTheta(self, theta):
         self.theta = theta
 
-    def EstimateTheta(self,pointlist,referent_vec):
+    def EstimateTheta(self,pointlist,reference_pointlist):
         '''
 
         :param pointlist:
         :param referent_theta:
         :return:
         '''
-        print(pointlist.shape)
-        print(referent_vec.shape)
-        print("---------------")
+        # print(pointlist.shape)
+        # print(referent_vec.shape)
+        # print("---------------")
+
+        #````
+        self.imu_path = pointlist[:,-2:]
+        self.uwb_path = reference_pointlist[:,-2:]
+        self.imu_path += self.offset
+
+        # print(self.imu_path.shape)
+        # print(self.uwb_path.shape)
+
+
+        plt.figure(1123)
+        plt.plot(self.imu_path[:,0],self.imu_path[:,1],'r-+')
+        plt.plot(self.uwb_path[:,0],self.uwb_path[:,1],'b-+')
+        plt.grid(True)
 
 
 
 
-
+    def distance(self,theta):
+        return theta
 
     def Transform(self, pointlist):
 

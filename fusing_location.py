@@ -93,14 +93,29 @@ class fusing_location:
             self.UWBResult[i, :] = self.pf.GetResult()
         plt.figure(1)
         plt.plot(self.UWBResult[:,0],self.UWBResult[:,1],'r-+')
-        plt.show()
+        plt.grid(True)
+        # plt.show()
+
+    def Transform(self):
+        from reference_transform import reftransform
+        tf = reftransform()
+        # print(self.ImuResultSyn.shape)
+        tf.SetOffset(self.ImuResultSyn[0,-2:])
+        tf.EstimateTheta(self.ImuResultSyn,self.UWBResult)
+
+
 
 
 
 if __name__ == '__main__':
     for dir_name in os.listdir('./'):
-        if '02-02-02-01-' in dir_name :#or '-0'in dir_name:
+        if '05' in dir_name :#or '-0'in dir_name:
             print(dir_name)
             location = fusing_location(dir_name)
             location.OnlyPF()
+            location.Transform()
+
+
+
+            plt.show()
 

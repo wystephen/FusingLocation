@@ -150,17 +150,17 @@ class DataChronic:
         for i in range(self.UwbData.shape[0]):
             uwb_time = self.UwbData[i,0]
 
-            for j in range(index-5,self.openshoeresult.shape[0]):
+            for j in range(self.openshoeresult.shape[0]):
                 if np.abs(uwb_time-self.openshoeresult[j,0])<0.05:
                     self.ImuResultSyn[i,:] = self.openshoeresult[j,1:4]
                     break
                 if j == self.openshoeresult.shape[0]-1:
                     print("MAYBE SOME ERROR HERE")
-                    self.ImuResultSyn = self.ImuResultSyn[:i,:]
-                    i = self.UwbData.shape[0]
+                    # self.ImuResultSyn = self.ImuResultSyn[:i,:]
+                    # i = self.UwbData.shape[0]
                     break
-            if i == self.UwbData.shape[0]:
-                break
+            # if i == self.UwbData.shape[0] and i:
+            #     break
 
         plt.figure(111101)
         plt.plot(self.ImuResultSyn[:, 0], self.ImuResultSyn[:, 1], 'b-+')
@@ -206,7 +206,7 @@ class DataChronic:
         # plt.show()
 
         for i in range(self.UwbData.shape[0]):
-            self.pf.Sample(0.2)
+            self.pf.Sample(0.5)
             self.pf.Evaluated(self.UwbData[i, 1:5])
 
             self.pf.ReSample()

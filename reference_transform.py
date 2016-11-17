@@ -40,11 +40,11 @@ class ReferenceTransform:
         # print(self.imu_path.shape)
         # print(self.uwb_path.shape)
 
-
-        plt.figure(1123)
-        plt.plot(self.imu_path[:, 0], self.imu_path[:, 1], 'r-+')
-        plt.plot(self.uwb_path[:, 0], self.uwb_path[:, 1], 'b-+')
-        plt.grid(True)
+        #
+        # plt.figure(1123)
+        # plt.plot(self.imu_path[:, 0], self.imu_path[:, 1], 'r-+')
+        # plt.plot(self.uwb_path[:, 0], self.uwb_path[:, 1], 'b-+')
+        # plt.grid(True)
 
         init_theta_pose = [90 * np.pi / 180.0 + 135.0 * np.pi / 180.0, 0.0, 0.0]  # 90.0 * np.pi / 180.0
 
@@ -57,11 +57,11 @@ class ReferenceTransform:
         print(res.x)
         self.theta = res.x[0]
         tmp_imu_path = self.Transform(self.imu_path) + res.x[1:3]
-        plt.plot(tmp_imu_path[:, 0], tmp_imu_path[:, 1], 'g-+')
-        for i in range(0, tmp_imu_path.shape[0], 15):
-            plt.plot([tmp_imu_path[i, 0], self.uwb_path[i, 0]],
-                     [tmp_imu_path[i, 1], self.uwb_path[i, 1]],
-                     'y-')
+        # plt.plot(tmp_imu_path[:, 0], tmp_imu_path[:, 1], 'g-+')
+        # for i in range(0, tmp_imu_path.shape[0], 15):
+        #     plt.plot([tmp_imu_path[i, 0], self.uwb_path[i, 0]],
+        #              [tmp_imu_path[i, 1], self.uwb_path[i, 1]],
+        #              'y-')
         self.tmp_imu_path = tmp_imu_path
 
     def theta_costfunc(self, thetapose):

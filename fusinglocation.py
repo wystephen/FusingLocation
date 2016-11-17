@@ -129,24 +129,27 @@ class FusingLocation:
 
         for i in range(self.UwbData.shape[0]):
             # self.pf.Sample(0.5)
-            if i > 2:
+            if 8 > i > 2:
                 '''
                 odometry method 1
                 '''
-                # self.pf.OdometrySample(self.ImuSynT[i, :] - self.ImuSynT[i - 1, :], 0.3)
+                self.pf.OdometrySample(self.ImuSynT[i, :] - self.ImuSynT[i - 1, :], 0.2)
+            elif i > 8:
                 '''
                 Odometry method 2
                 '''
-                vec_last = self.ImuResultSyn[i - 1, 1:] - self.ImuResultSyn[i - 2, 1:]  # last time odo
+                vec_last = self.ImuResultSyn[i - 1, 1:] - self.ImuResultSyn[i - 3, 1:]  # last time odo
                 vec_now = self.ImuResultSyn[i, 1:] - self.ImuResultSyn[i - 1, 1:]  # this time odo
 
-                vec_res = self.FusingResult[i - 1, :] - self.FusingResult[i - 2, :]  # last time result
+                vec_res = self.FusingResult[i - 1, :] - self.FusingResult[i - 3, :]  # last time result
 
                 # print('vec shape',vec_last.shape,vec_now.shape,vec_res.shape)
-
-                theta_offset = np.sum(vec_last * vec_now) / \
-                               np.linalg.norm(vec_last) / \
-                               np.linalg.norm(vec_now)
+                #
+                # theta_offset = vec_last.dot(vec_now) / \
+                #                np.linalg.norm(vec_last) / \
+                #                np.linalg.norm(vec_now)
+                theta_offset = math.atan2(vec_now[1], vec_now[0]) - \
+                               math.atan2(vec_last[1], vec_last[0])
 
                 theta_src = math.atan2(vec_res[1], vec_res[0])
 
@@ -156,12 +159,21 @@ class FusingLocation:
                                       np.linalg.norm(vec_now) * np.sin(theta)],
                                      dtype=float)
 
+                # odo_vec = vec_now / vec_last * vec_res
+                #
+                # vec_last_n = vec_last / np.linalg.norm(vec_last)
+                # vec_now_n = vec_now / np.linalg.norm(vec_now)
+                #
+                # vec_res_n = vec_res / np.linalg.norm(vec_res)
+
+                # odo_vec = vec_res + vec_now - vec_last
+                # odo_vec /= np.linalg.norm(odo_vec)
+
                 self.pf.OdometrySample(odo_vec, 0.1)
-
-
 
             else:
                 self.pf.Sample(0.5)
+
             self.pf.Evaluated(self.UwbData[i, 1:5])
 
             self.pf.ReSample()

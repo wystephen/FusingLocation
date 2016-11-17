@@ -22,8 +22,8 @@ class FusingLocation:
     def __init__(self,dir_name):
         #---
         self.dc = DataChronic(dir_name)
-        self.dc.SmoothPath()
         self. dc.RunOpenshoe()
+        self.dc.SmoothPath()
         self. dc.SynData()
         # self. dc.OnlyPF(100)
 

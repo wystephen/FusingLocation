@@ -46,7 +46,9 @@ class ReferenceTransform:
         plt.plot(self.uwb_path[:, 0], self.uwb_path[:, 1], 'b-+')
         plt.grid(True)
 
-        init_theta_pose = [135.0 * np.pi / 180.0, 0.0, 0.0]  # 90.0 * np.pi / 180.0
+        # init_theta_pose = [90 * np.pi / 180.0 + 135.0 * np.pi / 180.0, 0.0, 0.0]  # 90.0 * np.pi / 180.0
+
+        init_theta_pose = [180 * np.pi / 180.0 + 135.0 * np.pi / 180.0, 0.0, 0.0]  # 90.0 * np.pi / 180.0
         res = minimize(self.theta_costfunc,
                        init_theta_pose,
                        method='L-BFGS-B',
@@ -60,6 +62,7 @@ class ReferenceTransform:
             plt.plot([tmp_imu_path[i, 0], self.uwb_path[i, 0]],
                      [tmp_imu_path[i, 1], self.uwb_path[i, 1]],
                      'y-')
+        self.tmp_imu_path = tmp_imu_path
 
     def theta_costfunc(self, thetapose):
         theta = thetapose[0]
@@ -84,9 +87,8 @@ class ReferenceTransform:
         tmp_imu = tMatrix.dot(self.imu_path.transpose()).transpose()
         tmp_imu += pose
 
-        val = np.sum((tmp_imu[0:20, :] - self.uwb_path[0:20, :]) ** 2.0)
+        val = np.sum((tmp_imu[:, :] - self.uwb_path[:, :]) ** 2.0)
         print("val:", val, "thetapose:", thetapose)
-
         return val
 
     def Transform(self, pointlist):

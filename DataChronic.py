@@ -31,7 +31,7 @@ class DataChronic:
 
         self.time_offset =  531844066.535
 
-        # self.time_offset += 2
+        self.time_offset += 2.10
         '''
         Load imu data
         '''

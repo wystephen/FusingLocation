@@ -104,6 +104,50 @@ class FusingLocation:
         # print(self.ImuResultSyn.shape)
         tf.SetOffset(self.UWBResult[0, 0:2])
         tf.EstimateTheta(self.ImuResultSyn,self.UWBResult)
+        self.ImuSynT = tf.tmp_imu_path
+
+    def Fusing(self, particle_num=200):
+        self.pf = PF_FRAME.PF_Frame([1000, 1000], [10, 10], 10, particle_num)
+
+        self.pf.SetBeaconSet(self.BeaconSet[:, 0:2])
+        self.pf.InitialPose(self.initialpose)
+        # self.pf.InitialPose([0.0, 0.0])
+
+        self.FusingResult = np.zeros([self.UwbData.shape[0], 2])
+        # print(self.UwbData,self.UwbData.shape)
+
+        # self.UwbData /= 1000.0
+        #
+        # self.UwbData = self.UwbData ** 2.0
+        # self.UwbData -= self.z_offset
+        # self.UwbData = self.UwbData ** 0.5
+
+        self.UwbData[:, 1:] = np.abs(self.UwbData[:, 1:] ** 2.0 - self.z_offset)
+
+        self.UwbData[:, 1:] = np.sqrt(np.abs(self.UwbData[:, 1:]))
+
+        # plt.figure(111104)
+        # for i in range(self.UwbData.shape[1]):
+        #     if i > 0:
+        #         plt.plot(self.UwbData[:, i])
+        # plt.show()
+
+        for i in range(self.UwbData.shape[0]):
+            # self.pf.Sample(0.5)
+            if i > 1:
+                self.pf.OdometrySample(self.ImuSynT[i, :] - self.ImuSynT[i - 1, :], 0.1)
+            else:
+                self.pf.Sample(0.5)
+            self.pf.Evaluated(self.UwbData[i, 1:5])
+
+            self.pf.ReSample()
+
+            self.FusingResult[i, :] = self.pf.GetResult()
+
+        plt.figure(2211)
+        plt.plot(self.UWBResult[:, 0], self.UWBResult[:, 1], 'r-+')
+        plt.plot(self.FusingResult[:, 0], self.FusingResult[:, 1], 'b-+')
+        plt.grid(True)
 
 
 
@@ -111,11 +155,12 @@ class FusingLocation:
 
 if __name__ == '__main__':
     for dir_name in os.listdir('./'):
-        if '05-0' in dir_name:  # or '-0'in dir_name:
+        if '06-0' in dir_name:  # or '-0'in dir_name:
             print(dir_name)
             location = FusingLocation(dir_name)
             location.OnlyPF()
             location.Transform()
+            location.Fusing(200)
 
             plt.show()
 

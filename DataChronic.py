@@ -154,6 +154,28 @@ class DataChronic:
                 steplen += 1
         print("average len:", np.mean(np.asarray(lenvec)))
 
+        '''
+        Add offset and generate a new path.
+        '''
+        t_offset = int(np.mean(np.asarray(lenvec)))
+        tmp_openshoe_src = np.zeros([self.openshoeresult.shape[0] + t_offset,
+                                     self.openshoeresult.shape[1]])
+        tmp_openshoe_src[t_offset:, :] = self.openshoeresult.copy()
+        tmp_openshoe_src[:t_offset, :] = self.openshoeresult[t_offset:2 * t_offset, :]
+        tmp_openshoe_ori = self.openshoeresult.copy()
+
+        for i in range(self.openshoeresult.shape[0]):
+            self.openshoeresult[i, 1:] = (tmp_openshoe_src[i, 1:]
+                                          + tmp_openshoe_ori[i, 1:]) / 2.0
+
+        plt.plot(self.openshoeresult[:, 1], self.openshoeresult[:, 2], 'y-+')
+        plt.figure(1102023)
+        plt.plot(self.openshoeresult[:, 0], self.openshoeresult[:, 1], 'r-+')
+        plt.plot(self.openshoeresult[:, 0], self.openshoeresult[:, 2], 'b-+')
+        plt.grid(True)
+
+
+
 
 
     def SynData(self):
@@ -183,7 +205,7 @@ class DataChronic:
         # print('ImuResultSyn shape:', self.ImuResultSyn.shape)
 
         for i in range(self.UwbData.shape[0]):
-            uwb_time = self.UwbData[i,0]
+            uwb_time = self.UwbData[i, 0]
 
             for j in range(self.openshoeresult.shape[0]):
                 if np.abs(uwb_time-self.openshoeresult[j,0])<0.05:

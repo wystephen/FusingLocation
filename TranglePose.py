@@ -43,3 +43,7 @@ class trianglepose:
         return (val * 1.0
                 / float(self.range_list.shape[0])
                 / float(self.beaconset.shape[0]))
+
+    def ComputePath(self, uwbdata):
+        initial_pose = [0.0, 0.0, 0.0]
+        OptResult = np.zeros([uwbdata.shape[0], 4])

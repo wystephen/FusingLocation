@@ -41,6 +41,7 @@ class FusingLocation:
         tp = trianglepose(self.BeaconSet, self.UwbData[2:10, 1:])
         self.z_offset = tp.pose[2] - self.BeaconSet[1, 2]
         self.initialpose = tp.pose[0:2]
+        self.OptResult = tp.ComputePath(self.UwbData)
 
     def OnlyPF(self, particle_num=200):
         '''

@@ -4,12 +4,11 @@
 import os
 import sys
 import math
-import time,timeit
+import time, timeit
 
 import numpy as np
 from scipy.optimize import minimize
 import matplotlib.pyplot as plt
-
 
 from XimuDataPreProcess import XimuDataPreProcess
 from DataChronic import DataChronic
@@ -19,12 +18,12 @@ from TranglePose import trianglepose
 
 
 class FusingLocation:
-    def __init__(self,dir_name):
-        #---
+    def __init__(self, dir_name):
+        # ---
         self.dc = DataChronic(dir_name)
-        self. dc.RunOpenshoe()
+        self.dc.RunOpenshoe()
         self.dc.SmoothPath()
-        self. dc.SynData()
+        self.dc.SynData()
         # self. dc.OnlyPF(100)
 
         # Copy data to this class
@@ -32,21 +31,16 @@ class FusingLocation:
         self.UwbData = self.dc.UwbData
         self.ImuResultSyn = self.dc.ImuResultSyn
 
-        self.UwbData[:,1:] = self.UwbData[:,1:] / 1000.0
-
+        self.UwbData[:, 1:] = self.UwbData[:, 1:] / 1000.0
 
         '''
         Need to compute:
         1. Z_OFFSET and INITIAL POINT
         2.
         '''
-        tp  = trianglepose(self.BeaconSet, self.UwbData[2:10, 1:])
-        self.z_offset = tp.pose[2]-self.BeaconSet[1,2]
+        tp = trianglepose(self.BeaconSet, self.UwbData[2:10, 1:])
+        self.z_offset = tp.pose[2] - self.BeaconSet[1, 2]
         self.initialpose = tp.pose[0:2]
-
-
-
-
 
     def OnlyPF(self, particle_num=200):
         '''
@@ -77,7 +71,6 @@ class FusingLocation:
 
         self.UwbData[:, 1:] = np.abs(self.UwbData[:, 1:] ** 2.0 - self.z_offset)
 
-
         self.UwbData[:, 1:] = np.sqrt(np.abs(self.UwbData[:, 1:]))
 
         plt.figure(111104)
@@ -94,7 +87,7 @@ class FusingLocation:
 
             self.UWBResult[i, :] = self.pf.GetResult()
         plt.figure(1)
-        plt.plot(self.UWBResult[:,0],self.UWBResult[:,1],'r-+')
+        plt.plot(self.UWBResult[:, 0], self.UWBResult[:, 1], 'r-+')
         plt.grid(True)
         # plt.show()
 
@@ -103,7 +96,7 @@ class FusingLocation:
         tf = ReferenceTransform()
         # print(self.ImuResultSyn.shape)
         tf.SetOffset(self.UWBResult[0, 0:2])
-        tf.EstimateTheta(self.ImuResultSyn,self.UWBResult)
+        tf.EstimateTheta(self.ImuResultSyn, self.UWBResult)
         self.ImuSynT = tf.tmp_imu_path
 
     def Fusing(self, particle_num=200):
@@ -150,9 +143,6 @@ class FusingLocation:
         plt.grid(True)
 
 
-
-
-
 if __name__ == '__main__':
     for dir_name in os.listdir('./'):
         if '06-0' in dir_name:  # or '-0'in dir_name:
@@ -163,4 +153,3 @@ if __name__ == '__main__':
             location.Fusing(200)
 
             plt.show()
-

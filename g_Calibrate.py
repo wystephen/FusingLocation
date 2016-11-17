@@ -11,8 +11,10 @@ from    scipy.optimize import minimize
 '''
 This class is use to compute the transform matrix to calibration the ximu use data in pdr.
 '''
+
+
 class gCalibration:
-    def __init__(self,ZUPT,source_data):
+    def __init__(self, ZUPT, source_data):
         '''
         Initial,use zupt and source data.
         :param ZUPT:
@@ -25,60 +27,43 @@ class gCalibration:
     def SelectData(self):
         data_size = np.sum(self.zupt)
         print(data_size)
-        self.zerovdata = np.zeros([int(data_size),3])
+        self.zerovdata = np.zeros([int(data_size), 3])
         the_index = 0
 
         for i in range(self.zupt.shape[0]):
             if self.zupt[i] > 0.6:
                 '''
                 '''
-                self.zerovdata[the_index,:] = self.source_data[i,1:4]
+                self.zerovdata[the_index, :] = self.source_data[i, 1:4]
                 the_index += 1
 
-    def CostFunction(self,theta_acc):
+    def CostFunction(self, theta_acc):
         '''
 
         :param theta_acc:
         :return:
         '''
-        ka,ta,ba = self.Theta2Matrix(theta_acc)
+        ka, ta, ba = self.Theta2Matrix(theta_acc)
 
         tmp_data = np.zeros_like(self.zerovdata)
 
         print(tmp_data.shape)
 
-
-
-
-
-
-
-
-
-
-
-    def Theta2Matrix(self,theta):
+    def Theta2Matrix(self, theta):
         ka = np.diag(theta[0:3])
 
-        ta = np.zeros([1,1,1])
-        ta[0,1] = - theta[3]
-        ta[0,2] = theta[5]
-        ta[1,2] = theta[4]
+        ta = np.zeros([1, 1, 1])
+        ta[0, 1] = - theta[3]
+        ta[0, 2] = theta[5]
+        ta[1, 2] = theta[4]
 
         ba = theta[6:9]
 
-        return ka,ta,ba
-
-
-
-
-
-
-
+        return ka, ta, ba
 
 
 if __name__ == '__main__':
-    from OPENSHOE import zupt_test,Setting
+    from OPENSHOE import zupt_test, Setting
 
     import XimuDataPreProcess
 
@@ -138,14 +123,13 @@ if __name__ == '__main__':
     calibration
     '''
 
-    gca = gCalibration(ZUPT1,source_data)
+    gca = gCalibration(ZUPT1, source_data)
     gca.SelectData()
 
     print(gca.zerovdata.shape)
     plt.figure(1)
-    plt.plot(gca.zerovdata[:,0],'r-+')
-    plt.plot(gca.zerovdata[:,1],'g-+')
-    plt.plot(gca.zerovdata[:,2],'b-+')
+    plt.plot(gca.zerovdata[:, 0], 'r-+')
+    plt.plot(gca.zerovdata[:, 1], 'g-+')
+    plt.plot(gca.zerovdata[:, 2], 'b-+')
 
     plt.show()
-

@@ -89,6 +89,7 @@ class FusingLocation:
             self.UWBResult[i, :] = self.pf.GetResult()
         plt.figure(1)
         plt.plot(self.UWBResult[:, 0], self.UWBResult[:, 1], 'r-+')
+        plt.plot(self.OptResult[:, 1], self.OptResult[:, 2], 'y-+')
         plt.grid(True)
         # plt.show()
 
@@ -128,8 +129,22 @@ class FusingLocation:
 
         for i in range(self.UwbData.shape[0]):
             # self.pf.Sample(0.5)
-            if i > 1:
-                self.pf.OdometrySample(self.ImuSynT[i, :] - self.ImuSynT[i - 1, :], 0.3)
+            if i > 2:
+                '''
+                odometry method 1
+                '''
+                # self.pf.OdometrySample(self.ImuSynT[i, :] - self.ImuSynT[i - 1, :], 0.3)
+                '''
+                Odometry method 2
+                '''
+                vec_last = self.ImuResultSyn[i - 1, :] - self.ImuResultSyn[i - 2, :]  # last time odo
+                vec_now = self.ImuResultSyn[i, :] - self.ImuResultSyn[i - 1, :]  # this time odo
+
+                vec_res = self.FusingResult[i - 1, :] - self.FusingResult[i - 2, :]  # last time result
+
+
+
+
             else:
                 self.pf.Sample(0.5)
             self.pf.Evaluated(self.UwbData[i, 1:5])

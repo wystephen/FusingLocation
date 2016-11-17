@@ -91,9 +91,10 @@ class DataChronic:
         zupt_detector = zupt_test.zupte_test(setting)
 
         zupt1 = zupt_detector.GLRT_Detector(self.ImuSourceData[:, 1:7])
+        self.zupt = zupt1
 
         plt.figure(1110112)
-        plt.plot(self.ImuSourceData[:, 0], zupt1 * 12000, 'r+')
+        plt.plot(self.ImuSourceData[:, 0], zupt1 * 12000, 'r+-')
         plt.plot(self.UwbData[:, 0], self.UwbData[:, 1], 'g+')
 
         # print("MARK1",self.ImuSourceData[:,0])
@@ -116,6 +117,8 @@ class DataChronic:
                 self.ImuSourceData[index, 1:7],
                 zupt1[index],
                 zupt1[index]).reshape([18])
+        plt.plot(self.ImuSourceData[:, 0], self.openshoeresult[:, 1] * 1000, 'b-+')
+        plt.plot(self.ImuSourceData[:, 0], self.openshoeresult[:, 2] * 1000, 'y-+')
         '''
         Test openshoe result.
         '''
@@ -129,6 +132,29 @@ class DataChronic:
     def SmoothPath(self):
         # self.openshoeresult *= 1.0
         print('aa')
+        print(self.zupt)
+
+        '''
+        Compute length of every step
+        '''
+        # Ignore several step near the start point.
+        ignstep = 4
+        steplen = 0
+        lenvec = list()
+
+        for i in range(self.zupt.shape[0] - 1):
+            if self.zupt[i] == 1 and self.zupt[i + 1] == 0:
+                ignstep -= 1
+                if ignstep < 0:
+                    lenvec.append(steplen)
+
+            elif self.zupt[i] == 0 and self.zupt[i + 1] == 1:
+                steplen = 0
+            else:
+                steplen += 1
+        print("average len:", np.mean(np.asarray(lenvec)))
+
+
 
     def SynData(self):
         '''

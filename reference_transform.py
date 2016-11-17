@@ -46,9 +46,9 @@ class ReferenceTransform:
         plt.plot(self.uwb_path[:, 0], self.uwb_path[:, 1], 'b-+')
         plt.grid(True)
 
-        # init_theta_pose = [90 * np.pi / 180.0 + 135.0 * np.pi / 180.0, 0.0, 0.0]  # 90.0 * np.pi / 180.0
+        init_theta_pose = [90 * np.pi / 180.0 + 135.0 * np.pi / 180.0, 0.0, 0.0]  # 90.0 * np.pi / 180.0
 
-        init_theta_pose = [180 * np.pi / 180.0 + 135.0 * np.pi / 180.0, 0.0, 0.0]  # 90.0 * np.pi / 180.0
+        # init_theta_pose = [180 * np.pi / 180.0 + 135.0 * np.pi / 180.0, 0.0, 0.0]  # 90.0 * np.pi / 180.0
         res = minimize(self.theta_costfunc,
                        init_theta_pose,
                        method='L-BFGS-B',

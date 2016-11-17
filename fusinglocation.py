@@ -137,11 +137,26 @@ class FusingLocation:
                 '''
                 Odometry method 2
                 '''
-                vec_last = self.ImuResultSyn[i - 1, :] - self.ImuResultSyn[i - 2, :]  # last time odo
-                vec_now = self.ImuResultSyn[i, :] - self.ImuResultSyn[i - 1, :]  # this time odo
+                vec_last = self.ImuResultSyn[i - 1, 1:] - self.ImuResultSyn[i - 2, 1:]  # last time odo
+                vec_now = self.ImuResultSyn[i, 1:] - self.ImuResultSyn[i - 1, 1:]  # this time odo
 
                 vec_res = self.FusingResult[i - 1, :] - self.FusingResult[i - 2, :]  # last time result
 
+                # print('vec shape',vec_last.shape,vec_now.shape,vec_res.shape)
+
+                theta_offset = np.sum(vec_last * vec_now) / \
+                               np.linalg.norm(vec_last) / \
+                               np.linalg.norm(vec_now)
+
+                theta_src = math.atan2(vec_res[1], vec_res[0])
+
+                theta = theta_src + theta_offset
+
+                odo_vec = np.asarray([np.linalg.norm(vec_now) * np.cos(theta),
+                                      np.linalg.norm(vec_now) * np.sin(theta)],
+                                     dtype=float)
+
+                self.pf.OdometrySample(odo_vec, 0.1)
 
 
 

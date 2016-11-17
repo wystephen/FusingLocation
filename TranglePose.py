@@ -25,12 +25,14 @@ class trianglepose:
                        jac=False)
 
         print(res.x)
+        self.pose = res.x
+
 
     def costfunction_single_range(self, pose):
         val = 0.0
         for i in range(self.beaconset.shape[0]):
             val += np.abs(np.linalg.norm(self.beaconset[i, :] - pose)
-                          - self.range_list[i])
+                          - self.single_range_list[i])
         return val
 
     def costfunction_multi_range(self, pose):

@@ -135,7 +135,7 @@ class FusingLocation:
         for i in range(self.UwbData.shape[0]):
             # self.pf.Sample(0.5)
             if i > 1:
-                self.pf.OdometrySample(self.ImuSynT[i, :] - self.ImuSynT[i - 1, :], 0.1)
+                self.pf.OdometrySample(self.ImuSynT[i, :] - self.ImuSynT[i - 1, :], 0.3)
             else:
                 self.pf.Sample(0.5)
             self.pf.Evaluated(self.UwbData[i, 1:5])

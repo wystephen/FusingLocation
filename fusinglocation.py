@@ -133,7 +133,8 @@ class FusingLocation:
                 '''
                 odometry method 1
                 '''
-                self.pf.OdometrySample(self.ImuSynT[i, :] - self.ImuSynT[i - 1, :], 0.2)
+                self.pf.OdometrySample(self.ImuSynT[i, :] - self.ImuSynT[i - 1, :],
+                                       0.1)
             elif i > 8:
                 '''
                 Odometry method 2
@@ -193,12 +194,24 @@ class FusingLocation:
 
 
 if __name__ == '__main__':
+    ex_dir_list = list()
     for dir_name in os.listdir('./'):
-        if '03-' in dir_name:  # or '-0'in dir_name:
-            print(dir_name)
-            location = FusingLocation(dir_name)
-            location.OnlyPF()
-            location.Transform()
-            location.Fusing(200)
+        if '-0' in dir_name:
+            ex_dir_list.append(dir_name)
+            # if '03-' in dir_name:  # or '-0'in dir_name:
+            #     print(dir_name)
+            #     location = FusingLocation(dir_name)
+            #     location.OnlyPF()
+            #     location.Transform()
+            #     location.Fusing(200)
+            #
+            #     plt.show()
+    for i in [3]:
+        dir_name = ex_dir_list[i]
+        print(dir_name)
+        location = FusingLocation(dir_name)
+        location.OnlyPF()
+        location.Transform()
+        location.Fusing(200)
 
-            plt.show()
+        plt.show()

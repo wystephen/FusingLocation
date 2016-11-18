@@ -129,7 +129,7 @@ class FusingLocation:
 
         for i in range(self.UwbData.shape[0]):
             # self.pf.Sample(0.5)
-            if 8 > i > 2:
+            if 8 > i > 2 or True:
                 '''
                 odometry method 1
                 '''
@@ -138,7 +138,7 @@ class FusingLocation:
                 '''
                 Odometry method 2
                 '''
-                vec_last = self.ImuResultSyn[i - 1, 1:] - self.ImuResultSyn[i - 3, 1:]  # last time odo
+                vec_last = self.ImuResultSyn[i - 1, 1:] - self.ImuResultSyn[i - 5, 1:]  # last time odo
                 vec_now = self.ImuResultSyn[i, 1:] - self.ImuResultSyn[i - 1, 1:]  # this time odo
 
                 vec_res = self.FusingResult[i - 1, :] - self.FusingResult[i - 3, :]  # last time result
@@ -154,6 +154,11 @@ class FusingLocation:
                 theta_src = math.atan2(vec_res[1], vec_res[0])
 
                 theta = theta_src + theta_offset
+                #
+                # print("theta",math.atan2(vec_now[1], vec_now[0]),
+                #       math.atan2(vec_last[1], vec_last[0]),
+                #       theta_src)
+
 
                 odo_vec = np.asarray([np.linalg.norm(vec_now) * np.cos(theta),
                                       np.linalg.norm(vec_now) * np.sin(theta)],
@@ -181,6 +186,7 @@ class FusingLocation:
             self.FusingResult[i, :] = self.pf.GetResult()
 
         plt.figure(2211)
+        plt.title("fusing v.s. pf")
         plt.plot(self.UWBResult[:, 0], self.UWBResult[:, 1], 'r-+')
         plt.plot(self.FusingResult[:, 0], self.FusingResult[:, 1], 'b-+')
         plt.grid(True)
@@ -188,7 +194,7 @@ class FusingLocation:
 
 if __name__ == '__main__':
     for dir_name in os.listdir('./'):
-        if '06-0' in dir_name:  # or '-0'in dir_name:
+        if '03-02' in dir_name:  # or '-0'in dir_name:
             print(dir_name)
             location = FusingLocation(dir_name)
             location.OnlyPF()

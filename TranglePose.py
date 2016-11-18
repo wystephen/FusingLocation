@@ -52,7 +52,7 @@ class trianglepose:
             self.single_range_list = uwbdata[i, 1:]
             res = minimize(self.costfunction_single_range,
                            initial_pose,
-                           method='L-BFGS-B',
+                           # method='L-BFGS-B',
                            bounds=((-40, 40),
                                    (-40, 40),
                                    (1.0, 3.0)),

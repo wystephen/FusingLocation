@@ -122,6 +122,7 @@ class ReferenceTransform:
             theta_list.append(res.x[0])
 
         self.theta = np.mean(np.asarray(theta_list))
+        print("theta list:", theta_list)
         return self.Transform(odovec)
 
     def odo_costfunc(self, thetapose):
@@ -178,9 +179,9 @@ class ReferenceTransform:
             pointlist = tMatrix.dot(pointlist.transpose()).transpose()
             # pointlist += self.offset
 
-
-
         finally:
-            print(tMatrix)
+            # print(tMatrix)
+            aaaaaaa = 1111111
+
 
         return pointlist

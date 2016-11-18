@@ -49,7 +49,8 @@ class DataChronic:
         '''
         Add Time offset
         '''
-        self.ImuSourceData[:,0] += self.time_offset
+        if np.mean(self.ImuSourceData[:, 0]) - np.mean(self.UwbData[:, 0]) > 1000.0:
+            self.ImuSourceData[:, 0] += self.time_offset
 
 
         '''

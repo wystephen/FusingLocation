@@ -109,8 +109,10 @@ class ReferenceTransform:
 
         theta_list = list()
 
-        for t_i in range(5):
-            ini_thetapose = np.random.normal(0.0, 0.4, size=[3])
+        for t_i in range(1):
+            ini_thetapose = np.random.normal(0.0, 0.1, size=[3])
+
+            ini_thetapose[0] = self.theta
 
             res = minimize(self.odo_costfunc,
                            ini_thetapose,
@@ -123,8 +125,9 @@ class ReferenceTransform:
 
         self.theta = np.mean(np.asarray(theta_list))
         # print("theta list:", theta_list)
-        print("src and res norm:", np.linalg.norm(odovec),
-              np.linalg.norm(self.Transform(odovec)))
+        print(self.theta)
+        # print("src and res norm:", np.linalg.norm(odovec),
+        #       np.linalg.norm(self.Transform(odovec)))
         return self.Transform(odovec)
 
     def odo_costfunc(self, thetapose):
@@ -134,8 +137,8 @@ class ReferenceTransform:
         '''
         Check the value range of theta.
         '''
-        if not (-np.pi < self.theta < np.pi):
-            print("self.theta is out of range:", self.theta)
+        if not (-np.pi < theta < np.pi):
+            print("theta is out of range:", theta)
 
         '''
         Compute tMatrix

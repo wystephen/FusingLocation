@@ -95,11 +95,11 @@ class FusingLocation:
 
     def Transform(self):
         from reference_transform import ReferenceTransform
-        tf = ReferenceTransform()
+        self.tf = ReferenceTransform()
         # print(self.ImuResultSyn.shape)
-        tf.SetOffset(self.UWBResult[0, 0:2])
-        tf.EstimateTheta(self.ImuResultSyn, self.UWBResult)
-        self.ImuSynT = tf.tmp_imu_path
+        self.tf.SetOffset(self.UWBResult[0, 0:2])
+        self.tf.EstimateTheta(self.ImuResultSyn, self.UWBResult)
+        self.ImuSynT = self.tf.tmp_imu_path
 
     def Fusing(self, particle_num=200):
         self.pf = PF_FRAME.PF_Frame([1000, 1000], [10, 10], 10, particle_num)
@@ -129,7 +129,7 @@ class FusingLocation:
 
         for i in range(self.UwbData.shape[0]):
             # self.pf.Sample(0.5)
-            if 8 > i > 2 or True:
+            if 8 > i > 2:
                 '''
                 odometry method 1
                 '''
@@ -144,36 +144,9 @@ class FusingLocation:
 
                 vec_res = self.FusingResult[i - 1, :] - self.FusingResult[i - 3, :]  # last time result
 
-                # print('vec shape',vec_last.shape,vec_now.shape,vec_res.shape)
-                #
-                # theta_offset = vec_last.dot(vec_now) / \
-                #                np.linalg.norm(vec_last) / \
-                #                np.linalg.norm(vec_now)
-                theta_offset = math.atan2(vec_now[1], vec_now[0]) - \
-                               math.atan2(vec_last[1], vec_last[0])
-
-                theta_src = math.atan2(vec_res[1], vec_res[0])
-
-                theta = theta_src + theta_offset
-                #
-                # print("theta",math.atan2(vec_now[1], vec_now[0]),
-                #       math.atan2(vec_last[1], vec_last[0]),
-                #       theta_src)
-
-
-                odo_vec = np.asarray([np.linalg.norm(vec_now) * np.cos(theta),
-                                      np.linalg.norm(vec_now) * np.sin(theta)],
-                                     dtype=float)
-
-                # odo_vec = vec_now / vec_last * vec_res
-                #
-                # vec_last_n = vec_last / np.linalg.norm(vec_last)
-                # vec_now_n = vec_now / np.linalg.norm(vec_now)
-                #
-                # vec_res_n = vec_res / np.linalg.norm(vec_res)
-
-                # odo_vec = vec_res + vec_now - vec_last
-                # odo_vec /= np.linalg.norm(odo_vec)
+                odo_vec = self.tf.ComputeRefOdo(vec_now,
+                                                self.FusingResult[i - 6:i - 1, ],
+                                                self.ImuResultSyn[i - 6:i - 1, 1:])
 
                 self.pf.OdometrySample(odo_vec, 0.1)
 
@@ -206,10 +179,10 @@ if __name__ == '__main__':
             #     location.Fusing(200)
             #
             #     plt.show()
-    for i in [4]:
+    for i in [3]:
         dir_name = ex_dir_list[i]
         print(dir_name)
-        location = FusingLocation(dir_name, [1, 2])
+        location = FusingLocation(dir_name, [0, 2])
         location.OnlyPF()
         location.Transform()
         location.Fusing(200)

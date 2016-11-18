@@ -96,6 +96,62 @@ class ReferenceTransform:
         # print("val:", val, "thetapose:", thetapose)
         return val
 
+    def ComputeRefOdo(self, odovec, uwb_list, imu_list):
+        '''
+
+        :param odovec:
+        :param uwb_list:
+        :param imu_list:
+        :return:
+        '''
+        self.imu_path_odo = imu_list
+        self.uwb_path_odo = uwb_list
+
+        theta_list = list()
+
+        for t_i in range(5):
+            ini_thetapose = np.random.normal(0.0, 0.4, size=[3])
+
+            res = minimize(self.odo_costfunc,
+                           ini_thetapose,
+                           method='L-BFGS-B',
+                           bounds=((-np.pi, np.pi),
+                                   (-30, 30),
+                                   (-30, 30)),
+                           jac=False)
+            theta_list.append(res.x[0])
+
+        self.theta = np.mean(np.asarray(theta_list))
+        return self.Transform(odovec)
+
+    def odo_costfunc(self, thetapose):
+        theta = thetapose[0]
+        pose = thetapose[1:3]
+        val = 0.0
+        '''
+        Check the value range of theta.
+        '''
+        if not (-np.pi < self.theta < np.pi):
+            print("self.theta is out of range:", self.theta)
+
+        '''
+        Compute tMatrix
+        '''
+        tMatrix = np.asarray([
+            np.cos(theta), np.sin(theta),
+            -np.sin(theta), np.cos(theta)
+        ], dtype=float)
+
+        tMatrix = tMatrix.reshape([2, 2])
+
+        tmp_imu = tMatrix.dot(self.imu_path_odo.transpose()).transpose()
+        tmp_imu += pose
+
+        val = np.sum((tmp_imu -
+                      self.uwb_path_odo) ** 2.0)
+        # print("val:", val, "thetapose:", thetapose)
+        return val
+
     def Transform(self, pointlist):
 
         tMatrix = np.zeros([2, 2])

@@ -176,11 +176,11 @@ class DataChronic:
             self.openshoeresult[i, 1:] = (tmp_openshoe_src[i, 1:]
                                           + tmp_openshoe_ori[i, 1:]) / 2.0
 
-        plt.plot(self.openshoeresult[:, 1], self.openshoeresult[:, 2], 'y-+')
-        plt.figure(1102023)
-        plt.plot(self.openshoeresult[:, 0], self.openshoeresult[:, 1], 'r-+')
-        plt.plot(self.openshoeresult[:, 0], self.openshoeresult[:, 2], 'b-+')
-        plt.grid(True)
+            # plt.plot(self.openshoeresult[:, 1], self.openshoeresult[:, 2], 'y-+')
+            # plt.figure(1102023)
+            # plt.plot(self.openshoeresult[:, 0], self.openshoeresult[:, 1], 'r-+')
+            # plt.plot(self.openshoeresult[:, 0], self.openshoeresult[:, 2], 'b-+')
+            # plt.grid(True)
 
 
 

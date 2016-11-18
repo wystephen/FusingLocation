@@ -122,7 +122,9 @@ class ReferenceTransform:
             theta_list.append(res.x[0])
 
         self.theta = np.mean(np.asarray(theta_list))
-        print("theta list:", theta_list)
+        # print("theta list:", theta_list)
+        print("src and res norm:", np.linalg.norm(odovec),
+              np.linalg.norm(self.Transform(odovec)))
         return self.Transform(odovec)
 
     def odo_costfunc(self, thetapose):

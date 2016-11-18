@@ -129,7 +129,7 @@ class FusingLocation:
 
         for i in range(self.UwbData.shape[0]):
             # self.pf.Sample(0.5)
-            if 8 > i > 2 or True:
+            if 8 > i > 2:
                 '''
                 odometry method 1
                 '''
@@ -140,10 +140,10 @@ class FusingLocation:
                 '''
                 Odometry method 2
                 '''
-                # vec_last = self.ImuResultSyn[i - 1, 1:] - self.ImuResultSyn[i - 5, 1:]  # last time odo
+                vec_last = self.ImuResultSyn[i - 1, 1:] - self.ImuResultSyn[i - 5, 1:]  # last time odo
                 vec_now = self.ImuResultSyn[i, 1:] - self.ImuResultSyn[i - 1, 1:]  # this time odo
 
-                # vec_res = self.FusingResult[i - 1, :] - self.FusingResult[i - 3, :]  # last time result
+                vec_res = self.FusingResult[i - 1, :] - self.FusingResult[i - 3, :]  # last time result
 
                 odo_vec = self.tf.ComputeRefOdo(vec_now,
                                                 self.FusingResult[i - 6:i - 1, ],
@@ -180,12 +180,12 @@ if __name__ == '__main__':
             #     location.Fusing(200)
             #
             #     plt.show()
-    for i in [7]:
+    for i in [3]:
         dir_name = ex_dir_list[i]
         print(dir_name)
         location = FusingLocation(dir_name, [0, 1, 2])
         location.OnlyPF()
         location.Transform()
-        location.Fusing(200)
+        location.Fusing(1000)
 
         plt.show()

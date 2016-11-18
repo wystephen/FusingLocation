@@ -46,11 +46,6 @@ class DataChronic:
         self.ImuSourceData[:, 4:7] = tmp_data[:, 1:4] * np.pi / 180.0
 
 
-        '''
-        Add Time offset
-        '''
-        if np.mean(self.ImuSourceData[:, 0]) - np.mean(self.UwbData[:, 0]) > 1000.0:
-            self.ImuSourceData[:, 0] += self.time_offset
 
 
         '''
@@ -72,6 +67,12 @@ class DataChronic:
         o_beacon_use[1:] = o_beacon_use[1:] + 1
         self.UwbData = self.UwbData[:, o_beacon_use.astype(dtype=int)]
         self.BeaconSet = self.BeaconSet[beacon_use, :]
+        '''
+        Add Time offset
+        '''
+        if np.abs(np.mean(self.ImuSourceData[:, 0]) -
+                          np.mean(self.UwbData[:, 0])) > 1000.0:
+            self.ImuSourceData[:, 0] += self.time_offset
 
     def RunOpenshoe(self):
         '''

@@ -18,9 +18,9 @@ from TranglePose import trianglepose
 
 
 class FusingLocation:
-    def __init__(self, dir_name):
+    def __init__(self, dir_name, beacon_use=[0, 1, 2, 3]):
         # ---
-        self.dc = DataChronic(dir_name)
+        self.dc = DataChronic(dir_name, beacon_use=beacon_use)
         self.dc.RunOpenshoe()
         self.dc.SmoothPath()
         self.dc.SynData()
@@ -206,10 +206,10 @@ if __name__ == '__main__':
             #     location.Fusing(200)
             #
             #     plt.show()
-    for i in [3]:
+    for i in [4]:
         dir_name = ex_dir_list[i]
         print(dir_name)
-        location = FusingLocation(dir_name)
+        location = FusingLocation(dir_name, [1, 2])
         location.OnlyPF()
         location.Transform()
         location.Fusing(200)

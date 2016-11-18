@@ -58,7 +58,7 @@ class ReferenceTransform:
                                (-30, 30),
                                (-30, 30)),
                        jac=False)
-        print(res.x)
+        # print(res.x)
         self.theta = res.x[0]
         tmp_imu_path = self.Transform(self.imu_path) + res.x[1:3]
         plt.plot(tmp_imu_path[:, 0], tmp_imu_path[:, 1], 'g-+')
@@ -93,7 +93,7 @@ class ReferenceTransform:
 
         val = np.sum((tmp_imu[:tmp_imu.shape[0], :] -
                       self.uwb_path[:tmp_imu.shape[0], :]) ** 2.0)
-        print("val:", val, "thetapose:", thetapose)
+        # print("val:", val, "thetapose:", thetapose)
         return val
 
     def Transform(self, pointlist):

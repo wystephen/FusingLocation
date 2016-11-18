@@ -16,7 +16,7 @@ from ViewerModel import PF_FRAME
 
 
 class DataChronic:
-    def __init__(self, dir_name):
+    def __init__(self, dir_name, beacon_use=[0, 1, 2, 3]):
         '''
         Load and preprocess data.
 
@@ -66,6 +66,12 @@ class DataChronic:
         self.UwbData = np.loadtxt('atrange.txt')
         self.BeaconSet = np.loadtxt(dir_name + '/' + 'beaconset')
 
+        o_beacon_use = np.zeros(np.asarray(beacon_use).shape[0] + 1)
+        o_beacon_use[1:] = beacon_use
+        o_beacon_use[1:] = o_beacon_use[1:] + 1
+        self.UwbData = self.UwbData[:, o_beacon_use.astype(dtype=int)]
+        self.BeaconSet = self.BeaconSet[beacon_use, :]
+
     def RunOpenshoe(self):
         '''
         Run Open shoe ,get path compute by imu.
@@ -79,7 +85,7 @@ class DataChronic:
         setting = Setting.settings()
 
         setting.Ts = np.mean(self.ImuSourceData[1:, 0] - self.ImuSourceData[0:-1, 0])
-        print("Ts:", setting.Ts)
+        # print("Ts:", setting.Ts)
 
         setting.min_rud_sep = int(1 / setting.Ts)
 
@@ -105,9 +111,9 @@ class DataChronic:
                                self.ImuSourceData[1:40, 1:7])
 
         for index in range(self.ImuSourceData.shape[0]):
-            if (index % 2000 == 0):
-                print('finished openshoe:', float(index) /
-                      self.ImuSourceData.shape[0])
+            # if (index % 5000 == 0):
+            #     print('finished openshoe:', float(index) /
+            #           self.ImuSourceData.shape[0])
             if index > 1:
                 ins_filter.para.Ts = self.ImuSourceData[index, 0] - \
                                      self.ImuSourceData[index - 1, 0]
@@ -131,8 +137,8 @@ class DataChronic:
 
     def SmoothPath(self):
         # self.openshoeresult *= 1.0
-        print('aa')
-        print(self.zupt)
+        # print('aa')
+        # print(self.zupt)
 
         '''
         Compute length of every step

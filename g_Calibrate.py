@@ -47,7 +47,7 @@ class gCalibration:
 
         tmp_data = np.zeros_like(self.zerovdata)
 
-        print(tmp_data.shape)
+        # print(tmp_data.shape)
 
     def Theta2Matrix(self, theta):
         ka = np.diag(theta[0:3])

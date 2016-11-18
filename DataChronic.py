@@ -31,7 +31,7 @@ class DataChronic:
 
         self.time_offset =  531844066.535
 
-        self.time_offset += 2.10
+        self.time_offset += 1.10
         '''
         Load imu data
         '''
@@ -152,7 +152,7 @@ class DataChronic:
                 steplen = 0
             else:
                 steplen += 1
-        print("average len:", np.mean(np.asarray(lenvec)))
+        # print("average len:", np.mean(np.asarray(lenvec)))
 
         '''
         Add offset and generate a new path.
@@ -237,7 +237,7 @@ class DataChronic:
         '''
         PF ONLY USE UWB DATA
         '''
-        print(self.BeaconSet)
+        # print(self.BeaconSet)
 
         self.pf = PF_FRAME.PF_Frame([1000,1000],[10,10],10,particle_num)
 

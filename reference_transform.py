@@ -47,7 +47,7 @@ class ReferenceTransform:
         plt.plot(self.uwb_path[:, 0], self.uwb_path[:, 1], 'b-+')
         plt.grid(True)
 
-        init_theta_pose = [90 * np.pi / 180.0 + 135.0 * np.pi / 180.0,
+        init_theta_pose = [0.0,
                            0.0, 0.0]  # 90.0 * np.pi / 180.0
 
         # init_theta_pose = [180 * np.pi / 180.0 + 135.0 * np.pi / 180.0, 0.0, 0.0]  # 90.0 * np.pi / 180.0
@@ -91,7 +91,8 @@ class ReferenceTransform:
         tmp_imu = tMatrix.dot(self.imu_path.transpose()).transpose()
         tmp_imu += pose
 
-        val = np.sum((tmp_imu[:50, :] - self.uwb_path[:50, :]) ** 2.0)
+        val = np.sum((tmp_imu[:tmp_imu.shape[0], :] -
+                      self.uwb_path[:tmp_imu.shape[0], :]) ** 2.0)
         print("val:", val, "thetapose:", thetapose)
         return val
 

@@ -186,7 +186,7 @@ if __name__ == '__main__':
     for i in [3]:
         dir_name = ex_dir_list[i]
         print(dir_name)
-        location = FusingLocation(dir_name, [0, 2])
+        location = FusingLocation(dir_name, [0, 1, 2])
         location.OnlyPF()
         location.Transform()
         location.Fusing(1000)

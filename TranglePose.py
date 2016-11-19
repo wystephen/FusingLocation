@@ -66,6 +66,10 @@ class trianglepose:
     def TriComputePath(self, uwbdata):
         TriResult = np.zeros([uwbdata.shape[0], 4])
 
+        if self.beaconset.shape[0] < 3:
+            print("less than 3 beacon,Trilateration can't work.")
+            return
+
         for i in range(TriResult.shape[0]):
             TriResult[i, 0] = uwbdata[i, 0]
             TriResult[i, 1:] = self.Trilateration(

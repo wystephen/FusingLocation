@@ -61,13 +61,13 @@ class PF_Frame:
                                                    sigma,
                                                    self.P_state.shape[0])
 
-    def Evaluated(self, Ranges):
+    def Evaluated(self, Ranges, sigma=1.0):
         # print("P_state_shape [0] :",self.P_state.shape[0])
         # print("Ranges:",Ranges)
         for k in range(self.P_state.shape[0]):
-            self.Wight[k] *= self.Score(Ranges, self.P_state[k, :])
+            self.Wight[k] *= self.Score(Ranges, self.P_state[k, :], sigma)
 
-    def Score(self, Ranges, pose):
+    def Score(self, Ranges, pose, sigma=1.0):
         # Methond 1
         # dis_err = 0
         # for i in range((self.BeaconSet.shape[1])):
@@ -79,7 +79,7 @@ class PF_Frame:
         score = 0.0
         for i in range(self.BeaconSet.shape[0]):
             dis = np.linalg.norm(self.BeaconSet[i, :] - pose)
-            score += (self.NormPdf(Ranges[i], dis, 1.0) + 1e-50)
+            score += (self.NormPdf(Ranges[i], dis, sigma) + 1e-50)
         return score
         # Methond 3
         # dis = 0.0

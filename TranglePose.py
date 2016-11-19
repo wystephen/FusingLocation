@@ -68,7 +68,7 @@ class trianglepose:
 
         if self.beaconset.shape[0] < 3:
             print("less than 3 beacon,Trilateration can't work.")
-            return
+            return np.ones([6, 6, 6])
 
         for i in range(TriResult.shape[0]):
             TriResult[i, 0] = uwbdata[i, 0]
@@ -76,6 +76,7 @@ class trianglepose:
                 self.beaconset[0:3, :],
                 uwbdata[i, 1:]
             )
+        return TriResult
 
     def Trilateration(self, beaconset, r):
         '''
@@ -103,11 +104,11 @@ class trianglepose:
         else:
             j = 0.0
 
-        ez = np.cross(ex, ey)
+        # ez = np.cross(ex, ey)
 
         r1 = r[0]
         r2 = r[1]
-        r3 = r[3]
+        r3 = r[2]
 
         x = (r1 * r1 - r2 * r2) / (2 * h) + h / 2.0
         y = (r1 * r1 - r3 * r2 + i * i) / (2.0 * j) + j / 2.0 - x * i / j

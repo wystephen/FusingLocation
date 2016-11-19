@@ -95,6 +95,7 @@ class DataChronic:
         setting.gamma = 6580
 
         setting.init_heading2 = setting.init_heading1
+        setting.init_heading1 = setting.init_heading2 = 0.0
 
         zupt_detector = zupt_test.zupte_test(setting)
 

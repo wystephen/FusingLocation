@@ -51,3 +51,6 @@ class settings:
         self.gravity = 9.8
 
         self.time_Window_size = 10
+
+        #
+        self.pose_constraint = True

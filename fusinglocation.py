@@ -211,7 +211,8 @@ class FusingLocation:
 
         self.tf.EstimateTheta(self.ImuResultSyn, self.UWBResult)
 
-        para.init_heading1 = para.init_heading2 = self.tf.theta
+        para.init_heading1 = para.init_heading2 = -self.tf.theta
+        # print("theta is :" , self.tf.theta / np.pi * 180.0)
         para.init_pos1 = para.init_pos2 = np.asarray(
             [self.initialpose[0], self.initialpose[1], 0.0]
         )
@@ -311,7 +312,7 @@ class FusingLocation:
                     self.ImuData[imu_index, 1:7],
                     self.zupt[imu_index],
                     self.UwbResultFusing[uwb_index, 1:],
-                    10000.0
+                    0.5
                 ).reshape([18])
 
                 # tmp = self.ImuResultFusing[imu_index, :]

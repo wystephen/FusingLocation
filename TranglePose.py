@@ -62,3 +62,39 @@ class trianglepose:
             OptResult[i, 1:] = res.x
 
         return OptResult
+
+    def Trilateration(self, beaconset, r):
+        '''
+
+        :param r: Range to each beacon.
+        :return:
+        '''
+
+        ex = beaconset[1, :] - beaconset[0, :]
+
+        h = np.linalg.norm(ex)
+
+        ex = ex / np.linalg.norm(ex)
+
+        t1 = beaconset[2, :] - beaconset[0, :]
+        i = ex.dot(t1)
+        t2 = ex * i
+
+        ey = t1 - t2
+        t = np.linalg.norm(ey)
+
+        if t > 0.0:
+            ey = ey / t
+            j = ey.dot(t1)
+        else:
+            j = 0.0
+
+        ez = np.cross(ex, ey)
+
+        r1 = r[0]
+        r2 = r[1]
+        r3 = r[3]
+
+        x = (r1 * r1 - r2 * r2) / (2 * h) + h / 2.0
+        y = (r1 * r1 - r3 * r2 + i * i) / (2.0 * j) + j / 2.0 - x * i / j
+        z = r1 * r1 - x * x - y * y

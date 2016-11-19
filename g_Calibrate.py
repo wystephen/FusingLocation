@@ -3,6 +3,7 @@
 
 import numpy as np
 import scipy as sp
+from scipy.optimize import minimize, root
 
 import matplotlib.pyplot as plt
 
@@ -24,6 +25,8 @@ class gCalibration:
 
         self.zupt = ZUPT
 
+        self.g = 9.7967
+
     def SelectData(self):
         data_size = np.sum(self.zupt)
         print(data_size)
@@ -37,6 +40,31 @@ class gCalibration:
                 self.zerovdata[the_index, :] = self.source_data[i, 1:4]
                 the_index += 1
 
+    def ComputeParameter(self):
+        '''
+
+        :return:
+        '''
+
+        theta_acc = np.zeros(9)
+
+        res = minimize(self.CostFunction,
+                       theta_acc,
+                       method='L-BFGS-B',
+                       jac=False)
+
+        self.theta_acc = res.x
+
+    def TransformData(self, data):
+        ka, ta, ba = self.Theta2Matrix(self.theta_acc)
+
+        data[:, 0:3] = ta.dot(ka.dot((data[:, 0:3] + ba).transpose())).transpose()
+        data[:, 3:6] = ta.dot(ka.dot((data[:, 3:6]).transpose())).transpose()
+
+        return data
+
+
+
     def CostFunction(self, theta_acc):
         '''
 
@@ -45,14 +73,20 @@ class gCalibration:
         '''
         ka, ta, ba = self.Theta2Matrix(theta_acc)
 
-        tmp_data = np.zeros_like(self.zerovdata)
+        tmp_data = (self.zerovdata)
 
         # print(tmp_data.shape)
+        tresult = ta.dot(ka.dot((tmp_data + ba).transpose())).transpose()
+        tresult = np.linalg.norm(tresult, axis=1)
+        print(np.mean(np.abs(tresult - self.g)))
+        return np.mean(np.abs(tresult - self.g))
+
 
     def Theta2Matrix(self, theta):
         ka = np.diag(theta[0:3])
 
-        ta = np.zeros([1, 1, 1])
+        ta = np.diag([1, 1, 1])
+
         ta[0, 1] = - theta[3]
         ta[0, 2] = theta[5]
         ta[1, 2] = theta[4]
@@ -125,6 +159,32 @@ if __name__ == '__main__':
 
     gca = gCalibration(ZUPT1, source_data)
     gca.SelectData()
+    gca.ComputeParameter()
+    source_data[:, 1:7] = gca.TransformData(source_data[:, 1:7])
+
+    from OPENSHOE.PdrEkf import ZUPTaidedIns
+
+    ins_filter = ZUPTaidedIns(setting)
+
+    ins_filter.init_Nav_eq(source_data[1:40, 1:7],
+                           source_data[1:40, 1:7])
+    openshoeresult = np.zeros([source_data.shape[0], 19])
+    for index in range(source_data.shape[0]):
+        openshoeresult[index, 0] = source_data[index, 0]
+        openshoeresult[index, 1:] = ins_filter.GetPosition(
+            source_data[index, 1:7],
+            source_data[index, 1:7],
+            ZUPT1[index],
+            ZUPT1[index]
+        ).reshape([18])
+    plt.figure(11111)
+    plt.plot(openshoeresult[:, 1], openshoeresult[:, 2], 'r+-')
+    plt.grid(True)
+
+
+
+
+
 
     print(gca.zerovdata.shape)
     plt.figure(1)

@@ -363,11 +363,15 @@ class ZUPTaidedInsPlus(object):
         END RANGE CONSTRAINT
         '''
         self.last_pose_constrain += 1
+        # pose[2] = 0.0
+        # tp = pose
+        # pose[0] = tp[1]
+        # pose[1] = tp[0]
 
         if self.para.pose_constraint and \
-                        self.last_pose_constrain > self.para.min_rud_sep and \
+                        self.last_pose_constrain > self.para.min_rud_sep * 2 and \
                         np.linalg.norm(
-                                    self.x_h[0:3] - pose) > distance:
+                                    self.x_h[0:2] - pose) > distance:
             self.para.range_constraint = distance
             self.last_pose_constrain = 0
 

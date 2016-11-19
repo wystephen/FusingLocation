@@ -67,6 +67,16 @@ class DataChronic:
         o_beacon_use[1:] = o_beacon_use[1:] + 1
         self.UwbData = self.UwbData[:, o_beacon_use.astype(dtype=int)]
         self.BeaconSet = self.BeaconSet[beacon_use, :]
+
+        '''
+        Test change BeaconSet
+        '''
+        # self.BeaconSet[:,2] *= 1.0
+        tmp = self.BeaconSet.copy()
+
+        self.BeaconSet[:, 0], self.BeaconSet[:, 1] = tmp[:, 1], tmp[:, 0]
+
+
         '''
         Add Time offset
         '''
@@ -227,9 +237,13 @@ class DataChronic:
                     break
             # if i == self.UwbData.shape[0] and i:
             #     break
-        tmp = self.ImuResultSyn.copy()
-        self.ImuResultSyn[:, 0] = tmp[:, 1]
-        self.ImuResultSyn[:, 1] = tmp[:, 0]
+
+        '''
+        IMPORTANT MODIFICATE
+        '''
+        # tmp = self.ImuResultSyn.copy()
+        # self.ImuResultSyn[:, 0] = tmp[:, 1]
+        # self.ImuResultSyn[:, 1] = tmp[:, 0]
 
         plt.figure(111101)
         plt.plot(self.ImuResultSyn[:, 0], self.ImuResultSyn[:, 1], 'b-+')

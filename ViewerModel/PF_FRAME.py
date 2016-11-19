@@ -120,6 +120,11 @@ class PF_Frame:
         # RESAMPLE METHOND 2
         # print(self.Wight.sum())
         for i in range(self.P_state.shape[0]):
+            # print("wight sum:",self.Wight.sum())
+            if np.isnan(self.Wight.sum()):
+                self.Wight = np.ones_like(self.Wight)
+                self.Wight /= np.sum(self.Wight)
+                print("some error ,so reset the wight.")
             tmp_rnd = np.random.uniform(0.0, self.Wight.sum())
             i_index = -1
             while (tmp_rnd > 0.0):

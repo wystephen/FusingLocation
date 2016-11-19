@@ -187,6 +187,18 @@ class FusingLocation:
         Openshoe prepare.
         '''
 
+        self.ImuData = self.dc.ImuSourceData
+
+        # tmp = self.ImuData.copy()
+        #
+        # self.ImuData[:,1] = tmp[:,2]
+        # self.ImuData[:,2] = tmp[:,1]
+        #
+        # self.ImuData[:,4] = tmp[:,5]
+        # self.ImuData[:,5] = tmp[:,4]
+
+
+
         from OPENSHOE.Setting import settings
 
         para = settings()
@@ -200,13 +212,17 @@ class FusingLocation:
         self.tf.EstimateTheta(self.ImuResultSyn, self.UWBResult)
 
         para.init_heading1 = para.init_heading2 = self.tf.theta
-        para.init_pos1 = para.init_pos2 = self.initialpose[0:2]
+        para.init_pos1 = para.init_pos2 = np.asarray(
+            [self.initialpose[0], self.initialpose[1], 0.0]
+        )
 
         para.Ts = np.mean(self.ImuData[1:, 0] - self.ImuData[0:-1, 0])
         para.min_rud_sep = int(1 / para.Ts)
 
         para.time_Window_size = 5
         para.gamma = 6580
+
+        para.range_constraint_on = False
 
         self.zupt = self.dc.zupt
 
@@ -217,7 +233,6 @@ class FusingLocation:
         self.ins.init_Nav_eq(self.ImuData[1:50, 1:7],
                              self.ImuData[1:50, 1:7])
 
-        self.ImuData = self.dc.ImuSourceData
 
         print("imu data :", self.ImuData.shape)
         print("Uwb data;", self.UwbData.shape)
@@ -262,13 +277,17 @@ class FusingLocation:
                     self.zupt[imu_index],
                     self.UwbResultFusing[uwb_index, 1:],
                     2.0
-                )
+                ).reshape([18])
+
+                # tmp = self.ImuResultFusing[imu_index, :]
+                # self.ImuResultFusing[imu_index, 1] = tmp[2]
+                # self.ImuResultFusing[imu_index, 2] = tmp[1]
 
                 imu_index += 1
                 continue
 
             if self.UwbData[uwb_index, 0] < self.ImuData[imu_index, 0]:
-                odo_vec = self.ImuResultFusing[imu_index, 1:3] - LastImuPose
+                odo_vec = self.ImuResultFusing[imu_index - 1, 1:3] - LastImuPose
 
                 self.pf.OdometrySample(odo_vec, 0.1)
 
@@ -279,7 +298,7 @@ class FusingLocation:
                 self.UwbResultFusing[uwb_index, 0] = self.UwbData[uwb_index, 0]
                 self.UwbResultFusing[uwb_index, 1:] = self.pf.GetResult()
 
-                LastImuPose = self.ImuResultFusing[imu_index, 1:3]
+                LastImuPose = self.ImuResultFusing[imu_index - 1, 1:3]
 
                 uwb_index += 1
 
@@ -292,8 +311,12 @@ class FusingLocation:
                     self.ImuData[imu_index, 1:7],
                     self.zupt[imu_index],
                     self.UwbResultFusing[uwb_index, 1:],
-                    3.5
-                )
+                    10000.0
+                ).reshape([18])
+
+                # tmp = self.ImuResultFusing[imu_index, :]
+                # self.ImuResultFusing[imu_index, 1] = tmp[2]
+                # self.ImuResultFusing[imu_index, 2] = tmp[1]
 
                 imu_index += 1
 
@@ -305,22 +328,8 @@ class FusingLocation:
         plt.plot(self.ImuResultFusing[:, 1], self.ImuResultFusing[:, 2], 'r-+')
         plt.plot(self.UwbResultFusing[:, 1], self.UwbResultFusing[:, 2], 'b-+')
         plt.plot(self.UWBResult[:, 0], self.UWBResult[:, 1], 'y-+')
+
         plt.grid(True)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -343,7 +352,7 @@ if __name__ == '__main__':
         location = FusingLocation(dir_name, [0, 1, 2])
         location.OnlyPF()
         location.Transform()
-        location.Fusing(1000)
+        # location.Fusing(1000)
         location.DeepFusing(1000)
 
         plt.show()

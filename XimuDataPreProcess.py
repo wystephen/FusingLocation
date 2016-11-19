@@ -151,6 +151,20 @@ class XimuDataPreProcess:
         # print(start_index,end_index)
         # print('MARK00',self.data_index[:,0])
 
+        '''
+        Left Right change
+        '''
+        # self.data_index[:,2] *= -1.0
+        # self.data_index[:,5] *= -1.0
+
+        # tmp = self.data_index.copy()
+        #
+        # self.data_index[:,1] = tmp[:,2]
+        # self.data_index[:,2] = tmp[:,1]
+        #
+        # self.data_index[:,4] = tmp[:,5]
+        # self.data_index[:,5] = tmp[:,4]
+
 
 
 

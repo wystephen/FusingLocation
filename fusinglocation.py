@@ -42,6 +42,7 @@ class FusingLocation:
         self.z_offset = tp.pose[2] - self.BeaconSet[1, 2]
         self.initialpose = tp.pose[0:2]
         self.OptResult = tp.ComputePath(self.UwbData)
+        self.TriResult = tp.TriComputePath(self.UwbData)
 
     def OnlyPF(self, particle_num=200):
         '''
@@ -88,8 +89,11 @@ class FusingLocation:
 
             self.UWBResult[i, :] = self.pf.GetResult()
         plt.figure(1)
+        plt.title("uwb-r:opt-y:tri-g")
         plt.plot(self.UWBResult[:, 0], self.UWBResult[:, 1], 'r-+')
         plt.plot(self.OptResult[:, 1], self.OptResult[:, 2], 'y-+')
+        plt.plot(self.TriResult[:, 1], self.TriResult[:, 2], 'g-+')
+
         plt.grid(True)
         # plt.show()
 

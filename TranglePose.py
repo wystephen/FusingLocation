@@ -63,6 +63,16 @@ class trianglepose:
 
         return OptResult
 
+    def TriComputePath(self, uwbdata):
+        TriResult = np.zeros([uwbdata.shape[0], 4])
+
+        for i in range(TriResult.shape[0]):
+            TriResult[i, 0] = uwbdata[i, 0]
+            TriResult[i, 1:] = self.Trilateration(
+                self.beaconset[0:3, :],
+                uwbdata[i, 1:]
+            )
+
     def Trilateration(self, beaconset, r):
         '''
 
@@ -98,3 +108,5 @@ class trianglepose:
         x = (r1 * r1 - r2 * r2) / (2 * h) + h / 2.0
         y = (r1 * r1 - r3 * r2 + i * i) / (2.0 * j) + j / 2.0 - x * i / j
         z = r1 * r1 - x * x - y * y
+
+        return np.asarray([x, y, z])

@@ -106,6 +106,66 @@ class FusingLocation:
         self.tf.EstimateTheta(self.ImuResultSyn, self.UWBResult)
         self.ImuSynT = self.tf.tmp_imu_path
 
+    def MixFusing(self, particle_num=200):
+        self.pf = PF_FRAME.PF_Frame([1000, 1000], [10, 10], 10, particle_num)
+
+        self.pf.SetBeaconSet(self.BeaconSet[:, 0:2])
+        self.pf.InitialPose(self.initialpose)
+        # self.pf.InitialPose([0.0, 0.0])
+
+        self.FusingResult = np.zeros([self.UwbData.shape[0], 2])
+        # print(self.UwbData,self.UwbData.shape)
+
+        # self.UwbData /= 1000.0
+        #
+        # self.UwbData = self.UwbData ** 2.0
+        # self.UwbData -= self.z_offset
+        # self.UwbData = self.UwbData ** 0.5
+
+        self.UwbData[:, 1:] = np.abs(self.UwbData[:, 1:] ** 2.0 - self.z_offset)
+
+        self.UwbData[:, 1:] = np.sqrt(np.abs(self.UwbData[:, 1:]))
+
+        # plt.figure(111104)
+        # for i in range(self.UwbData.shape[1]):
+        #     if i > 0:
+        #         plt.plot(self.UwbData[:, i])
+        # plt.show()
+
+        for i in range(self.UwbData.shape[0]):
+            # self.pf.Sample(0.5)
+            if 18 > i > 2:
+                '''
+                odometry method 1
+                '''
+                self.pf.OdometrySample(self.ImuSynT[i, :] - self.ImuSynT[i - 1, :],
+                                       0.1)
+            elif i > 18:
+                '''
+                Odometry method 2
+                '''
+                # vec_last = self.ImuResultSyn[i - 1, 1:] - self.ImuResultSyn[i - 6, 1:]  # last time odo
+                vec_now = self.ImuResultSyn[i, 1:] - self.ImuResultSyn[i - 1, 1:]  # this time odo
+
+                # vec_res = self.FusingResult[i - 1, :] - self.FusingResult[i - 6, :]  # last time result
+
+                odo_vec = self.tf.ComputeRefOdo(vec_now,
+                                                self.FusingResult[i - 17:i - 1, :],
+                                                self.ImuResultSyn[i - 17:i - 1, 1:])
+
+                self.tmp_imu = self.tf.Transform(self.ImuResultSyn[1:])
+
+                self.pf.OdometrySample(self.tmp_imu[i, :] - self.tmp_imu[i - 1, :], 0.1)
+
+            else:
+                self.pf.Sample(0.5)
+
+            self.pf.Evaluated(self.UwbData[i, 1:5], sigma=3.0)
+
+            self.pf.ReSample()
+
+            self.FusingResult[i, :] = self.pf.GetResult()
+
     def Fusing(self, particle_num=200):
         self.pf = PF_FRAME.PF_Frame([1000, 1000], [10, 10], 10, particle_num)
 
@@ -362,6 +422,7 @@ if __name__ == '__main__':
         location.OnlyPF()
         location.Transform()
         # location.Fusing(1000)
-        location.DeepFusing(1000)
+        # location.DeepFusing(1000)
+        location.MixFusing(1000)
 
         plt.show()

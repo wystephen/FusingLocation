@@ -368,6 +368,7 @@ class ZUPTaidedInsPlus(object):
         # tp = pose
         # pose[0] = tp[1]
         # pose[1] = tp[0]
+        '''Beacon Range Constraint.'''
 
         if self.para.pose_constraint and \
                         self.last_pose_constrain > self.para.min_rud_sep and \
@@ -395,7 +396,7 @@ class ZUPTaidedInsPlus(object):
             self.x_h[9:15] = tmp2[0:6]
             self.quat2 = tmp2[6:10]
 
-        self.P = (self.P * 0.5 + np.transpose(self.P) * 0.5)
+        self.P = (self.P * 0.5 + self.P.transpose() * 0.5)
         # print(self.x_h,self.quat1,self.quat2)
         return self.x_h
 
@@ -627,7 +628,9 @@ class ZUPTaidedInsPlus(object):
 
         alpha = np.transpose(z).dot(A).dot(z)
 
-        Jp = (((np.diagflat(np.ones([18, 1])) - 1) / alpha).dot(A).dot(z.dot(np.transpose(z)))).dot(A).dot(W)
+        Jp = (((np.diagflat(np.ones([18, 1])) - 1) / alpha).
+              dot(A).
+              dot(z.dot(np.transpose(z)))).dot(A).dot(W)
 
         Pout = Jp.dot(Pin).dot(np.transpose(Jp))
 

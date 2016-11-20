@@ -97,8 +97,8 @@ class DataChronic:
                 m_cov_list.append(MeasureCov)
 
                 self.UwbData[j, i] = Estimate
-            self.estcov[:, i] = np.asarray(e_cov_list)
-            self.meacov[:, i] = np.asarray(m_cov_list)
+            self.estcov[:, i - 1] = np.asarray(e_cov_list)
+            self.meacov[:, i - 1] = np.asarray(m_cov_list)
 
         plt.figure(9911)
         plt.title("cov of estimate")
@@ -112,7 +112,7 @@ class DataChronic:
         plt.grid(True)
 
         for i in range(self.meacov.shape[1]):
-            plt.plt(self.meacov[:, i])
+            plt.plot(self.meacov[:, i])
 
         '''
         Test change BeaconSet

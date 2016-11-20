@@ -139,23 +139,26 @@ class FusingLocation:
                 odometry method 1
                 '''
                 self.pf.OdometrySample(self.ImuSynT[i, :] - self.ImuSynT[i - 1, :],
-                                       0.1)
+                                       0.2)
             elif i > 18:
                 '''
                 Odometry method 2
                 '''
                 # vec_last = self.ImuResultSyn[i - 1, 1:] - self.ImuResultSyn[i - 6, 1:]  # last time odo
-                vec_now = self.ImuResultSyn[i, 1:] - self.ImuResultSyn[i - 1, 1:]  # this time odo
+                vec_now = self.ImuSynT[i, :] - self.ImuSynT[i - 1, :]  # this time odo
 
                 # vec_res = self.FusingResult[i - 1, :] - self.FusingResult[i - 6, :]  # last time result
 
                 odo_vec = self.tf.ComputeRefOdo(vec_now,
+                                                # self.UWBResult[i - 17:i - 1, :],
                                                 self.FusingResult[i - 17:i - 1, :],
-                                                self.ImuResultSyn[i - 17:i - 1, 1:])
+                                                self.ImuSynT[i - 17:i - 1, :])
 
-                self.tmp_imu = self.tf.Transform(self.ImuResultSyn[1:])
+                # self.tmp_imu = self.tf.Transform(self.ImuResultSyn[:,1:3])
+                print("para:", vec_now, odo_vec)
 
-                self.pf.OdometrySample(self.tmp_imu[i, :] - self.tmp_imu[i - 1, :], 0.1)
+                # self.pf.OdometrySample(self.tmp_imu[i, :] - self.tmp_imu[i - 1, :], 0.1)
+                self.pf.OdometrySample(odo_vec, 0.1)
 
             else:
                 self.pf.Sample(0.5)
@@ -165,6 +168,17 @@ class FusingLocation:
             self.pf.ReSample()
 
             self.FusingResult[i, :] = self.pf.GetResult()
+
+        plt.figure(119)
+        plt.title("MIX FUSING b-imu r-fusing g-uwb")
+
+        # plt.plot(self.tmp_imu[:, 0], self.tmp_imu[:, 1], 'b-+')
+
+        plt.plot(self.ImuSynT[:, 0], self.ImuSynT[:, 1], 'b-+')
+
+        plt.plot(self.FusingResult[:, 0], self.FusingResult[:, 1], 'r-+')
+        plt.plot(self.UWBResult[:, 0], self.UWBResult[:, 1], 'g-+')
+        plt.grid(True)
 
     def Fusing(self, particle_num=200):
         self.pf = PF_FRAME.PF_Frame([1000, 1000], [10, 10], 10, particle_num)
@@ -186,11 +200,6 @@ class FusingLocation:
 
         self.UwbData[:, 1:] = np.sqrt(np.abs(self.UwbData[:, 1:]))
 
-        # plt.figure(111104)
-        # for i in range(self.UwbData.shape[1]):
-        #     if i > 0:
-        #         plt.plot(self.UwbData[:, i])
-        # plt.show()
 
         for i in range(self.UwbData.shape[0]):
             # self.pf.Sample(0.5)
@@ -293,7 +302,6 @@ class FusingLocation:
 
         self.ins.init_Nav_eq(self.ImuData[1:50, 1:7],
                              self.ImuData[1:50, 1:7])
-
 
         print("imu data :", self.ImuData.shape)
         print("Uwb data;", self.UwbData.shape)
@@ -399,7 +407,6 @@ class FusingLocation:
         plt.plot(self.UWBResult[:, 0], self.UWBResult[:, 1], 'y-+')
 
         plt.grid(True)
-
 
 
 if __name__ == '__main__':

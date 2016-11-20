@@ -373,6 +373,8 @@ class ZUPTaidedInsPlus(object):
                         self.last_pose_constrain > self.para.min_rud_sep and \
                         np.linalg.norm(
                                     self.x_h[0:2] - pose) > distance:
+            self.x_h[9] = pose[0]
+            self.x_h[10] = pose[1]
             self.para.range_constraint = distance
             self.last_pose_constrain = 0
 

@@ -277,7 +277,7 @@ class FusingLocation:
                     self.ImuData[imu_index, 1:7],
                     self.zupt[imu_index],
                     self.UwbResultFusing[uwb_index, 1:],
-                    2.0
+                    3.0
                 ).reshape([18])
 
                 # tmp = self.ImuResultFusing[imu_index, :]
@@ -308,11 +308,19 @@ class FusingLocation:
 
                 self.ImuResultFusing[imu_index, 0] = self.ImuData[imu_index, 0]
 
+                range_constraint_value = 5.4
+                if imu_index < 10:
+                    range_constraint_value = 100.0
+                elif imu_index < 20:
+                    range_constraint_value = 6.0
+                else:
+                    range_constraint_value = 3.0
+
                 self.ImuResultFusing[imu_index, 1:] = self.ins.GetPosition(
                     self.ImuData[imu_index, 1:7],
                     self.zupt[imu_index],
                     self.UwbResultFusing[uwb_index, 1:],
-                    0.5
+                    range_constraint_value
                 ).reshape([18])
 
                 # tmp = self.ImuResultFusing[imu_index, :]

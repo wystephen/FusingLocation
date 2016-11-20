@@ -111,7 +111,8 @@ class EkfPf:
                                                     self.UwbData[uwb_index, 1:],
                                                     z_offset=2.1
                                                     )
-                    self.weight[i] *= score
+                    self.weight[i] = score
+                    print("scoreL:", score)
                 self.weight /= np.sum(self.weight)
 
                 '''
@@ -147,7 +148,7 @@ class EkfPf:
                         i_index += 1
                         tmp_rnd -= tmp_weight[i_index]
 
-                    self.ekf_list.append(tmp_list[i_index])
+                    self.ekf_list.append(copy.deepcopy(tmp_list[i_index]))
                     self.weight[i] = tmp_weight[i_index]
 
                 uwb_index += 1

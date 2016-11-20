@@ -219,10 +219,10 @@ class FusingLocation:
                 # vec_res = self.FusingResult[i - 1, :] - self.FusingResult[i - 6, :]  # last time result
 
                 odo_vec = self.tf.ComputeRefOdo(vec_now,
-                                                self.FusingResult[i - 17:i - 1, :],
-                                                self.ImuResultSyn[i - 17:i - 1, 1:])
+                                                self.FusingResult[i - 6:i - 1, :],
+                                                self.ImuResultSyn[i - 6:i - 1, 1:])
 
-                self.pf.OdometrySample(odo_vec, 0.1)
+                self.pf.OdometrySample(odo_vec, 0.06)
 
             else:
                 self.pf.Sample(0.5)

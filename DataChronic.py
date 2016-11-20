@@ -29,7 +29,7 @@ class DataChronic:
 
         self.z_offset = 0.65
 
-        self.time_offset =  531844066.535
+        self.time_offset = 531844066.535
 
         self.time_offset += 1.10
         '''
@@ -45,9 +45,6 @@ class DataChronic:
         self.ImuSourceData[:, 1:4] = tmp_data[:, 4:7] * 9.8
         self.ImuSourceData[:, 4:7] = tmp_data[:, 1:4] * np.pi / 180.0
 
-
-
-
         '''
         Load uwb data
         '''
@@ -62,11 +59,60 @@ class DataChronic:
         self.UwbData = np.loadtxt('atrange.txt')
         self.BeaconSet = np.loadtxt(dir_name + '/' + 'beaconset')
 
+        print("UWB HZ AVERAGE TS IS :",
+              np.mean(self.UwbData[1:, 0] - self.UwbData[:-1, 0]))
+
         o_beacon_use = np.zeros(np.asarray(beacon_use).shape[0] + 1)
         o_beacon_use[1:] = beacon_use
         o_beacon_use[1:] = o_beacon_use[1:] + 1
         self.UwbData = self.UwbData[:, o_beacon_use.astype(dtype=int)]
         self.BeaconSet = self.BeaconSet[beacon_use, :]
+
+        '''
+        Single value Kalman filter for uwb range
+        '''
+        self.estcov = np.zeros_like(self.UwbData[:, 1:])
+        self.meacov = np.zeros_like(self.UwbData[:, 1:])
+        for i in range(self.UwbData.shape[1]):
+            if i == 0:
+                continue
+
+            EstimateCov = 1.0
+            MeasureCov = 2.0
+
+            Estimate = 0.0
+
+            e_cov_list = list()
+            m_cov_list = list()
+
+            for j in range(self.UwbData.shape[0]):
+                K = EstimateCov * np.sqrt(1 / (EstimateCov * EstimateCov + MeasureCov * MeasureCov))
+                Estimate = Estimate + K * (self.UwbData[j, i] - Estimate)
+
+                EstimateCov = np.sqrt(1 - K) * EstimateCov
+
+                MeasureCov = np.sqrt(1 - K) * MeasureCov
+
+                e_cov_list.append(EstimateCov)
+                m_cov_list.append(MeasureCov)
+
+                self.UwbData[j, i] = Estimate
+            self.estcov[:, i] = np.asarray(e_cov_list)
+            self.meacov[:, i] = np.asarray(m_cov_list)
+
+        plt.figure(9911)
+        plt.title("cov of estimate")
+        plt.grid(True)
+
+        for i in range(self.estcov.shape[1]):
+            plt.plot(self.estcov[:, i])
+
+        plt.figure(9912)
+        plt.title("cov of measure")
+        plt.grid(True)
+
+        for i in range(self.meacov.shape[1]):
+            plt.plt(self.meacov[:, i])
 
         '''
         Test change BeaconSet
@@ -75,7 +121,6 @@ class DataChronic:
         tmp = self.BeaconSet.copy()
 
         self.BeaconSet[:, 0], self.BeaconSet[:, 1] = tmp[:, 1], tmp[:, 0]
-
 
         '''
         Add Time offset
@@ -193,10 +238,6 @@ class DataChronic:
             # plt.plot(self.openshoeresult[:, 0], self.openshoeresult[:, 2], 'b-+')
             # plt.grid(True)
 
-
-
-
-
     def SynData(self):
         '''
 
@@ -227,16 +268,16 @@ class DataChronic:
             uwb_time = self.UwbData[i, 0]
 
             for j in range(self.openshoeresult.shape[0]):
-                if np.abs(uwb_time-self.openshoeresult[j,0])<0.05:
-                    self.ImuResultSyn[i,:] = self.openshoeresult[j,1:4]
+                if np.abs(uwb_time - self.openshoeresult[j, 0]) < 0.05:
+                    self.ImuResultSyn[i, :] = self.openshoeresult[j, 1:4]
                     break
-                if j == self.openshoeresult.shape[0]-1:
+                if j == self.openshoeresult.shape[0] - 1:
                     print("MAYBE SOME ERROR HERE")
                     # self.ImuResultSyn = self.ImuResultSyn[:i,:]
                     # i = self.UwbData.shape[0]
                     break
-            # if i == self.UwbData.shape[0] and i:
-            #     break
+                    # if i == self.UwbData.shape[0] and i:
+                    #     break
 
         '''
         IMPORTANT MODIFICATE
@@ -250,7 +291,7 @@ class DataChronic:
 
         # plt.show()
 
-    def OnlyPF(self,particle_num = 200):
+    def OnlyPF(self, particle_num=200):
         '''
 
         :param particle_num:
@@ -262,12 +303,12 @@ class DataChronic:
         '''
         # print(self.BeaconSet)
 
-        self.pf = PF_FRAME.PF_Frame([1000,1000],[10,10],10,particle_num)
+        self.pf = PF_FRAME.PF_Frame([1000, 1000], [10, 10], 10, particle_num)
 
-        self.pf.SetBeaconSet(self.BeaconSet[:,0:2])
-        self.pf.InitialPose([0.0,0.0])
+        self.pf.SetBeaconSet(self.BeaconSet[:, 0:2])
+        self.pf.InitialPose([0.0, 0.0])
 
-        self.UWBResult = np.zeros([self.UwbData.shape[0],2])
+        self.UWBResult = np.zeros([self.UwbData.shape[0], 2])
         # print(self.UwbData,self.UwbData.shape)
 
         self.UwbData /= 1000.0
@@ -276,15 +317,13 @@ class DataChronic:
         # self.UwbData -= self.z_offset
         # self.UwbData = self.UwbData ** 0.5
 
-        self.UwbData[:,1:] = (self.UwbData[:,1:] ** 2.0 - self.z_offset)
+        self.UwbData[:, 1:] = (self.UwbData[:, 1:] ** 2.0 - self.z_offset)
 
-        self.UwbData[:,1:] = np.sqrt(np.abs(self.UwbData[:,1:]))
-
-
+        self.UwbData[:, 1:] = np.sqrt(np.abs(self.UwbData[:, 1:]))
 
         plt.figure(111104)
         for i in range(self.UwbData.shape[1]):
-            if i >0:
+            if i > 0:
                 plt.plot(self.UwbData[:, i])
         # plt.show()
 
@@ -293,11 +332,12 @@ class DataChronic:
             self.pf.Evaluated(self.UwbData[i, 1:5])
 
             self.pf.ReSample()
-            self.UWBResult[i,:]  = self.pf.GetResult()
+            self.UWBResult[i, :] = self.pf.GetResult()
 
         plt.figure(22)
-        plt.plot(self.UWBResult[:,0],self.UWBResult[:,1],'g+-')
+        plt.plot(self.UWBResult[:, 0], self.UWBResult[:, 1], 'g+-')
         plt.grid(True)
+
 
 if __name__ == '__main__':
     import os

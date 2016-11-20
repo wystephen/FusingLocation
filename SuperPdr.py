@@ -38,6 +38,24 @@ class FusingPlus:
         self.last_pose_constrain = 0
         self.last_zv = 0
 
+    def Evaluation(self, beaconset, the_range, z_offset=1.9):
+
+        pose = np.asarray([self.x_h[0], self.x_h[1], z_offset])
+
+        val = 0.0
+        # print("beaconset:",beaconset,beaconset.shape[0])
+        for i in range(beaconset.shape[0]):
+            val += self.NormalPdf(np.linalg.norm(pose - beaconset[i, :]),
+                                  the_range[i], 2.0)
+        return pose[0:2], val
+
+    def NormalPdf(self, x, miu, sigma):
+        para1 = 1 / np.sqrt(2.0 * np.pi) / sigma
+        para2 = - (x - miu) ** 2.0 / sigma / sigma
+
+        return para1 * np.exp(para2)
+
+
     def init_Nav_eq(self, u1, u2):
         '''
 
@@ -263,7 +281,7 @@ class FusingPlus:
 
         return R
 
-    def GetPosition(self, u1, zupt1, pose, distance):
+    def GetPosition(self, u1, zupt1):
 
         '''
         Use u1 compute position.
@@ -372,31 +390,6 @@ class FusingPlus:
         # pose[1] = tp[0]
         '''Beacon Range Constraint.'''
 
-        if self.para.pose_constraint and \
-                        self.last_pose_constrain > self.para.min_rud_sep and \
-                        np.linalg.norm(
-                                    self.x_h[0:2] - pose) > distance:
-            self.x_h[9] = pose[0]
-            self.x_h[10] = pose[1]
-            self.para.range_constraint = distance
-            self.last_pose_constrain = 0
-
-            tmp_in1 = np.zeros([10, 1])
-            tmp_in2 = np.zeros([10, 1])
-
-            tmp_in1[0:6] = self.x_h[0:6]
-            tmp_in1[6:10] = self.quat1.reshape(4, 1)
-
-            tmp_in2[0:6] = self.x_h[9:15]
-            tmp_in2[6:10] = self.quat2.reshape(4, 1)
-
-            tmp1, tmp2, self.P = self.range_constraint(tmp_in1, tmp_in2, self.P)
-
-            self.x_h[0:6] = tmp1[0:6]
-            self.quat1 = tmp1[6:10]
-
-            self.x_h[9:15] = tmp2[0:6]
-            self.quat2 = tmp2[6:10]
 
         self.P = (self.P * 0.5 + self.P.transpose() * 0.5)
         # print(self.x_h,self.quat1,self.quat2)

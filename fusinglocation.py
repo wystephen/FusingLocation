@@ -44,6 +44,21 @@ class FusingLocation:
         self.OptResult = tp.ComputePath(self.UwbData)
         self.TriResult = tp.TriComputePath(self.UwbData)
 
+        '''
+        Save data to file
+        '''
+        tmp_dir_name = './tmp_file_dir/'
+
+        np.savetxt(tmp_dir_name + 'beaconset.data', self.BeaconSet)
+        np.savetxt(tmp_dir_name + 'UwbData.data', self.UwbData)
+        np.savetxt(tmp_dir_name + 'UwbResult.data', self.OptResult)
+
+        np.savetxt(tmp_dir_name + 'ImuData.data', self.dc.ImuSourceData)
+        np.savetxt(tmp_dir_name + 'Zupt.data', self.dc.zupt)
+        np.savetxt(tmp_dir_name + 'ImuResultData.data', self.ImuResultSyn)
+
+
+
     def OnlyPF(self, particle_num=200):
         '''
 
@@ -286,6 +301,8 @@ class FusingLocation:
             [self.initialpose[0], self.initialpose[1], 0.0]
         )
 
+        print("para heading and pos:", para.init_heading1, para.init_pos1)
+
         para.Ts = np.mean(self.ImuData[1:, 0] - self.ImuData[0:-1, 0])
         para.min_rud_sep = int(1 / para.Ts)
 
@@ -378,11 +395,11 @@ class FusingLocation:
 
                 range_constraint_value = 5.4
                 if imu_index < 10:
-                    range_constraint_value = 100.0
+                    range_constraint_value = 1000.0
                 elif imu_index < 20:
-                    range_constraint_value = 6.0
+                    range_constraint_value = 6000.0
                 else:
-                    range_constraint_value = 3.0
+                    range_constraint_value = 03000.0
 
                 self.ImuResultFusing[imu_index, 1:] = self.ins.GetPosition(
                     self.ImuData[imu_index, 1:7],
@@ -425,11 +442,11 @@ if __name__ == '__main__':
     for i in [3]:
         dir_name = ex_dir_list[i]
         print(dir_name)
-        location = FusingLocation(dir_name, [0, 1, 2])
+        location = FusingLocation(dir_name, [0, 1, 2, 3])
         location.OnlyPF()
         location.Transform()
         # location.Fusing(1000)
-        # location.DeepFusing(1000)
-        location.MixFusing(1000)
+        location.DeepFusing(1000)
+        # location.MixFusing(1000)
 
         plt.show()

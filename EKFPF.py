@@ -10,6 +10,8 @@ import matplotlib.pyplot as plt
 
 import os
 
+import time
+
 
 class EkfPf:
     def __init__(self,
@@ -64,7 +66,7 @@ class EkfPf:
             self.ekf_list.append(tmp_ins)
 
         '''
-        Achive it as easy as possible.
+        Achieve it as easy as possible.
         '''
 
         imu_index = 0
@@ -76,6 +78,8 @@ class EkfPf:
         self.weight /= np.sum(self.weight)
 
         self.poselist = np.zeros([self.particle_num, 2])
+
+        time_last = time.time()
 
         while True:
             if imu_index == self.ImuData.shape[0] or uwb_index == self.UwbData.shape[0]:
@@ -123,7 +127,7 @@ class EkfPf:
                                                     z_offset=2.1
                                                     )
                     self.weight[i] *= score
-                    print("scoreL:", score)
+                    # print("scoreL:", score)
                 self.weight /= np.sum(self.weight)
 
                 '''
@@ -137,6 +141,8 @@ class EkfPf:
                 self.FusingResult[uwb_index, :] = tmp_pose
 
                 print("result of ", uwb_index, self.FusingResult[uwb_index, :])
+                print("time used :", time.time() - time_last)
+                time_last = time.time()
 
                 '''
                 Resample
@@ -175,7 +181,7 @@ class EkfPf:
                     )
                 imu_index += 1
 
-        import time
+        # import time
 
         fig = plt.figure(1)
         plt.title("FUSING RESULT(red - fusing,blue - uwb")

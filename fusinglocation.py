@@ -439,14 +439,14 @@ if __name__ == '__main__':
             #     location.Fusing(200)
             #
             #     plt.show()
-    for i in [3]:
+    for i in [11]:
         dir_name = ex_dir_list[i]
         print(dir_name)
         location = FusingLocation(dir_name, [0, 1, 2, 3])
         location.OnlyPF()
         location.Transform()
         # location.Fusing(1000)
-        location.DeepFusing(1000)
-        # location.MixFusing(1000)
+        # location.DeepFusing(1000)
+        location.MixFusing(1000)
 
         plt.show()

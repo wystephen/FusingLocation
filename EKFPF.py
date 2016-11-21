@@ -26,8 +26,8 @@ class EkfPf:
         Test parameter here.
         '''
 
-        particle_number = 309
-        self.Sigma = 0.9
+        particle_number = 500
+        self.Sigma = 1.3
 
         self.beaconset = beaconset
         self.UwbData = UwbData
@@ -42,9 +42,9 @@ class EkfPf:
 
         self.main_para = settings()
 
-        self.main_para.init_heading1 = self.main_para.init_heading2 = 0.881176651262
+        self.main_para.init_heading1 = self.main_para.init_heading2 = -np.pi  # -2.7035450517
 
-        self.main_para.init_pos1 = self.main_para.init_pos2 = [1.42, -6.578, 0.0]
+        self.main_para.init_pos1 = self.main_para.init_pos2 = [0.8, -5.6, 0.0]
 
         self.main_para.range_constraint_on = False
 
@@ -105,7 +105,7 @@ class EkfPf:
                 for i in range(len(self.ekf_list)):
                     self.poselist[i, :], self.weight[i] = self.ekf_list[i].Evaluation(self.beaconset,
                                                                                       self.UwbData[uwb_index, 1:],
-                                                                                      z_offset=2.1)
+                                                                                      z_offset=1.9)
                 self.weight /= np.sum(self.weight)
 
                 tmp_pose = [0.0, 0.0]
@@ -124,7 +124,7 @@ class EkfPf:
                     self.poselist[i, :], score = \
                         self.ekf_list[i].Evaluation(self.beaconset,
                                                     self.UwbData[uwb_index, 1:],
-                                                    z_offset=2.1
+                                                    z_offset=1.9
                                                     )
                     self.weight[i] *= score
                     # print("scoreL:", score)

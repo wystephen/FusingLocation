@@ -46,7 +46,7 @@ class FusingPlus:
         # print("beaconset:",beaconset,beaconset.shape[0])
         for i in range(beaconset.shape[0]):
             val *= self.NormalPdf(np.linalg.norm(pose - beaconset[i, :]),
-                                  the_range[i], 2.0)
+                                  the_range[i], 1.0)
         return pose[0:2], val
 
     def NormalPdf(self, x, miu, sigma):

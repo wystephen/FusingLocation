@@ -20,7 +20,12 @@ class EkfPf:
                  Zupt,
                  particle_number=1000):
 
-        self.Sigma = 0.01
+        '''
+        Test parameter here.
+        '''
+
+        particle_number = 1009
+        self.Sigma = 1.81
 
         self.beaconset = beaconset
         self.UwbData = UwbData
@@ -99,6 +104,12 @@ class EkfPf:
                                                                                       z_offset=2.1)
                 self.weight /= np.sum(self.weight)
 
+                tmp_pose = [0.0, 0.0]
+                for i in range(self.weight.shape[0]):
+                    tmp_pose += self.poselist[i, :] * self.weight[i]
+
+                self.FusingResult[uwb_index, :] = tmp_pose
+
                 uwb_index += 1
 
             if self.UwbData[uwb_index, 0] < self.ImuData[imu_index, 0]:
@@ -111,7 +122,7 @@ class EkfPf:
                                                     self.UwbData[uwb_index, 1:],
                                                     z_offset=2.1
                                                     )
-                    self.weight[i] = score
+                    self.weight[i] *= score
                     print("scoreL:", score)
                 self.weight /= np.sum(self.weight)
 
@@ -164,11 +175,17 @@ class EkfPf:
                     )
                 imu_index += 1
 
-        plt.figure(1)
+        import time
+
+        fig = plt.figure(1)
         plt.title("FUSING RESULT(red - fusing,blue - uwb")
         plt.plot(self.FusingResult[:, 0], self.FusingResult[:, 1], 'r-+')
         plt.plot(self.UwbResult[:, 1], self.UwbResult[:, 2], 'b-+')
         plt.grid(True)
+        fig.savefig("{0}-{1}-{2}.png".format(particle_number,
+                                             self.Sigma,
+                                             time.time()))
+
 
 
 if __name__ == '__main__':
@@ -190,6 +207,6 @@ if __name__ == '__main__':
 
     test_ekfpf = EkfPf(beaconset, UwbData, UwbResult,
                        ImuData, Zupt,
-                       10)
+                       1000)
 
     plt.show()

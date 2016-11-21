@@ -42,10 +42,10 @@ class FusingPlus:
 
         pose = np.asarray([self.x_h[0], self.x_h[1], z_offset])
 
-        val = 0.0
+        val = 1.0
         # print("beaconset:",beaconset,beaconset.shape[0])
         for i in range(beaconset.shape[0]):
-            val += self.NormalPdf(np.linalg.norm(pose - beaconset[i, :]),
+            val *= self.NormalPdf(np.linalg.norm(pose - beaconset[i, :]),
                                   the_range[i], 2.0)
         return pose[0:2], val
 

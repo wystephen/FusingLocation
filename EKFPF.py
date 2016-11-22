@@ -26,8 +26,9 @@ class EkfPf:
         Test parameter here.
         '''
 
-        particle_number = 500
-        self.Sigma = 1.3
+        particle_number = 300
+        self.Sigma = 0.5
+        self.EvaluateSigma = 2.0
 
         self.beaconset = beaconset
         self.UwbData = UwbData
@@ -60,8 +61,8 @@ class EkfPf:
         for i in range(self.particle_num):
             tmp_ins = FusingPlus(self.main_para)
 
-            tmp_ins.init_Nav_eq(self.ImuData[1:50, 1:7],
-                                self.ImuData[1:50, 1:7])
+            tmp_ins.init_Nav_eq(self.ImuData[1:20, 1:7],
+                                self.ImuData[1:20, 1:7])
 
             self.ekf_list.append(tmp_ins)
 
@@ -105,6 +106,7 @@ class EkfPf:
                 for i in range(len(self.ekf_list)):
                     self.poselist[i, :], self.weight[i] = self.ekf_list[i].Evaluation(self.beaconset,
                                                                                       self.UwbData[uwb_index, 1:],
+                                                                                      sigma=self.EvaluateSigma,
                                                                                       z_offset=1.9)
                 self.weight /= np.sum(self.weight)
 
@@ -124,6 +126,7 @@ class EkfPf:
                     self.poselist[i, :], score = \
                         self.ekf_list[i].Evaluation(self.beaconset,
                                                     self.UwbData[uwb_index, 1:],
+                                                    sigma=self.EvaluateSigma,
                                                     z_offset=1.9
                                                     )
                     self.weight[i] *= score
@@ -188,9 +191,10 @@ class EkfPf:
         plt.plot(self.FusingResult[:, 0], self.FusingResult[:, 1], 'r-+')
         plt.plot(self.UwbResult[:, 1], self.UwbResult[:, 2], 'b-+')
         plt.grid(True)
-        fig.savefig("{0}-{1}-{2}.png".format(particle_number,
-                                             self.Sigma,
-                                             time.time()))
+        fig.savefig("{0}-{1}-{2}-{3}.png".format(particle_number,
+                                                 self.Sigma,
+                                                 self.EvaluateSigma,
+                                                 time.time()))
 
 
 
@@ -210,6 +214,13 @@ if __name__ == '__main__':
             Zupt = np.loadtxt(dir_name + file_name)
         elif 'ImuResultData' in file_name:
             ImuResult = np.loadtxt(dir_name + file_name)
+
+    # from ViewerModel import PF_FRAME
+    #
+    # pf_test = PF_FRAME.PF_Frame([11111,1111],[12,12],1.2,1000)
+    #
+    # pf_test.SetBeaconSet(beaconset[:,0:2])
+    #
 
     test_ekfpf = EkfPf(beaconset, UwbData, UwbResult,
                        ImuData, Zupt,

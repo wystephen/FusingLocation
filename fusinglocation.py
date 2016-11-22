@@ -429,7 +429,7 @@ class FusingLocation:
 if __name__ == '__main__':
     ex_dir_list = list()
     for dir_name in os.listdir('./'):
-        if '-0' in dir_name:
+        if '-0' in dir_name and not '0.' in dir_name:
             ex_dir_list.append(dir_name)
             # if '03-' in dir_name:  # or '-0'in dir_name:
             #     print(dir_name)
@@ -439,7 +439,7 @@ if __name__ == '__main__':
             #     location.Fusing(200)
             #
             #     plt.show()
-    for i in [11]:
+    for i in [13]:
         dir_name = ex_dir_list[i]
         print(dir_name)
         location = FusingLocation(dir_name, [0, 1, 2, 3])

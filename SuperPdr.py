@@ -38,7 +38,7 @@ class FusingPlus:
         self.last_pose_constrain = 0
         self.last_zv = 0
 
-    def Evaluation(self, beaconset, the_range, z_offset=1.9):
+    def Evaluation(self, beaconset, the_range, sigma=2.0, z_offset=1.9):
 
         pose = np.asarray([self.x_h[0], self.x_h[1], z_offset])
 
@@ -46,7 +46,7 @@ class FusingPlus:
         # print("beaconset:",beaconset,beaconset.shape[0])
         for i in range(beaconset.shape[0]):
             val *= self.NormalPdf(np.linalg.norm(pose - beaconset[i, :]),
-                                  the_range[i], 1.0)
+                                  the_range[i], sigma)
         return pose[0:2], val
 
     def NormalPdf(self, x, miu, sigma):

@@ -71,49 +71,49 @@ class DataChronic:
         '''
         Single value Kalman filter for uwb range
         '''
-        # self.estcov = np.zeros_like(self.UwbData[:, 1:])
-        # self.meacov = np.zeros_like(self.UwbData[:, 1:])
-        # for i in range(self.UwbData.shape[1]):
-        #     if i == 0:
-        #         continue
-        #
-        #     EstimateCov = 1.0
-        #     MeasureCov = 2.0
-        #
-        #     Estimate = 0.0
-        #
-        #     e_cov_list = list()
-        #     m_cov_list = list()
-        #
-        #     for j in range(self.UwbData.shape[0]):
-        #         K = EstimateCov * np.sqrt(1 / (EstimateCov * EstimateCov + MeasureCov * MeasureCov))
-        #         Estimate = Estimate + K * (self.UwbData[j, i] - Estimate)
-        #
-        #         EstimateCov = np.sqrt(1 - K) * EstimateCov
-        #
-        #         MeasureCov = np.sqrt(1 - K) * MeasureCov
-        #
-        #         e_cov_list.append(EstimateCov)
-        #         m_cov_list.append(MeasureCov)
-        #
-        #         self.UwbData[j, i] = Estimate
-        #     self.estcov[:, i - 1] = np.asarray(e_cov_list)
-        #     self.meacov[:, i - 1] = np.asarray(m_cov_list)
-        #
-        # plt.figure(9911)
-        # plt.title("cov of estimate")
-        # plt.grid(True)
-        #
-        # for i in range(self.estcov.shape[1]):
-        #     plt.plot(self.estcov[:, i])
-        #
-        # plt.figure(9912)
-        # plt.title("cov of measure")
-        # plt.grid(True)
-        #
-        # for i in range(self.meacov.shape[1]):
-        #     plt.plot(self.meacov[:, i])
-        #
+        self.estcov = np.zeros_like(self.UwbData[:, 1:])
+        self.meacov = np.zeros_like(self.UwbData[:, 1:])
+        for i in range(self.UwbData.shape[1]):
+            if i == 0:
+                continue
+
+            EstimateCov = 1.0
+            MeasureCov = 2.0
+
+            Estimate = 0.0
+
+            e_cov_list = list()
+            m_cov_list = list()
+
+            for j in range(self.UwbData.shape[0]):
+                K = EstimateCov * np.sqrt(1 / (EstimateCov * EstimateCov + MeasureCov * MeasureCov))
+                Estimate = Estimate + K * (self.UwbData[j, i] - Estimate)
+
+                EstimateCov = np.sqrt(1 - K) * EstimateCov
+
+                MeasureCov = np.sqrt(1 - K) * MeasureCov
+
+                e_cov_list.append(EstimateCov)
+                m_cov_list.append(MeasureCov)
+
+                self.UwbData[j, i] = Estimate
+            self.estcov[:, i - 1] = np.asarray(e_cov_list)
+            self.meacov[:, i - 1] = np.asarray(m_cov_list)
+
+        plt.figure(9911)
+        plt.title("cov of estimate")
+        plt.grid(True)
+
+        for i in range(self.estcov.shape[1]):
+            plt.plot(self.estcov[:, i])
+
+        plt.figure(9912)
+        plt.title("cov of measure")
+        plt.grid(True)
+
+        for i in range(self.meacov.shape[1]):
+            plt.plot(self.meacov[:, i])
+
         '''
         Test change BeaconSet
         '''

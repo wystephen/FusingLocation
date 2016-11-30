@@ -446,7 +446,7 @@ if __name__ == '__main__':
         location.OnlyPF()
         location.Transform()
         # location.Fusing(1000)
-        # location.DeepFusing(1000)
-        location.MixFusing(1000)
+        location.DeepFusing(10000)
+        # location.MixFusing(1000)
 
         plt.show()

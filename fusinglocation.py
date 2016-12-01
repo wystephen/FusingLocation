@@ -254,6 +254,11 @@ class FusingLocation:
         plt.plot(self.FusingResult[:, 0], self.FusingResult[:, 1], 'b-+')
         plt.grid(True)
 
+    def OneFusing(self, particle_num):
+
+        self.pf = PF_FRAME.PF_Frame([1000, 1000], [10, 10], 10, particle_num)
+        
+
     def DeepFusing(self, particle_num):
 
         self.pf = PF_FRAME.PF_Frame([1000, 1000], [10, 10], 10, particle_num)
@@ -437,8 +442,8 @@ if __name__ == '__main__':
             #     location.OnlyPF()
             #     location.Transform()
             #     location.Fusing(200)
-            #
             #     plt.show()
+            #
     for i in [3]:
         dir_name = ex_dir_list[i]
         print(dir_name)

@@ -95,6 +95,12 @@ class FusingLocation:
             if i > 0:
                 plt.plot(self.UwbData[:, i])
         # plt.show()
+        plt.figure(15)
+        for j in range(self.UwbData.shape[1]):
+            if j > 0:
+                plt.plot(self.UwbData[1:, j] - self.UwbData[0:-1, j])
+                print("run hear", j, i)
+        plt.grid(True)
 
         for i in range(self.UwbData.shape[0]):
             self.pf.Sample(0.5)
@@ -257,7 +263,15 @@ class FusingLocation:
     def OneFusing(self, particle_num):
 
         self.pf = PF_FRAME.PF_Frame([1000, 1000], [10, 10], 10, particle_num)
-        
+
+        self.pf.SetBeaconSet(self.BeaconSet[:, 0:2])
+        self.pf.InitialPose(self.initialpose)
+
+        self.FusingResult = np.zeros(self.UwbData[:, 1:] ** 2.0 - self.z_offset)
+
+
+
+
 
     def DeepFusing(self, particle_num):
 
@@ -451,7 +465,7 @@ if __name__ == '__main__':
         location.OnlyPF()
         location.Transform()
         # location.Fusing(1000)
-        location.DeepFusing(10000)
+        location.DeepFusing(100)
         # location.MixFusing(1000)
 
         plt.show()

@@ -95,11 +95,15 @@ class FusingLocation:
             if i > 0:
                 plt.plot(self.UwbData[:, i])
         # plt.show()
+
+        ################
+
         plt.figure(15)
+        plt.title("diff")
         for j in range(self.UwbData.shape[1]):
             if j > 0:
-                plt.plot(self.UwbData[1:, j] - self.UwbData[0:-1, j])
-                print("run hear", j, i)
+                np.abs(plt.plot(self.UwbData[1:, j] - self.UwbData[0:-1, j]))
+                # print("run hear", j, i)
         plt.grid(True)
 
         for i in range(self.UwbData.shape[0]):

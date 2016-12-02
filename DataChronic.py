@@ -78,7 +78,7 @@ class DataChronic:
                 continue
 
             EstimateCov = 1.0
-            MeasureCov = 2.0
+            MeasureCov = 1.0
 
             Estimate = 0.0
 

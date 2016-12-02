@@ -102,7 +102,7 @@ class FusingLocation:
         plt.title("diff")
         for j in range(self.UwbData.shape[1]):
             if j > 0:
-                np.abs(plt.plot(self.UwbData[1:, j] - self.UwbData[0:-1, j]))
+                plt.plot(np.abs(self.UwbData[1:, j] - self.UwbData[0:-1, j]))
                 # print("run hear", j, i)
         plt.grid(True)
 
@@ -203,6 +203,24 @@ class FusingLocation:
 
         plt.plot(self.FusingResult[:, 0], self.FusingResult[:, 1], 'r-+')
         plt.plot(self.UWBResult[:, 0], self.UWBResult[:, 1], 'g-+')
+
+        # plot points with big change.
+
+        setx = list()
+        sety = list()
+
+        for i in range(self.UwbData.shape[0]):
+            if i < 2:
+                break
+            tmp = (self.UwbData[i, 1:] - self.UwbData[i - 1, 1:])
+            for k in range(tmp.shape[0]):
+                if np.abs(tmp[k]) > 0.5:
+                    setx.append(self.UwbResultFusing[i, 0])
+                    sety.append(self.UwbResultFusing[i, 1])
+        plt.scatter(np.asarray(setx), np.asarray(sety))
+
+
+
         plt.grid(True)
 
     def Fusing(self, particle_num=200):
@@ -462,14 +480,16 @@ if __name__ == '__main__':
             #     location.Fusing(200)
             #     plt.show()
             #
+            #   3
+            #   13
     for i in [3]:
         dir_name = ex_dir_list[i]
         print(dir_name)
-        location = FusingLocation(dir_name, [0, 1, 2, 3])
+        location = FusingLocation(dir_name, [0, 1, 2])
         location.OnlyPF()
         location.Transform()
         # location.Fusing(1000)
-        location.DeepFusing(100)
-        # location.MixFusing(1000)
+        # location.DeepFusing(1000)
+        location.MixFusing(1000)
 
         plt.show()

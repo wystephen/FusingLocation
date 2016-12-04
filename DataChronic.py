@@ -80,7 +80,7 @@ class DataChronic:
                 continue
 
             EstimateCov = 1.0
-            MeasureCov = 2.0
+            MeasureCov = 1.0
 
             Estimate = 0.0
 
@@ -102,19 +102,19 @@ class DataChronic:
             self.estcov[:, i - 1] = np.asarray(e_cov_list)
             self.meacov[:, i - 1] = np.asarray(m_cov_list)
 
-        plt.figure(9911)
-        plt.title("cov of estimate")
-        plt.grid(True)
+        # plt.figure(9911)
+        # plt.title("cov of estimate")
+        # plt.grid(True)
 
-        for i in range(self.estcov.shape[1]):
-            plt.plot(self.estcov[:, i])
-
-        plt.figure(9912)
-        plt.title("cov of measure")
-        plt.grid(True)
-
-        for i in range(self.meacov.shape[1]):
-            plt.plot(self.meacov[:, i])
+        # for i in range(self.estcov.shape[1]):
+        #     plt.plot(self.estcov[:, i])
+        #
+        # plt.figure(9912)
+        # plt.title("cov of measure")
+        # plt.grid(True)
+        #
+        # for i in range(self.meacov.shape[1]):
+        #     plt.plot(self.meacov[:, i])
 
         '''
         Test change BeaconSet
@@ -294,52 +294,59 @@ class DataChronic:
 
         # plt.show()
 
-    def OnlyPF(self, particle_num=200):
-        '''
-
-        :param particle_num:
-        :return:
-        '''
-
-        '''
-        PF ONLY USE UWB DATA
-        '''
-        # print(self.BeaconSet)
-
-        self.pf = PF_FRAME.PF_Frame([1000, 1000], [10, 10], 10, particle_num)
-
-        self.pf.SetBeaconSet(self.BeaconSet[:, 0:2])
-        self.pf.InitialPose([0.0, 0.0])
-
-        self.UWBResult = np.zeros([self.UwbData.shape[0], 2])
-        # print(self.UwbData,self.UwbData.shape)
-
-        self.UwbData /= 1000.0
+        # def OnlyPF(self, particle_num=200):
+        #     '''
         #
-        # self.UwbData = self.UwbData ** 2.0
-        # self.UwbData -= self.z_offset
-        # self.UwbData = self.UwbData ** 0.5
-
-        self.UwbData[:, 1:] = (self.UwbData[:, 1:] ** 2.0 - self.z_offset)
-
-        self.UwbData[:, 1:] = np.sqrt(np.abs(self.UwbData[:, 1:]))
-
-        plt.figure(111104)
-        for i in range(self.UwbData.shape[1]):
-            if i > 0:
-                plt.plot(self.UwbData[:, i])
-        # plt.show()
-
-        for i in range(self.UwbData.shape[0]):
-            self.pf.Sample(0.5)
-            self.pf.Evaluated(self.UwbData[i, 1:5])
-
-            self.pf.ReSample()
-            self.UWBResult[i, :] = self.pf.GetResult()
-
-        plt.figure(22)
-        plt.plot(self.UWBResult[:, 0], self.UWBResult[:, 1], 'g+-')
-        plt.grid(True)
+        #     :param particle_num:
+        #     :return:
+        #     '''
+        #
+        #     '''
+        #     PF ONLY USE UWB DATA
+        #     '''
+        #     # print(self.BeaconSet)
+        #
+        #     self.pf = PF_FRAME.PF_Frame([1000, 1000], [10, 10], 10, particle_num)
+        #
+        #     self.pf.SetBeaconSet(self.BeaconSet[:, 0:2])
+        #     self.pf.InitialPose([0.0, 0.0])
+        #
+        #     self.UWBResult = np.zeros([self.UwbData.shape[0], 2])
+        #     # print(self.UwbData,self.UwbData.shape)
+        #
+        #     self.UwbData /= 1000.0
+        #     #
+        #     # self.UwbData = self.UwbData ** 2.0
+        #     # self.UwbData -= self.z_offset
+        #     # self.UwbData = self.UwbData ** 0.5
+        #
+        #     self.UwbData[:, 1:] = (self.UwbData[:, 1:] ** 2.0 - self.z_offset)
+        #
+        #     self.UwbData[:, 1:] = np.sqrt(np.abs(self.UwbData[:, 1:]))
+        #
+        #     plt.figure(11114)
+        #     for i in range(self.UwbData.shape[1]):
+        #         if i > 0:
+        #             plt.plot(self.UwbData[:, i])
+        #
+        #     # plt.show()
+        #     plt.figure(15)
+        #     for j in range(self.UwbData.shape[1]):
+        #         if j > 0:
+        #             plt.plot(self.UwbData[1:, j] - self.UwbData[0:-1, j])
+        #             print("run hear", j, i)
+        #     plt.grid(True)
+        #
+        #     for i in range(self.UwbData.shape[0]):
+        #         self.pf.Sample(0.5)
+        #         self.pf.Evaluated(self.UwbData[i, 1:5])
+        #
+        #         self.pf.ReSample()
+        #         self.UWBResult[i, :] = self.pf.GetResult()
+        #
+        #     plt.figure(22)
+        #     plt.plot(self.UWBResult[:, 0], self.UWBResult[:, 1], 'g+-')
+        #     plt.grid(True)
 
 
 if __name__ == '__main__':

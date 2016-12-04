@@ -96,6 +96,16 @@ class FusingLocation:
                 plt.plot(self.UwbData[:, i])
         # plt.show()
 
+        ################
+
+        plt.figure(15)
+        plt.title("diff")
+        for j in range(self.UwbData.shape[1]):
+            if j > 0:
+                plt.plot(np.abs(self.UwbData[1:, j] - self.UwbData[0:-1, j]))
+                # print("run hear", j, i)
+        plt.grid(True)
+
         for i in range(self.UwbData.shape[0]):
             self.pf.Sample(0.5)
             self.pf.Evaluated(self.UwbData[i, 1:5])
@@ -193,6 +203,24 @@ class FusingLocation:
 
         plt.plot(self.FusingResult[:, 0], self.FusingResult[:, 1], 'r-+')
         plt.plot(self.UWBResult[:, 0], self.UWBResult[:, 1], 'g-+')
+
+        # plot points with big change.
+
+        setx = list()
+        sety = list()
+
+        for i in range(self.UwbData.shape[0]):
+            if i < 2:
+                break
+            tmp = (self.UwbData[i, 1:] - self.UwbData[i - 1, 1:])
+            for k in range(tmp.shape[0]):
+                if np.abs(tmp[k]) > 0.5:
+                    setx.append(self.UwbResultFusing[i, 0])
+                    sety.append(self.UwbResultFusing[i, 1])
+        plt.scatter(np.asarray(setx), np.asarray(sety))
+
+
+
         plt.grid(True)
 
     def Fusing(self, particle_num=200):
@@ -253,6 +281,19 @@ class FusingLocation:
         plt.plot(self.UWBResult[:, 0], self.UWBResult[:, 1], 'r-+')
         plt.plot(self.FusingResult[:, 0], self.FusingResult[:, 1], 'b-+')
         plt.grid(True)
+
+    def OneFusing(self, particle_num):
+
+        self.pf = PF_FRAME.PF_Frame([1000, 1000], [10, 10], 10, particle_num)
+
+        self.pf.SetBeaconSet(self.BeaconSet[:, 0:2])
+        self.pf.InitialPose(self.initialpose)
+
+        self.FusingResult = np.zeros(self.UwbData[:, 1:] ** 2.0 - self.z_offset)
+
+
+
+
 
     def DeepFusing(self, particle_num):
 
@@ -439,10 +480,13 @@ if __name__ == '__main__':
             #     location.Fusing(200)
             #
             #     plt.show()
-    for i in [13]:
+            #
+            #   3
+            #   13
+    for i in [3]:
         dir_name = ex_dir_list[i]
         print(dir_name)
-        location = FusingLocation(dir_name, [0, 1, 2, 3])
+        location = FusingLocation(dir_name, [0, 1, 2])
         location.OnlyPF()
         location.Transform()
         # location.Fusing(1000)

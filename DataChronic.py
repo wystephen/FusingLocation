@@ -28,10 +28,12 @@ class DataChronic:
         '''
 
         self.z_offset = 0.65
+        self.time_offset = 0.0
 
         self.time_offset = 531844066.535
 
         self.time_offset += 1.10
+
         '''
         Load imu data
         '''
@@ -128,6 +130,7 @@ class DataChronic:
         if np.abs(np.mean(self.ImuSourceData[:, 0]) -
                           np.mean(self.UwbData[:, 0])) > 1000.0:
             self.ImuSourceData[:, 0] += self.time_offset
+            print("-------ADDET")
 
     def RunOpenshoe(self):
         '''

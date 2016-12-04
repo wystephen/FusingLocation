@@ -26,7 +26,7 @@ class EkfPf:
         Test parameter here.
         '''
 
-        particle_number = 80
+        particle_number = 180
         self.Sigma = 0.5
         self.EvaluateSigma = 1.8
 
@@ -190,6 +190,7 @@ class EkfPf:
         plt.title("FUSING RESULT(red - fusing,blue - uwb")
         plt.plot(self.FusingResult[:, 0], self.FusingResult[:, 1], 'r-+')
         plt.plot(self.UwbResult[:, 1], self.UwbResult[:, 2], 'b-+')
+
         plt.grid(True)
         fig.savefig("{0}-{1}-{2}-{3}.png".format(particle_number,
                                                  self.Sigma,
@@ -202,18 +203,28 @@ if __name__ == '__main__':
     dir_name = './tmp_file_dir/'
 
     for file_name in os.listdir('./tmp_file_dir/'):
-        if 'beaconset' in file_name:
+        if 'beaconset' in file_name and (not ('.csv' in file_name)):
             beaconset = np.loadtxt(dir_name + file_name)
-        elif 'UwbData' in file_name:
+            np.savetxt(dir_name + file_name + '.csv', np.loadtxt(dir_name + file_name), delimiter=',')
+        elif 'UwbData' in file_name and (not ('.csv' in file_name)):
             UwbData = np.loadtxt(dir_name + file_name)
-        elif 'UwbResult' in file_name:
+            np.savetxt(dir_name + file_name + '.csv', np.loadtxt(dir_name + file_name), delimiter=',')
+
+        elif 'UwbResult' in file_name and (not ('.csv' in file_name)):
             UwbResult = np.loadtxt(dir_name + file_name)
-        elif 'ImuData' in file_name:
+            np.savetxt(dir_name + file_name + '.csv', np.loadtxt(dir_name + file_name), delimiter=',')
+
+        elif 'ImuData' in file_name and (not ('.csv' in file_name)):
             ImuData = np.loadtxt(dir_name + file_name)
-        elif 'Zupt' in file_name:
+            np.savetxt(dir_name + file_name + '.csv', np.loadtxt(dir_name + file_name), delimiter=',')
+
+        elif 'Zupt' in file_name and (not ('.csv' in file_name)):
             Zupt = np.loadtxt(dir_name + file_name)
-        elif 'ImuResultData' in file_name:
+            np.savetxt(dir_name + file_name + '.csv', np.loadtxt(dir_name + file_name), delimiter=',')
+
+        elif 'ImuResultData' in file_name and (not ('.csv' in file_name)):
             ImuResult = np.loadtxt(dir_name + file_name)
+            np.savetxt(dir_name + file_name + '.csv', np.loadtxt(dir_name + file_name), delimiter=',')
 
     # from ViewerModel import PF_FRAME
     #
@@ -221,6 +232,12 @@ if __name__ == '__main__':
     #
     # pf_test.SetBeaconSet(beaconset[:,0:2])
     #
+
+    '''
+    Save file as csv
+    '''
+
+
 
     test_ekfpf = EkfPf(beaconset, UwbData, UwbResult,
                        ImuData, Zupt,

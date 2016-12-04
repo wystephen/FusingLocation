@@ -53,7 +53,7 @@ class FusingLocation:
         np.savetxt(tmp_dir_name + 'UwbData.data', self.UwbData)
         np.savetxt(tmp_dir_name + 'UwbResult.data', self.OptResult)
 
-        np.savetxt(tmp_dir_name + 'ImuData.data', self.dc.ImuSourceData)
+        np.savetxt(tmp_dir_name + 'ImuData.data', self.dc.ImuSourceData.astype(dtype=float))
         np.savetxt(tmp_dir_name + 'Zupt.data', self.dc.zupt)
         np.savetxt(tmp_dir_name + 'ImuResultData.data', self.ImuResultSyn)
 
@@ -439,14 +439,14 @@ if __name__ == '__main__':
             #     location.Fusing(200)
             #
             #     plt.show()
-    for i in [3]:
+    for i in [13]:
         dir_name = ex_dir_list[i]
         print(dir_name)
         location = FusingLocation(dir_name, [0, 1, 2, 3])
         location.OnlyPF()
         location.Transform()
         # location.Fusing(1000)
-        # location.DeepFusing(1000)
-        location.MixFusing(1000)
+        location.DeepFusing(1000)
+        # location.MixFusing(1000)
 
         plt.show()

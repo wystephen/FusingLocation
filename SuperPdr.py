@@ -454,6 +454,9 @@ class FusingPlus:
         else:
             q2 = quat2
 
+
+
+        # ----------------------------------------
         g_t = np.array([0, 0, 9.8173])
         g_t = np.transpose(g_t)
 

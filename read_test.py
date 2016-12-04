@@ -17,6 +17,7 @@ if __name__ == '__main__':
     plt.figure(2)
     plt.plot(uwbtime-imutime-np.mean(uwbtime[:])+np.mean(imutime[:]),'g-+')
     plt.grid(True)
+    print(len(imutime))
 
 
     print('time offset:',np.mean(uwbtime[:])-np.mean(imutime[:]))

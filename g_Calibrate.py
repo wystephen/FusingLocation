@@ -7,7 +7,7 @@ from scipy.optimize import minimize, root
 
 import matplotlib.pyplot as plt
 
-from    scipy.optimize import minimize
+# from    scipy.optimize import minimize
 
 '''
 This class is use to compute the transform matrix to calibration the ximu use data in pdr.

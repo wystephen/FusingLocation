@@ -483,7 +483,7 @@ if __name__ == '__main__':
             #
             #   3
             #   13
-    for i in [3]:
+    for i in [13]:
         dir_name = ex_dir_list[i]
         print(dir_name)
         location = FusingLocation(dir_name, [0, 1, 2])

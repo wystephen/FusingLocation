@@ -26,7 +26,8 @@ figure(1);
 %surf(NLOS,'r');
 %surf(real_dis,'b');
 %mesh((NLOS-real_dis));
-contour((NLOS-real_dis));
+%contour((NLOS-real_dis));
+surf(NLOS-real_dis);
 
 X = NLOS(:);
 Y = real_dis(:);

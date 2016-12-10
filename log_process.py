@@ -69,7 +69,7 @@ class seq_process:
                 if not (jdata['seq'] == aaseq):
                     if not (aaseq == 0):
                         aarange.write("{0} {1} {2}\n".format(aadis[0], aadis[1], aadis[2]))
-                        aadis = np.zeros(aadis.shape) - 100.0
+                        # aadis = np.zeros(aadis.shape) - 100.0
                     aaseq = jdata['seq']
 
                 if jdata['aid'] == 0:
@@ -85,7 +85,7 @@ class seq_process:
                 if (not (jdata['seq'] == atseq)):
                     if not atseq == 0:
                         atrange.write("{0} {1} {2} {3} {4}\n".format(jdata['time'],atdis[0], atdis[1], atdis[2], atdis[3]))
-                        atdis = np.zeros(atdis.shape) - 100.0
+                        # atdis = np.zeros(atdis.shape) - 100.0
                         
                     atseq = jdata['seq']
 

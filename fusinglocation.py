@@ -483,6 +483,9 @@ if __name__ == '__main__':
             #
             #   3
             #   13
+    print(ex_dir_list)
+    ex_dir_list.sort()
+    print(ex_dir_list)
     for i in [3]:
         dir_name = ex_dir_list[i]
         print(dir_name)
@@ -490,7 +493,7 @@ if __name__ == '__main__':
         location.OnlyPF()
         location.Transform()
         # location.Fusing(1000)
-        location.DeepFusing(1000)
-        # location.MixFusing(1000)
+        # location.DeepFusing(1000)
+        location.MixFusing(1000)
 
         plt.show()

@@ -485,6 +485,6 @@ if __name__ == '__main__':
         location.Transform()
         # location.Fusing(1000)
         # location.DeepFusing(1000)
-        location.MixFusing(1000)
+        location.MixFusing(3000)
 
         plt.show()

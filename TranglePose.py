@@ -7,7 +7,7 @@ from scipy.optimize import minimize
 
 class trianglepose:
     def __init__(self, beaconset, range_list):
-        self.pose = np.array([5.2, -0.4, 1.12])
+        self.pose = np.array([5.2, -0.4, 1.85])
         self.beaconset = beaconset
         self.range_list = range_list
         # print("size of beaconset", self.beaconset.shape, self.range_list.shape)

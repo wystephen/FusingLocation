@@ -44,9 +44,9 @@ class ZUPTaidedIns(object):
         :return:
         '''
 
-        f_u = np.mean(u1[0, :])
-        f_v = np.mean(u1[1, :])
-        f_w = np.mean(u1[2, :])
+        f_u = np.mean(u1[:, 0])
+        f_v = np.mean(u1[:, 1])
+        f_w = np.mean(u1[:, 2])
 
         # print(f_u,f_v,f_w)
         roll = math.atan2(-f_v, -f_w)

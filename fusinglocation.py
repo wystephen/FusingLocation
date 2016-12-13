@@ -57,8 +57,6 @@ class FusingLocation:
         np.savetxt(tmp_dir_name + 'Zupt.data', self.dc.zupt)
         np.savetxt(tmp_dir_name + 'ImuResultData.data', self.ImuResultSyn)
 
-
-
     def OnlyPF(self, particle_num=200):
         '''
 
@@ -219,8 +217,6 @@ class FusingLocation:
                     sety.append(self.UwbResultFusing[i, 1])
         plt.scatter(np.asarray(setx), np.asarray(sety))
 
-
-
         plt.grid(True)
 
     def Fusing(self, particle_num=200):
@@ -242,7 +238,6 @@ class FusingLocation:
         self.UwbData[:, 1:] = np.abs(self.UwbData[:, 1:] ** 2.0 - self.z_offset ** 2.0)
 
         self.UwbData[:, 1:] = np.sqrt(np.abs(self.UwbData[:, 1:]))
-
 
         for i in range(self.UwbData.shape[0]):
             # self.pf.Sample(0.5)
@@ -290,10 +285,6 @@ class FusingLocation:
         self.pf.InitialPose(self.initialpose)
 
         self.FusingResult = np.zeros(self.UwbData[:, 1:] ** 2.0 - self.z_offset ** 2.0)
-
-
-
-
 
     def DeepFusing(self, particle_num):
 
@@ -483,14 +474,17 @@ if __name__ == '__main__':
             #
             #   3
             #   13
+    print(ex_dir_list)
+    ex_dir_list.sort()
+    print(ex_dir_list)
     for i in [3]:
         dir_name = ex_dir_list[i]
         print(dir_name)
-        location = FusingLocation(dir_name, [0, 1, 2])
+        location = FusingLocation(dir_name, [0, 1, 2, 3])
         location.OnlyPF()
         location.Transform()
         # location.Fusing(1000)
-        location.DeepFusing(1000)
-        # location.MixFusing(1000)
+        # location.DeepFusing(1000)
+        location.MixFusing(3000)
 
         plt.show()

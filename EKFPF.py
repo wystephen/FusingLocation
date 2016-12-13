@@ -26,9 +26,9 @@ class EkfPf:
         Test parameter here.
         '''
 
-        particle_number = 180
+        particle_number = 2800
         self.Sigma = 0.5
-        self.EvaluateSigma = 1.8
+        self.EvaluateSigma = 1.0
 
         self.beaconset = beaconset
         self.UwbData = UwbData

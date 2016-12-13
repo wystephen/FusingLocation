@@ -79,8 +79,8 @@ class DataChronic:
             if i == 0:
                 continue
 
-            EstimateCov = 1.0
-            MeasureCov = 1.0
+            EstimateCov = 0.5
+            MeasureCov = 0.5
 
             Estimate = 0.0
 

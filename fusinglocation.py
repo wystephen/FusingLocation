@@ -86,7 +86,7 @@ class FusingLocation:
         # self.UwbData -= self.z_offset
         # self.UwbData = self.UwbData ** 0.5
 
-        self.UwbData[:, 1:] = np.abs(self.UwbData[:, 1:] ** 2.0 - self.z_offset)
+        self.UwbData[:, 1:] = np.abs(self.UwbData[:, 1:] ** 2.0 - self.z_offset**2.0)
 
         self.UwbData[:, 1:] = np.sqrt(np.abs(self.UwbData[:, 1:]))
 
@@ -147,7 +147,7 @@ class FusingLocation:
         # self.UwbData -= self.z_offset
         # self.UwbData = self.UwbData ** 0.5
 
-        self.UwbData[:, 1:] = np.abs(self.UwbData[:, 1:] ** 2.0 - self.z_offset)
+        self.UwbData[:, 1:] = np.abs(self.UwbData[:, 1:] ** 2.0 - self.z_offset ** 2.0)
 
         self.UwbData[:, 1:] = np.sqrt(np.abs(self.UwbData[:, 1:]))
 
@@ -239,7 +239,7 @@ class FusingLocation:
         # self.UwbData -= self.z_offset
         # self.UwbData = self.UwbData ** 0.5
 
-        self.UwbData[:, 1:] = np.abs(self.UwbData[:, 1:] ** 2.0 - self.z_offset)
+        self.UwbData[:, 1:] = np.abs(self.UwbData[:, 1:] ** 2.0 - self.z_offset ** 2.0)
 
         self.UwbData[:, 1:] = np.sqrt(np.abs(self.UwbData[:, 1:]))
 
@@ -289,7 +289,7 @@ class FusingLocation:
         self.pf.SetBeaconSet(self.BeaconSet[:, 0:2])
         self.pf.InitialPose(self.initialpose)
 
-        self.FusingResult = np.zeros(self.UwbData[:, 1:] ** 2.0 - self.z_offset)
+        self.FusingResult = np.zeros(self.UwbData[:, 1:] ** 2.0 - self.z_offset ** 2.0)
 
 
 
@@ -304,7 +304,7 @@ class FusingLocation:
 
         self.FusingResult = np.zeros([self.UwbData.shape[0], 2])
 
-        self.UwbData[:, 1:] = np.abs(self.UwbData[:, 1:] ** 2.0 - self.z_offset)
+        self.UwbData[:, 1:] = np.abs(self.UwbData[:, 1:] ** 2.0 - self.z_offset**2.0)
 
         self.UwbData[:, 1:] = np.sqrt(np.abs(self.UwbData[:, 1:]))
 

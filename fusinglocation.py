@@ -40,6 +40,7 @@ class FusingLocation:
         '''
         tp = trianglepose(self.BeaconSet, self.UwbData[2:10, 1:])
         self.z_offset = tp.pose[2] - self.BeaconSet[1, 2]
+        print("Z_OFFSET IS : " , self.z_offset,"pose : ",tp.pose)
         self.initialpose = tp.pose[0:2]
         self.OptResult = tp.ComputePath(self.UwbData)
         self.TriResult = tp.TriComputePath(self.UwbData)

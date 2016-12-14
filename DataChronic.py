@@ -47,22 +47,7 @@ class DataChronic:
         self.ImuSourceData[:, 1:4] = tmp_data[:, 4:7] * 9.8
         self.ImuSourceData[:, 4:7] = tmp_data[:, 1:4] * np.pi / 180.0
 
-        d_index = [32,60,75,96,110,135,147,172,205,232,244,268,282,303,315,344,379]
 
-        key_point_time = list()
-
-        for i in d_index:
-            key_point_time.append(self.ImuSourceData[i,0])
-        key_point_time = np.asarray(key_point_time)
-
-        key_point_tmp = np.loadtxt(dir_name + '/' + 'keypointtmp.t')
-        print(key_point_time.shape,"     key point    ",key_point_tmp.shape)
-
-        key_point_data = np.zeros([key_point_tmp.shape[0],key_point_tmp.shape[1]+1])
-        for i in range(key_point_tmp.shape[0]):
-            key_point_data[i,0:2] = key_point_tmp[i,:]
-            key_point_data[i,2] = key_point_time[i]
-        np.savetxt(dir_name+'keypoint.csv',key_point_data,delimiter=',')
 
         '''
         Load uwb data
@@ -148,6 +133,23 @@ class DataChronic:
                           np.mean(self.UwbData[:, 0])) > 1000.0:
             self.ImuSourceData[:, 0] += self.time_offset
             print("-------ADDET")
+
+        d_index = [32,60,75,96,110,135,147,172,205,232,244,268,282,303,315,344,379]
+
+        key_point_time = list()
+
+        for i in d_index:
+            key_point_time.append(self.ImuSourceData[i,0])
+        key_point_time = np.asarray(key_point_time)
+
+        key_point_tmp = np.loadtxt(dir_name + '/' + 'keypointtmp.t')
+        print(key_point_time.shape,"     key point    ",key_point_tmp.shape)
+
+        key_point_data = np.zeros([key_point_tmp.shape[0],key_point_tmp.shape[1]+1])
+        for i in range(key_point_tmp.shape[0]):
+            key_point_data[i,0:2] = key_point_tmp[i,:]
+            key_point_data[i,2] = key_point_time[i]
+        np.savetxt(dir_name+'/keypoint.csv',key_point_data,delimiter=',')
 
     def RunOpenshoe(self):
         '''

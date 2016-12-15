@@ -139,7 +139,7 @@ class DataChronic:
         key_point_time = list()
 
         for i in d_index:
-            key_point_time.append(self.ImuSourceData[i,0])
+            key_point_time.append(self.UwbData[i, 0])
         key_point_time = np.asarray(key_point_time)
 
         key_point_tmp = np.loadtxt(dir_name + '/' + 'keypointtmp.t')

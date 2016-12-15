@@ -29,6 +29,6 @@ class ResultEvaluate:
                 else:
                     return (np.linalg.norm(tp1) + np.linalg.norm(tp2)) / 2.0
 
-                print("Find :", i, timestamp, self.KeyPointData[i, 1], self.KeyPointData[i + 1, 2])
+                    # print("Find :", i, timestamp, self.KeyPointData[i, 1], self.KeyPointData[i + 1, 2])
             else:
                 return np.linalg.norm(point - self.KeyPointData[-1, 0:2])

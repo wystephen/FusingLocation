@@ -137,8 +137,9 @@ class ReferenceTransform:
         '''
         Check the value range of theta.
         '''
-        if not (-np.pi < theta < np.pi):
-            print(" odo cost func theta is out of range:", theta)
+        # ToDo : Modify here.
+        # if not (-np.pi < theta < np.pi):
+        # print(" odo cost func theta is out of range:", theta)
 
         '''
         Compute tMatrix

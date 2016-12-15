@@ -184,7 +184,7 @@ class FusingLocation:
                                                 self.ImuSynT[i - 17:i - 1, :])
 
                 # self.tmp_imu = self.tf.Transform(self.ImuResultSyn[:,1:3])
-                print("para:", vec_now, odo_vec)
+                # print("para:", vec_now, odo_vec)
 
                 # self.pf.OdometrySample(self.tmp_imu[i, :] - self.tmp_imu[i - 1, :], 0.1)
                 self.pf.OdometrySample(odo_vec, 0.1)
@@ -207,6 +207,8 @@ class FusingLocation:
 
         plt.plot(self.FusingResult[:, 0], self.FusingResult[:, 1], 'r-+')
         plt.plot(self.UWBResult[:, 0], self.UWBResult[:, 1], 'g-+')
+
+        plt.plot(self.KeyPointMatrix[:, 0], self.KeyPointMatrix[:, 1], 'y+-')
 
         # plot points with big change.
 
@@ -231,6 +233,9 @@ class FusingLocation:
 
         re = ResultEvaluate.ResultEvaluate(self.KeyPointMatrix)
 
+        print('keypoint gime', self.KeyPointMatrix)
+        print('Uwbdata', self.UwbData[0, 0], self.UwbData[-1:-10, 0])
+
         error_uwb = list()
         error_fusing = list()
 
@@ -245,8 +250,8 @@ class FusingLocation:
         error_uwb = np.asarray(error_uwb)
         error_fusing = np.asanyarray(error_fusing)
         plt.figure(10212800)
-        plt.title('error , err_uwb(r)' + np.mean(error_uwb) +
-                  ' err_fusing(b) ' + np.mean(error_fusing))
+        # plt.title('error , err_uwb(r)' + np.mean(error_uwb) +
+        #           ' err_fusing(b) ' + np.mean(error_fusing))
         plt.grid(True)
         plt.plot(self.UwbData[:, 0], error_uwb, 'r')
         plt.plot(self.UwbData[:, 0], error_fusing, 'b')

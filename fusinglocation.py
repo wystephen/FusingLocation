@@ -249,6 +249,8 @@ class FusingLocation:
 
         error_uwb = np.asarray(error_uwb)
         error_fusing = np.asanyarray(error_fusing)
+        print("mean uwb err:", np.mean(error_uwb))
+        print("mean fusing err;", np.mean(error_fusing))
         plt.figure(10212800)
         # plt.title('error , err_uwb(r)' + np.mean(error_uwb) +
         #           ' err_fusing(b) ' + np.mean(error_fusing))
@@ -524,6 +526,6 @@ if __name__ == '__main__':
         location.Transform()
         # location.Fusing(1000)
         # location.DeepFusing(1000)
-        location.MixFusing(1000)
+        location.MixFusing(2000)
 
         plt.show()

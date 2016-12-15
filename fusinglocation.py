@@ -33,6 +33,10 @@ class FusingLocation:
 
         self.UwbData[:, 1:] = self.UwbData[:, 1:] / 1000.0
 
+        if '04-' in dir_name:
+            self.KeyPointMatrix = np.loadtxt(dir_name + '/keypoint.csv', delimiter=',')
+
+
         '''
         Need to compute:
         1. Z_OFFSET and INITIAL POINT
@@ -52,6 +56,7 @@ class FusingLocation:
 
         np.savetxt(tmp_dir_name + 'beaconset.data', self.BeaconSet)
         np.savetxt(tmp_dir_name + 'UwbData.data', self.UwbData)
+        # self.OnlyPF(1000)
         np.savetxt(tmp_dir_name + 'UwbResult.data', self.OptResult)
 
         np.savetxt(tmp_dir_name + 'ImuData.data', self.dc.ImuSourceData.astype(dtype=float))
@@ -214,11 +219,39 @@ class FusingLocation:
             tmp = (self.UwbData[i, 1:] - self.UwbData[i - 1, 1:])
             for k in range(tmp.shape[0]):
                 if np.abs(tmp[k]) > 0.5:
-                    setx.append(self.UwbResultFusing[i, 0])
-                    sety.append(self.UwbResultFusing[i, 1])
+                    setx.append(self.FusingResult[i, 0])
+                    sety.append(self.FusingResult[i, 1])
         plt.scatter(np.asarray(setx), np.asarray(sety))
 
         plt.grid(True)
+
+        print("shape :", self.UWBResult.shape, self.FusingResult.shape)
+
+        import ResultEvaluate
+
+        re = ResultEvaluate.ResultEvaluate(self.KeyPointMatrix)
+
+        error_uwb = list()
+        error_fusing = list()
+
+        for i in range(self.FusingResult.shape[0]):
+            error_uwb.append(re.Distance2Line(self.UWBResult[i, 0:2],
+                                              self.UwbData[i, 0]))
+            error_fusing.append(re.Distance2Line(
+                self.FusingResult[i, 0:2],
+                self.UwbData[i, 0]
+            ))
+
+        error_uwb = np.asarray(error_uwb)
+        error_fusing = np.asanyarray(error_fusing)
+        plt.figure(10212800)
+        plt.title('error , err_uwb(r)' + np.mean(error_uwb) +
+                  ' err_fusing(b) ' + np.mean(error_fusing))
+        plt.grid(True)
+        plt.plot(self.UwbData[:, 0], error_uwb, 'r')
+        plt.plot(self.UwbData[:, 0], error_fusing, 'b')
+
+
 
     def Fusing(self, particle_num=200):
         self.pf = PF_FRAME.PF_Frame([1000, 1000], [10, 10], 10, particle_num)
@@ -486,6 +519,6 @@ if __name__ == '__main__':
         location.Transform()
         # location.Fusing(1000)
         # location.DeepFusing(1000)
-        location.MixFusing(3000)
+        location.MixFusing(1000)
 
         plt.show()

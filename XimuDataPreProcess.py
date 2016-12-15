@@ -15,7 +15,7 @@ class XimuDataPreProcess:
         # print(type(file_lists))
         IsTMPFile = False
         for file_name in file_lists:
-            if 'tmp' in file_name:
+            if 'tmp_data_index.txt' in file_name:
                 if not use_tmp:
                     continue
                 self.data_index = np.loadtxt(file_dir + "/" +'tmp_data_index.txt')
@@ -172,4 +172,4 @@ if __name__ == '__main__':
     '''
     Just for Test
     '''
-    xdpp = XimuDataPreProcess("test6")
+    xdpp = XimuDataPreProcess("04-02-02-01-01")

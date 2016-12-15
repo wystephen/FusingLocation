@@ -74,13 +74,19 @@ class PF_Frame:
         #     dis_err += (np.linalg.norm(self.BeaconSet[i,:] - pose) - Ranges[i]) ** 2.0
         #
         # return 1/dis_err ** 0.5
-        # Methond 2
+        '''
+        METHOnd 2
+        '''
+        # Methond 2 multiply
         dis = 0.0
-        score = 0.0
+        # ToDo: Chage it back to add.
+        score = 1.0
         for i in range(self.BeaconSet.shape[0]):
             dis = np.linalg.norm(self.BeaconSet[i, :] - pose)
-            score += (self.NormPdf(Ranges[i], dis, sigma) + 1e-50)
+            score *= (self.NormPdf(Ranges[i], dis, sigma) + 1e-50)
         return score
+        '''
+        '''
         # Methond 3
         # dis = 0.0
         # score = 0.0

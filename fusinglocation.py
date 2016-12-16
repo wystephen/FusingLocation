@@ -538,7 +538,7 @@ if __name__ == '__main__':
     for i in [3]:
         dir_name = ex_dir_list[i]
         print(dir_name)
-        location = FusingLocation(dir_name, [0, 1, 3])
+        location = FusingLocation(dir_name, [0, 1])
         time_step.append(time.time())
         location.OnlyPF()
         time_step.append(time.time())
@@ -546,7 +546,7 @@ if __name__ == '__main__':
         time_step.append(time.time())
         # location.Fusing(1000)
         # location.DeepFusing(1000)
-        location.MixFusing(4000, noise_sigma=0.8, evaluate_sigma=1.5)
+        location.MixFusing(6000, noise_sigma=2.8, evaluate_sigma=1.5)
         time_step.append(time.time())
 
         print("time all:", time_step[-1] - ticks)

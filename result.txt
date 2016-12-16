@@ -1,0 +1,32 @@
+mean uwb err: 0.514961592951
+mean fusing err; 0.588384413308
+particle_num: 2000 noise_sigma: 0.5 evaluation sigma: 2.0
+beacon_use: [0, 1, 3]
+mean uwb err: 0.512001012999
+mean fusing err; 0.586516839917
+particle_num: 2000 noise_sigma: 0.5 evaluation sigma: 2.0
+beacon_use: [0, 1, 3]
+mean uwb err: 0.504263605341
+mean fusing err; 0.580223469885
+particle_num: 4000 noise_sigma: 0.5 evaluation sigma: 2.0
+beacon_use: [0, 1, 3]
+mean uwb err: 0.504877678981
+mean fusing err; 0.590255335217
+particle_num: 40 noise_sigma: 0.5 evaluation sigma: 2.0
+beacon_use: [0, 1, 3]
+mean uwb err: 0.505090234473
+mean fusing err; 0.583080940611
+particle_num: 4000 noise_sigma: 1.5 evaluation sigma: 2.0
+beacon_use: [0, 1, 3]
+mean uwb err: 0.509339138102
+mean fusing err; 0.595797912678
+particle_num: 4000 noise_sigma: 1.5 evaluation sigma: 2.5
+beacon_use: [0, 1, 3]
+mean uwb err: 0.524155337632
+mean fusing err; 0.527876909721
+particle_num: 8000 noise_sigma: 0.8 evaluation sigma: 2.5
+beacon_use: [0, 1, 2]
+mean uwb err: 0.529658762233
+mean fusing err; 0.535469266358
+particle_num: 8000 noise_sigma: 0.8 evaluation sigma: 2.5
+beacon_use: [3, 1, 2]

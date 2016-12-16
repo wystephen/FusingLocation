@@ -14,7 +14,7 @@ class ResultEvaluate:
     def Distance2Line(self,point,timestamp):
 
         for i in range(self.KeyPointData.shape[0]):
-            print("kkkkkk: i :", i)
+            # print("kkkkkk: i :", i)
             if timestamp >= self.KeyPointData[i, 2] and \
                             timestamp <= self.KeyPointData[i + 1, 2]:
                 tp1 = self.KeyPointData[i, 0:2]

@@ -25,6 +25,7 @@ class FusingLocation:
         self.dc.SmoothPath()
         self.dc.SynData()
         # self. dc.OnlyPF(100)
+        self.beacon_use = beacon_use
 
         # Copy data to this class
         self.BeaconSet = self.dc.BeaconSet
@@ -135,7 +136,7 @@ class FusingLocation:
         self.tf.EstimateTheta(self.ImuResultSyn, self.UWBResult)
         self.ImuSynT = self.tf.tmp_imu_path
 
-    def MixFusing(self, particle_num=200):
+    def MixFusing(self, particle_num=200, noise_sigma=2.0, evaluate_sigma=2.0):
         self.pf = PF_FRAME.PF_Frame([1000, 1000], [10, 10], 10, particle_num)
 
         self.pf.SetBeaconSet(self.BeaconSet[:, 0:2])
@@ -168,7 +169,7 @@ class FusingLocation:
                 odometry method 1
                 '''
                 self.pf.OdometrySample(self.ImuSynT[i, :] - self.ImuSynT[i - 1, :],
-                                       0.2)
+                                       noise_sigma)
             elif i > 18:
                 '''
                 Odometry method 2
@@ -187,12 +188,12 @@ class FusingLocation:
                 # print("para:", vec_now, odo_vec)
 
                 # self.pf.OdometrySample(self.tmp_imu[i, :] - self.tmp_imu[i - 1, :], 0.1)
-                self.pf.OdometrySample(odo_vec, 0.1)
+                self.pf.OdometrySample(odo_vec, noise_sigma)
 
             else:
                 self.pf.Sample(0.5)
 
-            self.pf.Evaluated(self.UwbData[i, 1:5], sigma=3.0)
+            self.pf.Evaluated(self.UwbData[i, 1:5], sigma=evaluate_sigma)
 
             self.pf.ReSample()
 
@@ -249,14 +250,25 @@ class FusingLocation:
 
         error_uwb = np.asarray(error_uwb)
         error_fusing = np.asanyarray(error_fusing)
-        print("mean uwb err:", np.mean(error_uwb))
-        print("mean fusing err;", np.mean(error_fusing))
+        print("mean uwb err:", np.mean(error_uwb[10:]))
+        print("mean fusing err;", np.mean(error_fusing[10:]))
         plt.figure(10212800)
         # plt.title('error , err_uwb(r)' + np.mean(error_uwb) +
         #           ' err_fusing(b) ' + np.mean(error_fusing))
+        plt.title("uwb_err{0},fusing_err{1}".format(np.mean(error_uwb[10:]),
+                                                    np.mean(error_fusing[10:])))
+
         plt.grid(True)
-        plt.plot(self.UwbData[:, 0], error_uwb, 'r')
-        plt.plot(self.UwbData[:, 0], error_fusing, 'b')
+        plt.plot(self.UwbData[10:, 0], error_uwb[10:], 'r')
+        plt.plot(self.UwbData[10:, 0], error_fusing[10:], 'b')
+
+        print("particle_num:", particle_num, "noise_sigma:", noise_sigma
+              , "evaluation sigma:", evaluate_sigma)
+
+        print("beacon_use:", self.beacon_use)
+
+
+
 
 
 
@@ -521,11 +533,11 @@ if __name__ == '__main__':
     for i in [3]:
         dir_name = ex_dir_list[i]
         print(dir_name)
-        location = FusingLocation(dir_name, [0, 1, 2, 3])
+        location = FusingLocation(dir_name, [0, 1, 3])
         location.OnlyPF()
         location.Transform()
         # location.Fusing(1000)
         # location.DeepFusing(1000)
-        location.MixFusing(2000)
+        location.MixFusing(4000, noise_sigma=1.5, evaluate_sigma=2.5)
 
         plt.show()

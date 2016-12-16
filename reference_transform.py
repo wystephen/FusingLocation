@@ -125,7 +125,7 @@ class ReferenceTransform:
 
         self.theta = np.mean(np.asarray(theta_list))
         # print("theta list:", theta_list)
-        print(self.theta)
+        # print(self.theta)
         # print("src and res norm:", np.linalg.norm(odovec),
         #       np.linalg.norm(self.Transform(odovec)))
         return self.Transform(odovec)

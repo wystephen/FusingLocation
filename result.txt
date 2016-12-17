@@ -68,3 +68,39 @@ particle_num: 1000 noise_sigma: 0.8 evaluation sigma: 1.5
 beacon_use: [0, 1, 2]
 time all: 244.31162977218628
 all_time: [  1.58384688e+02   7.00122070e+00   7.36367702e-02   7.88520846e+01]
+mean uwb err: 0.522552244871
+mean fusing err; 0.531759606206
+particle_num: 1000 noise_sigma: 0.8 evaluation sigma: 1.5
+beacon_use: [0, 1, 2]
+time all: 236.22485184669495
+all_time: [  1.32167145e+02   6.86352539e+00   7.55670071e-02   9.71186144e+01]
+mean uwb err: 0.525024610493
+mean fusing err; 0.530138431873
+particle_num: 1000 noise_sigma: 0.8 evaluation sigma: 1.5
+beacon_use: [0, 1, 2]
+time all: 244.31162977218628
+all_time: [  1.58384688e+02   7.00122070e+00   7.36367702e-02   7.88520846e+01]
+mean uwb err: 0.526409599176
+mean fusing err; 0.530041487261
+particle_num: 1000 noise_sigma: 0.8 evaluation sigma: 1.5
+beacon_use: [0, 1, 2]
+time all: 225.612948179245
+all_time: [  1.36408417e+02   7.02362299e+00   7.67264366e-02   8.21041818e+01]
+mean uwb err: 0.523751796778
+mean fusing err; 0.529826156184
+particle_num: 1000 noise_sigma: 1.8 evaluation sigma: 1.5
+beacon_use: [0, 1, 2]
+time all: 216.60664319992065
+all_time: [  1.37856977e+02   6.78639317e+00   7.45339394e-02   7.18887393e+01]
+mean uwb err: 0.528793715419
+mean fusing err; 0.530287395816
+particle_num: 1000 noise_sigma: 0.8 evaluation sigma: 1.5
+beacon_use: [0, 1, 2]
+time all: 227.19382047653198
+all_time: [  1.36883955e+02   7.01301527e+00   7.45055676e-02   8.32223449e+01]
+mean uwb err: 0.516339258716
+mean fusing err; 0.534392798213
+particle_num: 1000 noise_sigma: 1.8 evaluation sigma: 1.5
+beacon_use: [0, 1, 2]
+time all: 218.75813913345337
+all_time: [  1.37601589e+02   7.35529709e+00   8.09803009e-02   7.37202728e+01]

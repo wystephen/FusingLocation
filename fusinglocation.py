@@ -546,7 +546,7 @@ if __name__ == '__main__':
         time_step.append(time.time())
         # location.Fusing(1000)
         # location.DeepFusing(1000)
-        location.MixFusing(6000, noise_sigma=2.8, evaluate_sigma=1.5)
+        location.MixFusing(6000, noise_sigma=0.8, evaluate_sigma=1.5)
         time_step.append(time.time())
 
         print("time all:", time_step[-1] - ticks)

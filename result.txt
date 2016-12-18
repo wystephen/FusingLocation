@@ -104,3 +104,15 @@ particle_num: 1000 noise_sigma: 1.8 evaluation sigma: 1.5
 beacon_use: [0, 1, 2]
 time all: 218.75813913345337
 all_time: [  1.37601589e+02   7.35529709e+00   8.09803009e-02   7.37202728e+01]
+mean uwb err: 0.526978671926
+mean fusing err; 0.53905354176
+particle_num: 1000 noise_sigma: 1.8 evaluation sigma: 1.5
+beacon_use: [0, 1, 2]
+time all: 207.32057738304138
+all_time: [  1.29328704e+02   6.84255815e+00   7.50834942e-02   7.10742319e+01]
+mean uwb err: 0.523110750507
+mean fusing err; 0.529278153162
+particle_num: 1000 noise_sigma: 1.8 evaluation sigma: 4.5
+beacon_use: [0, 1, 2]
+time all: 319.9279639720917
+all_time: [  1.96515113e+02   8.74090004e+00   7.90948868e-02   1.14592856e+02]

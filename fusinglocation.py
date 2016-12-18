@@ -257,10 +257,13 @@ class FusingLocation:
         #           ' err_fusing(b) ' + np.mean(error_fusing))
         plt.title("uwb_err{0},fusing_err{1}".format(np.mean(error_uwb[10:]),
                                                     np.mean(error_fusing[10:])))
-
+        # line_up, = plt.plot([1, 2, 3], label='Line 2')
+        # line_down, = plt.plot([3, 2, 1], label='Line 1')
+        # plt.legend(handles=[line_up, line_down])
         plt.grid(True)
-        plt.plot(self.UwbData[10:, 0], error_uwb[10:], 'r')
-        plt.plot(self.UwbData[10:, 0], error_fusing[10:], 'b')
+        handle_uwb_error, = plt.plot(self.UwbData[10:, 0], error_uwb[10:], 'r',label = 'uwb error')
+        handle_fusing_error, = plt.plot(self.UwbData[10:, 0], error_fusing[10:], 'b',label = 'fusing error')
+        plt.legend(handles=[handle_uwb_error,handle_fusing_error])
 
         print("particle_num:", particle_num, "noise_sigma:", noise_sigma
               , "evaluation sigma:", evaluate_sigma)

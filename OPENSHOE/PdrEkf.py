@@ -168,6 +168,8 @@ class ZUPTaidedIns(object):
 
     def dcm2q(self, R):
         """
+        http://www.ee.ucr.edu/~farrell/AidedNavigation/D_App_Quaternions/Rot2Quat.pdf
+        [1] Farrell J A. Computation of the Quaternion from a Rotation Matrix[J]. 2008.
         Transform from rotation matrix to quanternions.
         :param R:old rotation matrix
         :return:quanternion

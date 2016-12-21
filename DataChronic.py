@@ -142,14 +142,14 @@ class DataChronic:
             key_point_time.append(self.UwbData[i, 0])
         key_point_time = np.asarray(key_point_time)
 
-        key_point_tmp = np.loadtxt(dir_name + '/' + 'keypointtmp.t')
-        print(key_point_time.shape,"     key point    ",key_point_tmp.shape)
-
-        key_point_data = np.zeros([key_point_tmp.shape[0],key_point_tmp.shape[1]+1])
-        for i in range(key_point_tmp.shape[0]):
-            key_point_data[i,0:2] = key_point_tmp[i,:]
-            key_point_data[i,2] = key_point_time[i]
-        np.savetxt(dir_name+'/keypoint.csv',key_point_data,delimiter=',')
+        # key_point_tmp = np.loadtxt(dir_name + '/' + 'keypointtmp.t')
+        # print(key_point_time.shape,"     key point    ",key_point_tmp.shape)
+        #
+        # key_point_data = np.zeros([key_point_tmp.shape[0],key_point_tmp.shape[1]+1])
+        # for i in range(key_point_tmp.shape[0]):
+        #     key_point_data[i,0:2] = key_point_tmp[i,:]
+        #     key_point_data[i,2] = key_point_time[i]
+        # np.savetxt(dir_name+'/keypoint.csv',key_point_data,delimiter=',')
 
     def RunOpenshoe(self):
         '''

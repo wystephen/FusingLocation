@@ -16,10 +16,9 @@ if __name__ == '__main__':
     Load Data
     '''
 
-
     # xdpp = XimuDataPreProcess.XimuDataPreProcess("01-03-01-01-01")
     # xdpp = XimuDataPreProcess.XimuDataPreProcess("02-02-02-01-01")
-    xdpp = XimuDataPreProcess.XimuDataPreProcess("03-02-02-01-00")
+    # xdpp = XimuDataPreProcess.XimuDataPreProcess("03-02-02-01-00")
     # xdpp = XimuDataPreProcess.XimuDataPreProcess("04-02-02-01-01")
     # xdpp = XimuDataPreProcess.XimuDataPreProcess("05-02-01-01-01")
     # xdpp = XimuDataPreProcess.XimuDataPreProcess("06-03-02-01-01")
@@ -27,14 +26,13 @@ if __name__ == '__main__':
     # xdpp = XimuDataPreProcess.XimuDataPreProcess("08-03-04-01-01")
     # xdpp = XimuDataPreProcess.XimuDataPreProcess("09-02-04-00-01")
     # xdpp = XimuDataPreProcess.XimuDataPreProcess("10-03-04-00-01")
+    # xdpp = XimuDataPreProcess.XimuDataPreProcess("18-03-05-01-01")
+    xdpp = XimuDataPreProcess.XimuDataPreProcess("17-03-07-01-01")
 
     source_data = xdpp.data_index
-
-
     '''
     PreProcessData
     '''
-
     print("first mean:",np.mean(source_data[:,1:7],axis=0))
     #deg to rad
     source_data[:,1:4] = source_data[:,1:4] * np.pi / 180.0
@@ -91,7 +89,6 @@ if __name__ == '__main__':
     # plt.show()
 
 
-
     '''
     Initial EKF
     '''
@@ -116,7 +113,13 @@ if __name__ == '__main__':
 
     # ZUPT1 = np.zeros_like(ZUPT1)
 
+    '''
+    Set Zupt as zeros.
+    '''
     zupt1 = zupt2 = ZUPT1
+
+
+    zupt1 = zupt2 = np.zeros_like(zupt1)
 
     all_x = np.zeros([18,source_data.shape[0]])
 

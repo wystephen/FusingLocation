@@ -134,13 +134,13 @@ class DataChronic:
             self.ImuSourceData[:, 0] += self.time_offset
             print("-------ADDET")
 
-        d_index = [32,60,75,96,110,135,147,172,205,232,244,268,282,303,315,344,379]
-
-        key_point_time = list()
-
-        for i in d_index:
-            key_point_time.append(self.UwbData[i, 0])
-        key_point_time = np.asarray(key_point_time)
+        # d_index = [32,60,75,96,110,135,147,172,205,232,244,268,282,303,315,344,379]
+        #
+        # key_point_time = list()
+        #
+        # for i in d_index:
+        #     key_point_time.append(self.UwbData[i, 0])
+        # key_point_time = np.asarray(key_point_time)
 
         # key_point_tmp = np.loadtxt(dir_name + '/' + 'keypointtmp.t')
         # print(key_point_time.shape,"     key point    ",key_point_tmp.shape)

@@ -209,6 +209,11 @@ class FusingLocation:
         plt.plot(self.FusingResult[:, 0], self.FusingResult[:, 1], 'r-+')
         plt.plot(self.UWBResult[:, 0], self.UWBResult[:, 1], 'g-+')
 
+
+        plt.show()
+
+        # if(self.KeyPointMatrix.shape[0]>3):
+        # TODO: Open...
         plt.plot(self.KeyPointMatrix[:, 0], self.KeyPointMatrix[:, 1], 'y+-')
 
         # plot points with big change.

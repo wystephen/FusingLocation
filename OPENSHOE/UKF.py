@@ -19,5 +19,8 @@ class UKFIns(object):
         '''
 
         '''
-        self.para
+        self.para = settings
+
+        self.R=np.zeros([6,6])
+
 

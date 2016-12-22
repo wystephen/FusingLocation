@@ -26,7 +26,7 @@ class EkfPf:
         Test parameter here.
         '''
 
-        particle_number = 150
+        particle_number = 1500
         self.Sigma = 0.5
         self.EvaluateSigma = 1.0
 

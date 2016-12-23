@@ -33,7 +33,7 @@ if __name__ == '__main__':
     ticks = time.time()
     time_step = list()
     time_step.append(ticks)
-    for i in [17]:
+    for i in [16]:
         dir_name = ex_dir_list[i]
         print(dir_name)
         # location = FusingLocation(dir_name, [0,1,2])
@@ -75,15 +75,30 @@ if __name__ == '__main__':
         ukfIns.init_Nav_eq(dc.ImuSourceData[1:40, 1:7])
 
         for index in range(dc.ImuSourceData.shape[0]):
-            if index > 1:
-                ukfIns.para.Ts = dc.ImuSourceData[index, 0] - \
-                                 dc.ImuSourceData[index - 1, 0]
-            ukf_result[index, 0] = dc.ImuSourceData[index, 0]
+            try:
+                if index > 1:
+                    ukfIns.para.Ts = dc.ImuSourceData[index, 0] - \
+                                     dc.ImuSourceData[index - 1, 0]
+                ukf_result[index, 0] = dc.ImuSourceData[index, 0]
 
-            ukf_result[index, 1:] = ukfIns.GetPosition(
-                dc.ImuSourceData[index, 1:7],
-                1
-            ).reshape[9]
+                ukf_result[index, 1:] = ukfIns.GetPosition(
+                    dc.ImuSourceData[index, 1:7],
+                    1
+                ).reshape(9)
+                print("index:", index, "x_h:", ukf_result[index, :])
+            except np.linalg.LinAlgError as e:
+                import matplotlib.pyplot as plt
+
+                plt.figure(1)
+                plt.plot(ukf_result[:, 1], ukf_result[:, 2], 'r-+')
+                plt.grid(True)
+                plt.show()
+            finally:
+                print(index)
+
+
+
+
 
         import matplotlib.pyplot as plt
 

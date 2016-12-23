@@ -31,9 +31,9 @@ class UKFIns(object):
 
         self.K = np.zeros([self.state_num, self.observe_num])
 
-        self.x_h = np.zeros([self.state_num, 1])
-
-
+        self.x_h = np.zeros([self.state_num])
+        self.init_filter()
+        self.init_vec(self.P)
         # Just for ukf
 
     def init_vec(self, P):
@@ -62,9 +62,9 @@ class UKFIns(object):
         Rb2t = self.Rt2b(attitude)
         Rb2t = np.transpose(Rb2t)
         quat1 = self.dcm2q(Rb2t)
-        x = np.zeros([18, 1])
-        x[0:3, 0] = self.para.init_pos1
-        x[6:9, 0] = attitude
+        x = np.zeros([9])
+        x[0:3] = self.para.init_pos1
+        x[6:9] = attitude
 
         self.x_h = x
         self.quat1 = quat1
@@ -128,7 +128,7 @@ class UKFIns(object):
         :param dt:
         :return:
         '''
-        y = np.zeros([9, 1])
+        y = np.zeros([9])
         # y = x_h
 
         w_tb = u1[3:6]
@@ -179,7 +179,7 @@ class UKFIns(object):
         # print(acc_t.shape)
         # print(B.dot(acc_t).shape)
         # print(A.dot(x_h[0:6]).shape)
-        acc_t = acc_t.reshape(3, 1)
+        acc_t = acc_t.reshape(3)
 
         # accumulate acc and pose.
         y[0:6] = A.dot(x_h[0:6]) + B.dot(acc_t)
@@ -192,11 +192,16 @@ class UKFIns(object):
 
         sigma_zz = np.zeros([self.P.shape[0] + self.Q.shape[0], self.P.shape[0] + self.Q.shape[0]])
 
-        miu_z[0:9] = self.x_h
+        miu_z[0:9] = self.x_h.reshape(9)
 
         sigma_zz[0:9, 0:9] = self.P
         sigma_zz[9:15, 9:15] = self.Q
 
+        miu_z = (0.5 * miu_z.transpose() + 0.5 * miu_z)
+
+        miu_z = np.abs(miu_z)
+
+        # print(sigma_zz)
         L = np.linalg.cholesky(sigma_zz)
         L_num = sigma_zz.shape[0]
 
@@ -241,11 +246,11 @@ class UKFIns(object):
             self.quat1 += (1 / 2.0 / (L_num + ka)) * q_list[i]
 
         self.P += (ka / (ka + L_num)) * (miu_z_list[0][0:9] - self.x_h).dot(
-            np.linalg.transpose(miu_z_list[0][0:9] - self.x_h))
+            (miu_z_list[0][0:9] - self.x_h).transpose())
 
         for j in range(1, 2 * L_num + 1):
             self.P += (1 / 2.0 / (ka + L_num)) * (miu_z_list[j][0:9] - self.x_h).dot(
-                np.linalg.transpose(miu_z_list[j][0:9] - self.x_h)
+                (miu_z_list[j][0:9] - self.x_h).transpose()
             )
 
         self.P = (self.P * 0.5 + self.P.transpose() * 0.5)

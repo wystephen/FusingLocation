@@ -38,9 +38,9 @@ class FusingLocation:
 
         rnd_list = np.random.uniform(0.0, 1.0, self.UwbData.shape)
         rnd_nor_list = np.random.normal(0.2, 0.2, self.UwbData.shape[0])
-        therold = 0.9
-        len_over = 13
-        for j in range(self.UwbData.shape[1]):
+        therold = 0.95
+        len_over = 3
+        for j in range(1, self.UwbData.shape[1]):
             for i in range(self.UwbData.shape[0] - len_over):
                 if (rnd_list[i, j] > therold):
                     self.UwbData[i:i + len_over, j] = self.UwbData[i, j]
@@ -567,6 +567,7 @@ if __name__ == '__main__':
         location = FusingLocation(dir_name, [0,1,2])
         time_step.append(time.time())
         location.OnlyPF()
+        # plt.plot()
         time_step.append(time.time())
         location.Transform()
         time_step.append(time.time())

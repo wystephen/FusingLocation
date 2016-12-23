@@ -25,11 +25,95 @@ class UKFIns(object):
         self.state_num = 9
         self.observe_num = 4
 
-        self.R = np.zeros([6, 6])
-        self.P = np.zeros([9,9])
-        self.Q =
+        self.R = np.zeros([self.observe_num, self.observe_num])
+        self.P = np.zeros([self.state_num, self.state_num])
+        self.Q = np.zeros([6, 6])
 
-        self.x_h = np.zeros([9,1])
+        self.K = np.zeros([self.state_num, self.observe_num])
+
+        self.x_h = np.zeros([self.state_num, 1])
+
+
+        # Just for ukf
+
+    def init_vec(self, P):
+        """
+
+        :param P:
+        :return:
+        """
+        self.Id = np.diagflat(np.ones(self.P.shape[0]))
+        return
+
+    def init_Nav_eq(self, u1):
+        '''
+        :param u1:
+        :param u2:
+        :return:
+        '''
+        f_u = np.mean(u1[0, :])
+        f_v = np.mean(u1[1, :])
+        f_w = np.mean(u1[2, :])
+        # print(f_u,f_v,f_w)
+        roll = math.atan2(-f_v, -f_w)
+        pitch = math.atan2(f_u, math.sqrt(f_v ** 2 + f_w ** 2))
+        attitude = [roll, pitch, self.para.init_heading1]
+        attitude = np.transpose(attitude)
+        Rb2t = self.Rt2b(attitude)
+        Rb2t = np.transpose(Rb2t)
+        quat1 = self.dcm2q(Rb2t)
+        x = np.zeros([18, 1])
+        x[0:3, 0] = self.para.init_pos1
+        x[6:9, 0] = attitude
+
+        self.x_h = x
+        self.quat1 = quat1
+
+        return x, quat1
+
+    def init_filter(self):
+        print(self.para.sigma_initial_pos ** 2)
+
+        self.P[0:3, 0:3] = np.diagflat(np.transpose(self.para.sigma_initial_pos ** 2.0))
+        self.P[3:6, 3:6] = np.diagflat(np.transpose(self.para.sigma_initial_vel ** 2.0))
+        self.P[6:9, 6:9] = np.diagflat(np.transpose(self.para.sigma_initial_att ** 2.0))
+
+        self.R = np.diagflat(np.transpose(np.ones([self.R.shape[0]])))
+        self.R = self.R * self.para.sigma_initial_range_single
+
+        # self.Q[0:3,0:3] = np.diagflat(np.transpose(self.para.sigma_initial_pos))
+
+        # self.P[9:12, 9:12] = np.diagflat(np.transpose(self.para.sigma_initial_pos2 ** 2.0))
+        # self.P[12:15, 12:15] = np.diagflat(np.transpose(self.para.sigma_initial_vel2 ** 2.0))
+        # self.P[15:18, 15:18] = np.diagflat(np.transpose(self.para.sigma_initial_att2 ** 2.0))
+
+        # print(self.P)
+
+        # self.R2 = np.diagflat(np.transpose(self.para.sigma_vel ** 2.0))
+        # self.R1 = np.diagflat(np.transpose(self.para.sigma_vel ** 2.0))
+
+        # self.R12[0:3, 0:3] = self.R1
+        # self.R12[3:6, 3:6] = self.R2
+
+        # print(self.R12)
+
+
+        self.Q[0:3, 0:3] = np.diagflat(np.transpose(self.para.sigma_acc ** 2.0))
+        self.Q[3:6, 3:6] = np.diagflat(np.transpose(self.para.sigma_gyro ** 2.0))
+
+
+        # self.Q[6:9, 6:9] = np.diagflat(np.transpose(self.para.sigma_acc ** 2.0))
+        # self.Q[9:12, 9:12] = np.diagflat(np.transpose(self.para.sigma_gyro ** 2.0))
+
+        # print (self.Q)
+
+        # self.H1[0:3, 3:6] = np.diagflat(np.transpose([1.0, 1.0, 1.0]))
+        #
+        # self.H2[0:3, 12:15] = np.diagflat(np.transpose([1.0, 1.0, 1.0]))
+
+        # self.H12[0:3, :] = self.H1
+        # self.H12[3:6, :] = self.H2
+
 
 
     def Navigation_euqtions(self, x_h, u1, quat1,  dt):
@@ -102,6 +186,80 @@ class UKFIns(object):
 
         return y, q
 
+    def GetPosition(self, u1, zupt1):
+
+        miu_z = np.zeros([self.x_h.shape[0] + u1.shape[0]])
+
+        sigma_zz = np.zeros([self.P.shape[0] + self.Q.shape[0], self.P.shape[0] + self.Q.shape[0]])
+
+        miu_z[0:9] = self.x_h
+
+        sigma_zz[0:9, 0:9] = self.P
+        sigma_zz[9:15, 9:15] = self.Q
+
+        L = np.linalg.cholesky(sigma_zz)
+        L_num = sigma_zz.shape[0]
+
+        alpha = np.zeros([1 + 2 * L_num])
+
+        ka = 2
+
+        miu_z_list = list()
+        q_list = list()
+
+        t_z = miu_z
+        t_q = self.quat1
+        t_z[0:9], t_q = self.Navigation_euqtions(miu_z[0:9], u1, self.quat1, self.para.Ts)
+        miu_z_list.append(t_z)
+        q_list.append(t_q)
+
+        for i in range(L_num):
+            t_z = miu_z
+            t_z[0:9], t_q = self.comp_internal_states(miu_z[0:9], L[0:9, i], self.quat1)
+            t_z[0:9], t_q = self.Navigation_euqtions(t_z[0:9], u1 + L[9:15, i], t_q, self.para.Ts)
+
+            miu_z_list.append(t_z)
+            q_list.append(t_q)
+
+            t_z = miu_z
+            t_z[0:9], t_q = self.comp_internal_states(miu_z[0:9], -L[0:9, i], self.quat1)
+            t_z[0:9], t_q = self.Navigation_euqtions(t_z[0:9], u1 - L[9:15, i], t_q, self.para.Ts)
+
+            miu_z_list.append(t_z)
+            q_list.append(t_q)
+
+    def comp_internal_states(self, x_in, dx, q_in):
+        '''
+
+        :param x_in:
+        :param dx:
+        :param q_in:
+        :param q_in2:
+        :return:
+        '''
+
+        R = self.q2dcm(q_in)
+
+        x_out = x_in + dx
+
+        epsilon = dx[6:9]
+        # print (dx)
+
+        OMEGA = np.array([
+            [0, -epsilon[2], epsilon[1]],
+            [epsilon[2], 0.0, -epsilon[0]],
+            [-epsilon[1], epsilon[0], 0.0]
+        ])
+
+        R = (np.diagflat([1.0, 1.0, 1.0]) - OMEGA).dot(R)
+
+        q_out = self.dcm2q(R)
+
+        return x_out, q_out
+
+    '''
+    auxilurate function.
+    '''
     def dcm2q(self, R):
         """
         Transform from rotation matrix to quanternions.
@@ -195,4 +353,26 @@ class UKFIns(object):
         R[1, 2] = p[5] - p[4]
         R[2, 1] = p[5] + p[4]
 
+        return R
+
+    def Rt2b(self, ang):
+        '''
+        :
+        :param ang:
+        :return:
+        '''
+        cr = math.cos(ang[0])
+        sr = math.sin(ang[0])
+
+        cp = math.cos(ang[1])
+        sp = math.sin(ang[1])
+
+        cy = math.cos(ang[2])
+        sy = math.sin(ang[2])
+
+        R = np.array(
+            [[cy * cp, sy * cp, -sp],
+             [-sy * cr + cy * sp * sr, cy * cr + sy * sp * sr, cp * sr],
+             [sy * sr + cy * sp * cr, -cy * sr + sy * sp * cr, cp * cr]]
+        )
         return R

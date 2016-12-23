@@ -6,6 +6,7 @@ Test UKF.py
 '''
 
 import os
+import numpy as np
 
 
 if __name__ == '__main__':
@@ -52,6 +53,41 @@ if __name__ == '__main__':
 
         # UwbData[:,1:] = dc.UwbData[:,1:]/1000.0
 
+        from OPENSHOE.UKF import UKFIns
+        from OPENSHOE import Setting
 
+        setting = Setting.settings()
 
+        setting.Ts = np.mean(dc.ImuSourceData[1:, 0] - dc.ImuSourceData[0:-1, 0])
+        # print("Ts:", setting.Ts)
 
+        setting.min_rud_sep = int(1 / setting.Ts)
+
+        setting.time_Window_size = 5
+        setting.gamma = 6580
+
+        setting.init_heading2 = setting.init_heading1
+        setting.init_heading1 = setting.init_heading2 = 0.0
+        ukfIns = UKFIns(settings=setting)
+
+        ukf_result = np.zeros([dc.ImuSourceData.shape[0], 10])
+
+        ukfIns.init_Nav_eq(dc.ImuSourceData[1:40, 1:7])
+
+        for index in range(dc.ImuSourceData.shape[0]):
+            if index > 1:
+                ukfIns.para.Ts = dc.ImuSourceData[index, 0] - \
+                                 dc.ImuSourceData[index - 1, 0]
+            ukf_result[index, 0] = dc.ImuSourceData[index, 0]
+
+            ukf_result[index, 1:] = ukfIns.GetPosition(
+                dc.ImuSourceData[index, 1:7],
+                1
+            ).reshape[9]
+
+        import matplotlib.pyplot as plt
+
+        plt.figure(1)
+        plt.plot(ukf_result[:, 1], ukf_result[:, 2], 'r-+')
+        plt.grid(True)
+        plt.show()

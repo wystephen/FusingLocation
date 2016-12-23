@@ -200,33 +200,66 @@ class UKFIns(object):
         L = np.linalg.cholesky(sigma_zz)
         L_num = sigma_zz.shape[0]
 
-        alpha = np.zeros([1 + 2 * L_num])
+        # alpha = np.zeros([1 + 2 * L_num])
 
-        ka = 2
+        ka = 2.0
 
         miu_z_list = list()
         q_list = list()
 
         t_z = miu_z
         t_q = self.quat1
-        t_z[0:9], t_q = self.Navigation_euqtions(miu_z[0:9], u1, self.quat1, self.para.Ts)
+        t_z[0:9], t_q = self.Navigation_euqtions(miu_z[0:9], u1, t_q, self.para.Ts)
         miu_z_list.append(t_z)
         q_list.append(t_q)
 
         for i in range(L_num):
             t_z = miu_z
-            t_z[0:9], t_q = self.comp_internal_states(miu_z[0:9], L[0:9, i], self.quat1)
-            t_z[0:9], t_q = self.Navigation_euqtions(t_z[0:9], u1 + L[9:15, i], t_q, self.para.Ts)
+            t_z[0:9], t_q = self.comp_internal_states(miu_z[0:9], np.sqrt(L_num + ka) * L[0:9, i], self.quat1)
+            t_z[0:9], t_q = self.Navigation_euqtions(t_z[0:9], u1 + np.sqrt(L_num + ka) * L[9:15, i], t_q, self.para.Ts)
 
             miu_z_list.append(t_z)
             q_list.append(t_q)
 
             t_z = miu_z
-            t_z[0:9], t_q = self.comp_internal_states(miu_z[0:9], -L[0:9, i], self.quat1)
-            t_z[0:9], t_q = self.Navigation_euqtions(t_z[0:9], u1 - L[9:15, i], t_q, self.para.Ts)
+            t_z[0:9], t_q = self.comp_internal_states(miu_z[0:9], -np.sqrt(L_num + ka) * L[0:9, i], self.quat1)
+            t_z[0:9], t_q = self.Navigation_euqtions(t_z[0:9], u1 - np.sqrt(L_num + ka) * L[9:15, i], t_q, self.para.Ts)
 
             miu_z_list.append(t_z)
             q_list.append(t_q)
+
+        # sum up
+        self.x_h = self.x_h * 0.0
+        self.P = self.P * 0.0
+        self.quat1 = self.quat1 * 0.0
+
+        self.x_h += (ka / (ka + L_num)) * miu_z_list[0][0:9]
+        self.quat1 += np.sqrt(L_num + ka) * q_list[0]
+
+        for i in range(1, 2 * L_num + 1):
+            self.x_h += (1 / (2.0) / (L_num + ka)) * miu_z_list[i][0:9]
+            self.quat1 += (1 / 2.0 / (L_num + ka)) * q_list[i]
+
+        self.P += (ka / (ka + L_num)) * (miu_z_list[0][0:9] - self.x_h).dot(
+            np.linalg.transpose(miu_z_list[0][0:9] - self.x_h))
+
+        for j in range(1, 2 * L_num + 1):
+            self.P += (1 / 2.0 / (ka + L_num)) * (miu_z_list[j][0:9] - self.x_h).dot(
+                np.linalg.transpose(miu_z_list[j][0:9] - self.x_h)
+            )
+
+        self.P = (self.P * 0.5 + self.P.transpose() * 0.5)
+
+        return self.x_h
+
+
+
+
+
+
+
+
+
 
     def comp_internal_states(self, x_in, dx, q_in):
         '''

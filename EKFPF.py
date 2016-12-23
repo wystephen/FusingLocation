@@ -26,7 +26,7 @@ class EkfPf:
         Test parameter here.
         '''
 
-        particle_number = 2800
+        particle_number = 1500
         self.Sigma = 0.5
         self.EvaluateSigma = 1.0
 
@@ -127,7 +127,7 @@ class EkfPf:
                         self.ekf_list[i].Evaluation(self.beaconset,
                                                     self.UwbData[uwb_index, 1:],
                                                     sigma=self.EvaluateSigma,
-                                                    z_offset=1.9
+                                                    z_offset=0.0
                                                     )
                     self.weight[i] *= score
                     # print("scoreL:", score)

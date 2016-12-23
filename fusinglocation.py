@@ -34,6 +34,20 @@ class FusingLocation:
 
         self.UwbData[:, 1:] = self.UwbData[:, 1:] / 1000.0
 
+        # Add noise here
+
+        rnd_list = np.random.uniform(0.0, 1.0, self.UwbData.shape)
+        rnd_nor_list = np.random.normal(0.2, 0.2, self.UwbData.shape[0])
+        therold = 0.9
+        len_over = 13
+        for j in range(self.UwbData.shape[1]):
+            for i in range(self.UwbData.shape[0] - len_over):
+                if (rnd_list[i, j] > therold):
+                    self.UwbData[i:i + len_over, j] = self.UwbData[i, j]
+
+
+
+
         if '04-' in dir_name:
             self.KeyPointMatrix = np.loadtxt(dir_name + '/keypoint.csv', delimiter=',')
 
@@ -96,12 +110,15 @@ class FusingLocation:
         self.UwbData[:, 1:] = np.sqrt(np.abs(self.UwbData[:, 1:]))
 
         plt.figure(111104)
+        plt.title("Add noise uwb range")
         for i in range(self.UwbData.shape[1]):
             if i > 0:
                 plt.plot(self.UwbData[:, i])
         # plt.show()
 
         ################
+
+
 
         plt.figure(15)
         plt.title("diff")

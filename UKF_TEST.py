@@ -33,7 +33,7 @@ if __name__ == '__main__':
     ticks = time.time()
     time_step = list()
     time_step.append(ticks)
-    for i in [16]:
+    for i in [3]:
         dir_name = ex_dir_list[i]
         print(dir_name)
         # location = FusingLocation(dir_name, [0,1,2])

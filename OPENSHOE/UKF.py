@@ -197,9 +197,11 @@ class UKFIns(object):
         sigma_zz[0:9, 0:9] = self.P
         sigma_zz[9:15, 9:15] = self.Q
 
-        miu_z = (0.5 * miu_z.transpose() + 0.5 * miu_z)
+        # miu_z = (0.5 * miu_z.transpose() + 0.5 * miu_z)
 
-        miu_z = np.abs(miu_z)
+        # miu_z = np.abs(miu_z)
+
+        miu_z = np.sqrt(miu_z*miu_z.transpose())
 
         # print(sigma_zz)
         L = np.linalg.cholesky(sigma_zz)

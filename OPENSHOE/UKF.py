@@ -81,39 +81,8 @@ class UKFIns(object):
         self.R = np.diagflat(np.transpose(np.ones([self.R.shape[0]])))
         self.R = self.R * self.para.sigma_initial_range_single
 
-        # self.Q[0:3,0:3] = np.diagflat(np.transpose(self.para.sigma_initial_pos))
-
-        # self.P[9:12, 9:12] = np.diagflat(np.transpose(self.para.sigma_initial_pos2 ** 2.0))
-        # self.P[12:15, 12:15] = np.diagflat(np.transpose(self.para.sigma_initial_vel2 ** 2.0))
-        # self.P[15:18, 15:18] = np.diagflat(np.transpose(self.para.sigma_initial_att2 ** 2.0))
-
-        # print(self.P)
-
-        # self.R2 = np.diagflat(np.transpose(self.para.sigma_vel ** 2.0))
-        # self.R1 = np.diagflat(np.transpose(self.para.sigma_vel ** 2.0))
-
-        # self.R12[0:3, 0:3] = self.R1
-        # self.R12[3:6, 3:6] = self.R2
-
-        # print(self.R12)
-
-
         self.Q[0:3, 0:3] = np.diagflat(np.transpose(self.para.sigma_acc ** 2.0))
         self.Q[3:6, 3:6] = np.diagflat(np.transpose(self.para.sigma_gyro ** 2.0))
-
-
-        # self.Q[6:9, 6:9] = np.diagflat(np.transpose(self.para.sigma_acc ** 2.0))
-        # self.Q[9:12, 9:12] = np.diagflat(np.transpose(self.para.sigma_gyro ** 2.0))
-
-        # print (self.Q)
-
-        # self.H1[0:3, 3:6] = np.diagflat(np.transpose([1.0, 1.0, 1.0]))
-        #
-        # self.H2[0:3, 12:15] = np.diagflat(np.transpose([1.0, 1.0, 1.0]))
-
-        # self.H12[0:3, :] = self.H1
-        # self.H12[3:6, :] = self.H2
-
 
 
     def Navigation_euqtions(self, x_h, u1, quat1,  dt):
@@ -176,9 +145,6 @@ class UKFIns(object):
         B[0:3, 0:3] = np.zeros([3, 3])
         B[3:6, 0:3] = np.diagflat([dt, dt, dt])
 
-        # print(acc_t.shape)
-        # print(B.dot(acc_t).shape)
-        # print(A.dot(x_h[0:6]).shape)
         acc_t = acc_t.reshape(3)
 
         # accumulate acc and pose.
@@ -254,6 +220,8 @@ class UKFIns(object):
             self.P += (1 / 2.0 / (ka + L_num)) * (miu_z_list[j][0:9] - self.x_h).dot(
                 (miu_z_list[j][0:9] - self.x_h).transpose()
             )
+
+        # Keep P;
 
         self.P = (self.P * 0.5 + self.P.transpose() * 0.5)
 

@@ -423,6 +423,7 @@ class ZUPTaidedInsPlus(object):
             Q = w_tb[1] * dt * 0.5
             R = w_tb[2] * dt * 0.5
 
+
             OMEGA = np.array([
                 [0.0, R, -Q, P],
                 [-R, 0.0, P, Q],

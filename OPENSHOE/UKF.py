@@ -159,6 +159,7 @@ class UKFIns(object):
         sigma_zz = np.zeros([self.P.shape[0] + self.Q.shape[0], self.P.shape[0] + self.Q.shape[0]])
 
         miu_z[0:9] = self.x_h.reshape(9)
+        # miu_z[9:15] = u1.reshape(6)
 
         sigma_zz[0:9, 0:9] = self.P
         sigma_zz[9:15, 9:15] = self.Q
@@ -188,14 +189,14 @@ class UKFIns(object):
 
         for i in range(L_num):
             t_z = miu_z
-            t_z[0:9], t_q = self.comp_internal_states(miu_z[0:9], np.sqrt(L_num + ka) * L[0:9, i], self.quat1)
+            t_z[0:9], t_q = self.comp_internal_states(miu_z[0:9], u1+np.sqrt(L_num + ka) * L[0:9, i], self.quat1)
             t_z[0:9], t_q = self.Navigation_euqtions(t_z[0:9], u1 + np.sqrt(L_num + ka) * L[9:15, i], t_q, self.para.Ts)
 
             miu_z_list.append(t_z)
             q_list.append(t_q)
 
             t_z = miu_z
-            t_z[0:9], t_q = self.comp_internal_states(miu_z[0:9], -np.sqrt(L_num + ka) * L[0:9, i], self.quat1)
+            t_z[0:9], t_q = self.comp_internal_states(miu_z[0:9], u1-np.sqrt(L_num + ka) * L[0:9, i], self.quat1)
             t_z[0:9], t_q = self.Navigation_euqtions(t_z[0:9], u1 - np.sqrt(L_num + ka) * L[9:15, i], t_q, self.para.Ts)
 
             miu_z_list.append(t_z)
@@ -213,6 +214,9 @@ class UKFIns(object):
             self.x_h += (1 / (2.0) / (L_num + ka)) * miu_z_list[i][0:9]
             self.quat1 += (1 / 2.0 / (L_num + ka)) * q_list[i]
 
+        #keep quat1
+        self.quat1 = self.quat1 / np.linalg.norm(self.quat1)
+
         self.P += (ka / (ka + L_num)) * (miu_z_list[0][0:9] - self.x_h).dot(
             (miu_z_list[0][0:9] - self.x_h).transpose())
 
@@ -220,6 +224,8 @@ class UKFIns(object):
             self.P += (1 / 2.0 / (ka + L_num)) * (miu_z_list[j][0:9] - self.x_h).dot(
                 (miu_z_list[j][0:9] - self.x_h).transpose()
             )
+
+
 
         # Keep P;
 

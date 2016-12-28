@@ -207,10 +207,10 @@ class UKFIns(object):
         self.P = self.P * 0.0
         self.quat1 = self.quat1 * 0.0
 
-        self.x_h += (ka / (ka + L_num)) * miu_z_list[0][0:9]
+        self.x_h += (ka / float(ka + L_num)) * miu_z_list[0][0:9]
         self.quat1 += np.sqrt(L_num + ka) * q_list[0]
 
-        for i in range(1, 2 * L_num + 2):
+        for i in range(1, 2 * L_num + 1):
             self.x_h += (1 / (2.0) / (L_num + ka)) * miu_z_list[i][0:9]
             self.quat1 += (1 / 2.0 / (L_num + ka)) * q_list[i]
 
@@ -220,7 +220,7 @@ class UKFIns(object):
         self.P += (ka / (ka + L_num)) * (miu_z_list[0][0:9] - self.x_h).dot(
             (miu_z_list[0][0:9] - self.x_h).transpose())
 
-        for j in range(1, 2 * L_num + 2):
+        for j in range(1, 2 * L_num + 1):
             self.P += (1 / 2.0 / (ka + L_num)) * (miu_z_list[j][0:9] - self.x_h).dot(
                 (miu_z_list[j][0:9] - self.x_h).transpose()
             )

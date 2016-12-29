@@ -8,6 +8,11 @@ Test UKF.py
 import os
 import numpy as np
 
+import matplotlib.pyplot as plt
+from OPENSHOE.UKF import UKFIns
+from OPENSHOE import Setting
+import time
+import DataChronic
 
 if __name__ == '__main__':
     ex_dir_list = list()
@@ -28,7 +33,6 @@ if __name__ == '__main__':
     print(ex_dir_list)
     ex_dir_list.sort()
     print(ex_dir_list)
-    import time
 
     ticks = time.time()
     time_step = list()
@@ -44,7 +48,6 @@ if __name__ == '__main__':
         # location.DeepFusing(1000)
         # location.MixFusing(1000, noise_sigma=1.0, evaluate_sigma=3.5)
         # plt.show()
-        import DataChronic
 
         dc = DataChronic.DataChronic(dir_name,beacon_use=[0,1,2,3])
 
@@ -53,8 +56,7 @@ if __name__ == '__main__':
 
         # UwbData[:,1:] = dc.UwbData[:,1:]/1000.0
 
-        from OPENSHOE.UKF import UKFIns
-        from OPENSHOE import Setting
+
 
         setting = Setting.settings()
 
@@ -100,7 +102,6 @@ if __name__ == '__main__':
 
 
 
-        import matplotlib.pyplot as plt
 
         plt.figure(1)
         plt.plot(ukf_result[:, 1], ukf_result[:, 2], 'r-+')

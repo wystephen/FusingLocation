@@ -229,7 +229,7 @@ class UKFIns(object):
 
         # Keep P;
 
-        self.P = (self.P * 0.5 + self.P.transpose() * 0.5)
+        # self.P = (self.P * 0.5 + self.P.transpose() * 0.5)
 
         return self.x_h
 

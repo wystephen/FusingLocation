@@ -512,6 +512,7 @@ class ZUPTaidedInsPlus(object):
         f_t = Rb2t.dot(u[0:3])
         f_t2 = Rb2t2.dot(u2[0:3])
 
+
         # Fixed here.
         St = np.array([
             [0, -f_t[2], f_t[1]],

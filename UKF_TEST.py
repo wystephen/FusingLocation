@@ -78,7 +78,7 @@ if __name__ == '__main__':
 
         for index in range(dc.ImuSourceData.shape[0]):
             try:
-                if index > 1:
+                if index > 10:
                     ukfIns.para.Ts = dc.ImuSourceData[index, 0] - \
                                      dc.ImuSourceData[index - 1, 0]
                 ukf_result[index, 0] = dc.ImuSourceData[index, 0]
@@ -97,11 +97,6 @@ if __name__ == '__main__':
                 plt.show()
             finally:
                 print(index)
-
-
-
-
-
 
         plt.figure(1)
         plt.plot(ukf_result[:, 1], ukf_result[:, 2], 'r-+')

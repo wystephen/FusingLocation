@@ -38,8 +38,8 @@ class FusingLocation:
 
         rnd_list = np.random.uniform(0.0, 1.0, self.UwbData.shape)
         rnd_nor_list = np.random.normal(0.2, 0.2, self.UwbData.shape[0])
-        therold = 0.95
-        len_over = 3
+        therold = 0.97
+        len_over = 5
         for j in range(1, self.UwbData.shape[1]):
             for i in range(self.UwbData.shape[0] - len_over):
                 if (rnd_list[i, j] > therold):

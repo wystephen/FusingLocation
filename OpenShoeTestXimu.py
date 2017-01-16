@@ -27,8 +27,8 @@ if __name__ == '__main__':
     # xdpp = XimuDataPreProcess.XimuDataPreProcess("09-02-04-00-01")
     # xdpp = XimuDataPreProcess.XimuDataPreProcess("10-03-04-00-01")
     # xdpp = XimuDataPreProcess.XimuDataPreProcess("18-03-05-01-01")
-    xdpp = XimuDataPreProcess.XimuDataPreProcess("17-03-07-01-01")
-
+    # xdpp = XimuDataPreProcess.XimuDataPreProcess("17-03-07-01-01")
+    xdpp = XimuDataPreProcess.XimuDataPreProcess("test14")
     source_data = xdpp.data_index
     '''
     PreProcessData

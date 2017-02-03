@@ -423,7 +423,6 @@ class ZUPTaidedInsPlus(object):
             Q = w_tb[1] * dt * 0.5
             R = w_tb[2] * dt * 0.5
 
-
             OMEGA = np.array([
                 [0.0, R, -Q, P],
                 [-R, 0.0, P, Q],
@@ -511,7 +510,6 @@ class ZUPTaidedInsPlus(object):
 
         f_t = Rb2t.dot(u[0:3])
         f_t2 = Rb2t2.dot(u2[0:3])
-
 
         # Fixed here.
         St = np.array([

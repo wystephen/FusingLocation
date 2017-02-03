@@ -27,8 +27,8 @@ if __name__ == '__main__':
     # xdpp = XimuDataPreProcess.XimuDataPreProcess("09-02-04-00-01")
     # xdpp = XimuDataPreProcess.XimuDataPreProcess("10-03-04-00-01")
     # xdpp = XimuDataPreProcess.XimuDataPreProcess("18-03-05-01-01")
-    xdpp = XimuDataPreProcess.XimuDataPreProcess("17-03-07-01-01")
-
+    # xdpp = XimuDataPreProcess.XimuDataPreProcess("17-03-07-01-01")
+    xdpp = XimuDataPreProcess.XimuDataPreProcess("14-02-06-01-01")
     source_data = xdpp.data_index
     '''
     PreProcessData
@@ -119,7 +119,7 @@ if __name__ == '__main__':
     zupt1 = zupt2 = ZUPT1
 
 
-    zupt1 = zupt2 = np.zeros_like(zupt1)
+    # zupt1 = zupt2 = np.zeros_like(zupt1)
 
     all_x = np.zeros([18,source_data.shape[0]])
 

@@ -48,7 +48,7 @@ class FusingLocation:
 
 
 
-        if '04-' in dir_name:
+        if '04-02-02' in dir_name:
             self.KeyPointMatrix = np.loadtxt(dir_name + '/keypoint.csv', delimiter=',')
 
 
@@ -561,7 +561,7 @@ if __name__ == '__main__':
     ticks = time.time()
     time_step = list()
     time_step.append(ticks)
-    for i in [17]:
+    for i in [6]:
         dir_name = ex_dir_list[i]
         print(dir_name)
         location = FusingLocation(dir_name, [0,1,2])

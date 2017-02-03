@@ -40,7 +40,13 @@ class seq_process:
     def process_file(self,file_name='LOG_2016_10_12_10_15_17.data',
                      out_aa='aarange.txt',
                      out_at='atrange.txt'):
-
+        '''
+        process .data file to aarange and atrange
+        :param file_name: source file.
+        :param out_aa: distance from beacon to beacon.
+        :param out_at: distance from tag to beacon.
+        :return:
+        '''
         self.file_pre_process(name=file_name)
         logf = open('log.data', 'r')
 

@@ -24,7 +24,7 @@ class FusingLocation:
         self.dc.RunOpenshoe()
         self.dc.SmoothPath()
         self.dc.SynData()
-        self. dc.OnlyPF(100)
+        # self. dc.OnlyPF(100)
         self.beacon_use = beacon_use
 
 

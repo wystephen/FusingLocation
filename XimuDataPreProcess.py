@@ -125,7 +125,7 @@ class XimuDataPreProcess:
         # Add time to acc and gyrl
         # print(self.data_index.shape)
         start_index = -10
-        end_index = -1000000
+        end_index = -100000
         speed_up_index = 0
         for i in range(self.data_index.shape[0]):
             index_tmp = self.data_index[i,0]

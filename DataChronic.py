@@ -47,8 +47,6 @@ class DataChronic:
         self.ImuSourceData[:, 1:4] = tmp_data[:, 4:7] * 9.8
         self.ImuSourceData[:, 4:7] = tmp_data[:, 1:4] * np.pi / 180.0
 
-
-
         '''
         Load uwb data
         '''
@@ -134,22 +132,22 @@ class DataChronic:
             self.ImuSourceData[:, 0] += self.time_offset
             print("-------ADDET")
 
-        # d_index = [32,60,75,96,110,135,147,172,205,232,244,268,282,303,315,344,379]
-        #
-        # key_point_time = list()
-        #
-        # for i in d_index:
-        #     key_point_time.append(self.UwbData[i, 0])
-        # key_point_time = np.asarray(key_point_time)
+            # d_index = [32,60,75,96,110,135,147,172,205,232,244,268,282,303,315,344,379]
+            #
+            # key_point_time = list()
+            #
+            # for i in d_index:
+            #     key_point_time.append(self.UwbData[i, 0])
+            # key_point_time = np.asarray(key_point_time)
 
-        # key_point_tmp = np.loadtxt(dir_name + '/' + 'keypointtmp.t')
-        # print(key_point_time.shape,"     key point    ",key_point_tmp.shape)
-        #
-        # key_point_data = np.zeros([key_point_tmp.shape[0],key_point_tmp.shape[1]+1])
-        # for i in range(key_point_tmp.shape[0]):
-        #     key_point_data[i,0:2] = key_point_tmp[i,:]
-        #     key_point_data[i,2] = key_point_time[i]
-        # np.savetxt(dir_name+'/keypoint.csv',key_point_data,delimiter=',')
+            # key_point_tmp = np.loadtxt(dir_name + '/' + 'keypointtmp.t')
+            # print(key_point_time.shape,"     key point    ",key_point_tmp.shape)
+            #
+            # key_point_data = np.zeros([key_point_tmp.shape[0],key_point_tmp.shape[1]+1])
+            # for i in range(key_point_tmp.shape[0]):
+            #     key_point_data[i,0:2] = key_point_tmp[i,:]
+            #     key_point_data[i,2] = key_point_time[i]
+            # np.savetxt(dir_name+'/keypoint.csv',key_point_data,delimiter=',')
 
     def RunOpenshoe(self):
         '''
@@ -327,58 +325,58 @@ class DataChronic:
         # plt.show()
 
     def OnlyPF(self, particle_num=200):
-            '''
+        '''
 
-            :param particle_num:
-            :return:
-            '''
+        :param particle_num:
+        :return:
+        '''
 
-            '''
-            PF ONLY USE UWB DATA
-            '''
-            # print(self.BeaconSet)
+        '''
+        PF ONLY USE UWB DATA
+        '''
+        # print(self.BeaconSet)
 
-            self.pf = PF_FRAME.PF_Frame([1000, 1000], [10, 10], 10, particle_num)
+        self.pf = PF_FRAME.PF_Frame([1000, 1000], [10, 10], 10, particle_num)
 
-            self.pf.SetBeaconSet(self.BeaconSet[:, 0:2])
-            self.pf.InitialPose([0.0, 0.0])
+        self.pf.SetBeaconSet(self.BeaconSet[:, 0:2])
+        self.pf.InitialPose([0.0, 0.0])
 
-            self.UWBResult = np.zeros([self.UwbData.shape[0], 2])
-            # print(self.UwbData,self.UwbData.shape)
+        self.UWBResult = np.zeros([self.UwbData.shape[0], 2])
+        # print(self.UwbData,self.UwbData.shape)
 
-            self.UwbData /= 1000.0
-            #
-            # self.UwbData = self.UwbData ** 2.0
-            # self.UwbData -= self.z_offset
-            # self.UwbData = self.UwbData ** 0.5
+        self.UwbData /= 1000.0
+        #
+        # self.UwbData = self.UwbData ** 2.0
+        # self.UwbData -= self.z_offset
+        # self.UwbData = self.UwbData ** 0.5
 
-            self.UwbData[:, 1:] = (self.UwbData[:, 1:] ** 2.0 - self.z_offset)
+        self.UwbData[:, 1:] = (self.UwbData[:, 1:] ** 2.0 - self.z_offset)
 
-            self.UwbData[:, 1:] = np.sqrt(np.abs(self.UwbData[:, 1:]))
+        self.UwbData[:, 1:] = np.sqrt(np.abs(self.UwbData[:, 1:]))
 
-            plt.figure(11114)
-            for i in range(self.UwbData.shape[1]):
-                if i > 0:
-                    plt.plot(self.UwbData[:, i])
+        plt.figure(11114)
+        for i in range(self.UwbData.shape[1]):
+            if i > 0:
+                plt.plot(self.UwbData[:, i])
 
-            # plt.show()
-            plt.figure(15)
-            for j in range(self.UwbData.shape[1]):
-                if j > 0:
-                    plt.plot(self.UwbData[1:, j] - self.UwbData[0:-1, j])
-                    print("run hear", j, i)
-            plt.grid(True)
+        # plt.show()
+        plt.figure(15)
+        for j in range(self.UwbData.shape[1]):
+            if j > 0:
+                plt.plot(self.UwbData[1:, j] - self.UwbData[0:-1, j])
+                print("run hear", j, i)
+        plt.grid(True)
 
-            for i in range(self.UwbData.shape[0]):
-                self.pf.Sample(0.5)
-                self.pf.Evaluated(self.UwbData[i, 1:5])
+        for i in range(self.UwbData.shape[0]):
+            self.pf.Sample(0.5)
+            self.pf.Evaluated(self.UwbData[i, 1:5])
 
-                self.pf.ReSample()
-                self.UWBResult[i, :] = self.pf.GetResult()
+            self.pf.ReSample()
+            self.UWBResult[i, :] = self.pf.GetResult()
 
-            plt.figure(22)
-            plt.plot(self.UWBResult[:, 0], self.UWBResult[:, 1], 'g+-')
-            plt.grid(True)
+        plt.figure(22)
+        plt.plot(self.UWBResult[:, 0], self.UWBResult[:, 1], 'g+-')
+        plt.grid(True)
 
 
 if __name__ == '__main__':

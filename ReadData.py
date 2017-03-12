@@ -14,6 +14,9 @@ if __name__ == '__main__':
     dc.RunOpenshoe()
     dc.SmoothPath()
     dc.SynData()
+    dc.OnlyPF()
+
+    dc.UwbData[:,0] = dc.UwbData[:,0]*1000.0
 
     np.savetxt(dir_name+'beaconset.data',dc.BeaconSet)
     np.savetxt(dir_name+'beaconset.data.csv',dc.BeaconSet,delimiter=',')
@@ -48,6 +51,11 @@ if __name__ == '__main__':
 
     ImuResult = dc.ImuResultSyn
     plt.plot(ImuResult[:,0],ImuResult[:,1],'r-+')
+    plt.grid(True)
+
+    plt.figure(3)
+    plt.plot(dc.ImuSourceData[:,0],'r')
+    plt.plot(dc.UwbData[:,0],'b')
     plt.grid(True)
 
     plt.show()

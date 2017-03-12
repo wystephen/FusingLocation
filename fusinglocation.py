@@ -27,7 +27,6 @@ class FusingLocation:
         # self. dc.OnlyPF(100)
         self.beacon_use = beacon_use
 
-
         # Copy data to this class
         self.BeaconSet = self.dc.BeaconSet
         self.UwbData = self.dc.UwbData
@@ -46,12 +45,8 @@ class FusingLocation:
                 if (rnd_list[i, j] > therold):
                     self.UwbData[i:i + len_over, j] = self.UwbData[i, j]
 
-
-
-
         if '04-02-02' in dir_name:
             self.KeyPointMatrix = np.loadtxt(dir_name + '/keypoint.csv', delimiter=',')
-
 
         '''
         Need to compute:
@@ -60,7 +55,7 @@ class FusingLocation:
         '''
         tp = trianglepose(self.BeaconSet, self.UwbData[2:10, 1:])
         self.z_offset = tp.pose[2] - self.BeaconSet[1, 2]
-        print("Z_OFFSET IS : " , self.z_offset,"pose : ",tp.pose)
+        print("Z_OFFSET IS : ", self.z_offset, "pose : ", tp.pose)
         self.initialpose = tp.pose[0:2]
         self.OptResult = tp.ComputePath(self.UwbData)
         self.TriResult = tp.TriComputePath(self.UwbData)
@@ -106,7 +101,7 @@ class FusingLocation:
         # self.UwbData -= self.z_offset
         # self.UwbData = self.UwbData ** 0.5
 
-        self.UwbData[:, 1:] = np.abs(self.UwbData[:, 1:] ** 2.0 - self.z_offset**2.0)
+        self.UwbData[:, 1:] = np.abs(self.UwbData[:, 1:] ** 2.0 - self.z_offset ** 2.0)
 
         self.UwbData[:, 1:] = np.sqrt(np.abs(self.UwbData[:, 1:]))
 
@@ -227,7 +222,6 @@ class FusingLocation:
         plt.plot(self.FusingResult[:, 0], self.FusingResult[:, 1], 'r-+')
         plt.plot(self.UWBResult[:, 0], self.UWBResult[:, 1], 'g-+')
 
-
         plt.show()
 
         # if(self.KeyPointMatrix.shape[0]>3):
@@ -284,19 +278,14 @@ class FusingLocation:
         # line_down, = plt.plot([3, 2, 1], label='Line 1')
         # plt.legend(handles=[line_up, line_down])
         plt.grid(True)
-        handle_uwb_error, = plt.plot(self.UwbData[10:, 0], error_uwb[10:], 'r',label = 'uwb error')
-        handle_fusing_error, = plt.plot(self.UwbData[10:, 0], error_fusing[10:], 'b',label = 'fusing error')
-        plt.legend(handles=[handle_uwb_error,handle_fusing_error])
+        handle_uwb_error, = plt.plot(self.UwbData[10:, 0], error_uwb[10:], 'r', label='uwb error')
+        handle_fusing_error, = plt.plot(self.UwbData[10:, 0], error_fusing[10:], 'b', label='fusing error')
+        plt.legend(handles=[handle_uwb_error, handle_fusing_error])
 
         print("particle_num:", particle_num, "noise_sigma:", noise_sigma
               , "evaluation sigma:", evaluate_sigma)
 
         print("beacon_use:", self.beacon_use)
-
-
-
-
-
 
     def Fusing(self, particle_num=200):
         self.pf = PF_FRAME.PF_Frame([1000, 1000], [10, 10], 10, particle_num)
@@ -374,7 +363,7 @@ class FusingLocation:
 
         self.FusingResult = np.zeros([self.UwbData.shape[0], 2])
 
-        self.UwbData[:, 1:] = np.abs(self.UwbData[:, 1:] ** 2.0 - self.z_offset**2.0)
+        self.UwbData[:, 1:] = np.abs(self.UwbData[:, 1:] ** 2.0 - self.z_offset ** 2.0)
 
         self.UwbData[:, 1:] = np.sqrt(np.abs(self.UwbData[:, 1:]))
 
@@ -565,7 +554,7 @@ if __name__ == '__main__':
     for i in [6]:
         dir_name = ex_dir_list[i]
         print(dir_name)
-        location = FusingLocation(dir_name, [0,1,2])
+        location = FusingLocation(dir_name, [0, 1, 2])
         time_step.append(time.time())
         location.OnlyPF()
         # plt.plot()
@@ -582,7 +571,5 @@ if __name__ == '__main__':
         time_step = np.asarray(time_step)
 
         print("all_time:", time_step[1:] - time_step[:-1])
-
-
 
         plt.show()

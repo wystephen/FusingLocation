@@ -9,11 +9,30 @@ import matplotlib.pyplot as plt
 import DataChronic
 
 if __name__ == '__main__':
-    dir_name = "/home/steve/Data/locate/3"
+    dir_name = "/home/steve/Data/locate/5"
     dc = DataChronic.DataChronic(dir_name)
     dc.RunOpenshoe()
     dc.SmoothPath()
     dc.SynData()
+
+    np.savetxt(dir_name+'beaconset.data',dc.BeaconSet)
+    np.savetxt(dir_name+'beaconset.data.csv',dc.BeaconSet,delimiter=',')
+
+    np.savetxt(dir_name+'UwbData.data',dc.UwbData)
+    np.savetxt(dir_name+'UwbData.data.csv',dc.UwbData,delimiter=',')
+
+    np.savetxt(dir_name+'UwbResult.data',dc.UWBResult)
+    np.savetxt(dir_name+'UwbResult.data.csv',dc.UWBResult,delimiter=',')
+
+    np.savetxt(dir_name+'ImuData.data',dc.ImuSourceData.astype(dtype=float))
+    np.savetxt(dir_name+'ImuData.data.csv',dc.ImuSourceData.astype(dtype=float),delimiter=',')
+
+    np.savetxt(dir_name+'Zupt.data',dc.zupt)
+    np.savetxt(dir_name+'Zupt.data.csv',dc.zupt,delimiter=',')
+
+    np.savetxt(dir_name+'ImuResultData.data',dc.ImuResultSyn)
+    np.savetxt(dir_name+'ImuResultData.data.csv',dc.ImuResultSyn,delimiter=',')
+
 
     UwbData = dc.UwbData
 
@@ -28,7 +47,7 @@ if __name__ == '__main__':
     plt.figure(2)
 
     ImuResult = dc.ImuResultSyn
-    plt.plot(ImuResult[:,1],ImuResult[:,2],'r-+')
+    plt.plot(ImuResult[:,0],ImuResult[:,1],'r-+')
     plt.grid(True)
 
     plt.show()

@@ -12,6 +12,7 @@ import os
 
 import time
 
+import copy
 
 class EkfPf:
     def __init__(self,
@@ -152,7 +153,6 @@ class EkfPf:
                 Resample
                 '''
 
-                import copy
                 tmp_list = copy.deepcopy(self.ekf_list)
                 tmp_weight = self.weight.copy()
 

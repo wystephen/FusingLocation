@@ -54,8 +54,8 @@ class DataChronic:
 
         import os
         for file_name in os.listdir(dir_name):
-            if '.data' in file_name:
-                # print("file__name :", file_name)
+            if '.data' in file_name and 'LOG' in file_name:
+                print("file__name :", file_name)
                 se.process_file(file_name=dir_name + '/' + file_name)
 
         self.UwbData = np.loadtxt('atrange.txt')
@@ -87,20 +87,20 @@ class DataChronic:
             e_cov_list = list()
             m_cov_list = list()
 
-            for j in range(self.UwbData.shape[0]):
-                K = EstimateCov * np.sqrt(1 / (EstimateCov * EstimateCov + MeasureCov * MeasureCov))
-                Estimate = Estimate + K * (self.UwbData[j, i] - Estimate)
-
-                EstimateCov = np.sqrt(1 - K) * EstimateCov
-
-                MeasureCov = np.sqrt(1 - K) * MeasureCov
-
-                e_cov_list.append(EstimateCov)
-                m_cov_list.append(MeasureCov)
-
-                self.UwbData[j, i] = Estimate
-            self.estcov[:, i - 1] = np.asarray(e_cov_list)
-            self.meacov[:, i - 1] = np.asarray(m_cov_list)
+            # for j in range(self.UwbData.shape[0]):
+            #     K = EstimateCov * np.sqrt(1 / (EstimateCov * EstimateCov + MeasureCov * MeasureCov))
+            #     Estimate = Estimate + K * (self.UwbData[j, i] - Estimate)
+            #
+            #     EstimateCov = np.sqrt(1 - K) * EstimateCov
+            #
+            #     MeasureCov = np.sqrt(1 - K) * MeasureCov
+            #
+            #     e_cov_list.append(EstimateCov)
+            #     m_cov_list.append(MeasureCov)
+            #
+            #     self.UwbData[j, i] = Estimate
+            # self.estcov[:, i - 1] = np.asarray(e_cov_list)
+            # self.meacov[:, i - 1] = np.asarray(m_cov_list)
 
         # plt.figure(9911)
         # plt.title("cov of estimate")
@@ -122,7 +122,7 @@ class DataChronic:
         # self.BeaconSet[:,2] *= 1.0
         tmp = self.BeaconSet.copy()
 
-        self.BeaconSet[:, 0], self.BeaconSet[:, 1] = tmp[:, 1], tmp[:, 0]
+        self.BeaconSet[:, 0], self.BeaconSet[:, 1] = tmp[:, 0], tmp[:, 1]*-1.0
 
         '''
         Add Time offset

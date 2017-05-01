@@ -12,6 +12,8 @@ real_dis = zeros(size(NLOS));
 index_x = zeros(size(NLOS));
 index_y = zeros(size(NLOS));
 
+
+%
 for i = 1:size(NLOS,1)
     for j = 1:size(NLOS,2)
         index_x(i,j) = j;

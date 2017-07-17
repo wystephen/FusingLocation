@@ -16,6 +16,7 @@ index_y = zeros(size(NLOS));
 %
 for i = 1:size(NLOS,1)
     for j = 1:size(NLOS,2)
+
         index_x(i,j) = j;
         index_y(i,j) = i;
         real_dis(i,j) = (((i-1) * 0.8 + y_offset)^2.0 + ...

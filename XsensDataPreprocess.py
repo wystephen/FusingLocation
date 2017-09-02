@@ -6,8 +6,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 import OPENSHOE.zupt_test
+import OPENSHOE.PdrEkf
 import OPENSHOE.Setting
 
+import mpl_toolkits.mplot3d.axes3d as p3
 
 if __name__ == '__main__':
     src_data = np.loadtxt('/home/steve/XsensData/1.csv', delimiter=',')
@@ -20,6 +22,7 @@ if __name__ == '__main__':
     np.savetxt("/home/steve/XsensData/1Imu.csv",out_data,delimiter=',')
 
     t_setting = OPENSHOE.Setting.settings()
+    t_setting.Ts = 1.0/400.0
 
     zupt_detector = OPENSHOE.zupt_test.zupte_test(t_setting)
 
@@ -39,8 +42,32 @@ if __name__ == '__main__':
     Test EKF
     '''
 
-    ins
+    ins_filter = OPENSHOE.PdrEkf.ZUPTaidedIns(settings=t_setting)
+    ins_filter.init_Nav_eq(out_data[1:40,1:7],out_data[1:40,1:7])
 
+    u1 = out_data[:,1:7]
+    u2 = u1
+
+    zupt1 = zupt2 = zupt_result
+
+    all_x = np.zeros([18,out_data.shape[0]])
+
+    for index in range(u1.shape[0]):
+        if(index % 100 ==0):
+            print("finished : " + str(float(index) / u1.shape[0]))
+        # if index > 1:
+        #     ins_filter.para.TS = out_data[index,0]-out_data[index-1,0]
+        all_x[:,index] = ins_filter.GetPosition(
+            u1[index,:],
+            u2[index,:],
+            zupt1[index,:],
+            zupt2[index,:]
+        ).reshape([18])
+
+    fig = plt.figure()
+    ax = p3.Axes3D(fig)
+    ax.plot(all_x[0,:],all_x[1,:],all_x[2,:])
+    plt.show()
 
 
     plt.show()

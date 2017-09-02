@@ -67,7 +67,7 @@ if __name__ == '__main__':
     fig = plt.figure()
     ax = p3.Axes3D(fig)
     ax.plot(all_x[0,:],all_x[1,:],all_x[2,:])
-    plt.show()
+    # plt.show()
 
 
     plt.show()

@@ -28,8 +28,8 @@ if __name__ == '__main__':
     # t_setting.Ts = 1.0/400.0
     t_setting.Ts = 1.0/100.0
 
-    t_setting.sigma_a /= 1.3
-    t_setting.sigma_g /= 1.3
+    t_setting.sigma_a /= 1.4
+    t_setting.sigma_g /= 1.4
 
     zupt_detector = OPENSHOE.zupt_test.zupte_test(t_setting)
 

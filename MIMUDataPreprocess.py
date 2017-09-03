@@ -17,7 +17,7 @@ if __name__ == '__main__':
 
     out_data = np.zeros([src_data.shape[0],10])
 
-    out_data[:,1:7] = src_data[:,4:10]
+    out_data[:,1:7] = src_data[:,3:9]
 
 
     np.savetxt("/home/steve/XsensData/1Imu.csv",out_data,delimiter=',')

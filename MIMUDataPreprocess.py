@@ -19,6 +19,8 @@ if __name__ == '__main__':
 
     out_data[:,1:7] = src_data[:,3:9]
 
+    out_data[:,3] *= -1.0
+    out_data[:,7] *= -1.0
     out_data[:,4:7] /= 180.0*np.pi
 
 

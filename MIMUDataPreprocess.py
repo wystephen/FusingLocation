@@ -33,6 +33,13 @@ if __name__ == '__main__':
     t_setting.sigma_a /= 1.2
     t_setting.sigma_g /= 1.3
 
+    t_setting.sigma_acc *= 1.3
+    t_setting.sigma_gyro *= 1.3
+
+    t_setting.init_heading = t_setting.init_heading1 = t_setting.init_heading2 = 0.0
+
+
+
     zupt_detector = OPENSHOE.zupt_test.zupte_test(t_setting)
 
     zupt_result = zupt_detector.GLRT_Detector(out_data[:,1:7])

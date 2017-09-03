@@ -30,8 +30,8 @@ if __name__ == '__main__':
     # t_setting.Ts = 1.0/400.0
     t_setting.Ts = 1.0/100.0
 
-    t_setting.sigma_a /= 1.2
-    t_setting.sigma_g /= 1.3
+    t_setting.sigma_a /= 1.5
+    t_setting.sigma_g /= 1.5
 
     t_setting.sigma_acc *= 1.3
     t_setting.sigma_gyro *= 1.3

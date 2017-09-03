@@ -24,6 +24,8 @@ if __name__ == '__main__':
     t_setting = OPENSHOE.Setting.settings()
     t_setting.Ts = 1.0/400.0
 
+
+
     zupt_detector = OPENSHOE.zupt_test.zupte_test(t_setting)
 
     zupt_result = zupt_detector.GLRT_Detector(out_data[:,1:7])

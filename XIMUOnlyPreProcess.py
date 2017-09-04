@@ -26,8 +26,13 @@ if __name__ == '__main__':
                 inertialData = inertialData[1:,:]
                 inertialData = inertialData.astype(dtype=np.float)
                 inertialData = inertialData[:,1:]
+
                 inertialData[:,0:3] *=(np.pi / 180.0)
                 inertialData[:,3:6] *=9.81
+
+                tmp_data = inertialData
+                inertialData[:,0:3] = tmp_data[:,3:6]
+                inertialData[:,3:6] = tmp_data[:,0:3]
                 print("inertial Data shape:",
                       inertialData.shape)
 

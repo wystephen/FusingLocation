@@ -9,7 +9,7 @@ import os
 '''
 
 if __name__ == '__main__':
-    dir_name = '/home/steve/Data/XIMU&UWB/2/'
+    dir_name = '/home/steve/Data/XIMU&UWB/1/'
 
     file_list = os.listdir(dir_name)
 
@@ -53,6 +53,8 @@ if __name__ == '__main__':
     ImuData[:,-magData.shape[1]:] = magData[:imu_lens,:]
 
     print(ImuData[0:3,:])
+
+    np.savetxt(dir_name+ 'ImuData.csv',ImuData,fmt='%.18e',delimiter=',')
 
 
 

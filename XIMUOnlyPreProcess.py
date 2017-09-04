@@ -9,7 +9,7 @@ import os
 '''
 
 if __name__ == '__main__':
-    dir_name = '/home/steve/Data/XIMU&UWB/1/'
+    dir_name = '/home/steve/Data/XIMU&UWB/2/'
 
     file_list = os.listdir(dir_name)
 

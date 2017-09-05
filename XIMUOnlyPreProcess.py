@@ -34,7 +34,7 @@ if __name__ == '__main__':
                 inertialData[:, 0:3] *= (np.pi / 180.0)
                 inertialData[:, 3:6] *= 9.81
 
-                tmp_data = inertialData
+                tmp_data = inertialData * 1.0 # pay attention to mem operation of numpy
                 inertialData[:, 0:3] = tmp_data[:, 3:6]
                 inertialData[:, 3:6] = tmp_data[:, 0:3]
                 print("inertial Data shape:",
@@ -110,10 +110,12 @@ if __name__ == '__main__':
     ax.plot(all_x[0, :], all_x[1, :], all_x[2, :])
     # plt.show()
     plt.figure()
+    plt.title("acc")
     plt.plot(ImuData[:, 0:3])
     plt.plot(zupt_result)
 
     plt.figure()
+    plt.title("gyro")
     plt.plot(ImuData[:, 3:6])
     plt.plot(zupt_result)
 

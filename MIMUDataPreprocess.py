@@ -21,7 +21,7 @@ if __name__ == '__main__':
 
     # out_data[:,3] *= -1.0
     # out_data[:,7] *= -1.0
-    # out_data[:,4:7] /= 180.0*np.pi
+    out_data[:,4:7] = out_data[:,4:7] / 180.0*np.pi
 
 
     np.savetxt("/home/steve/XsensData/1Imu.csv",out_data,delimiter=',')
@@ -30,8 +30,8 @@ if __name__ == '__main__':
     # t_setting.Ts = 1.0/400.0
     t_setting.Ts = 1.0/100.0
 
-    t_setting.sigma_a /= 0.9
-    t_setting.sigma_g /= 1.1
+    t_setting.sigma_a *=2.0
+    t_setting.sigma_g *= 2.0
 
     t_setting.sigma_acc = 0.5 * np.ones([3,1])
     t_setting.sigma_gyro = 0.5 * np.ones([3,1]) *np.pi / 180.0

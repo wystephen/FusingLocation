@@ -15,7 +15,7 @@ import mpl_toolkits.mplot3d.axes3d as p3
 '''
 
 if __name__ == '__main__':
-    dir_name = '/home/steve/Data/XIMU&UWB/1/'
+    dir_name = '/home/steve/Data/XIMU&UWB/5/'
 
     file_list = os.listdir(dir_name)
 
@@ -71,8 +71,8 @@ if __name__ == '__main__':
     # t_setting.Ts = 1.0/400.0
     t_setting.Ts = 1.0 / 128.0
 
-    t_setting.sigma_a *= 1.0
-    t_setting.sigma_g *= 1.0
+    t_setting.sigma_a *= 0.8
+    t_setting.sigma_g *= 0.8
 
     # t_setting.sigma_acc = 0.5 * np.ones([3,1])
     # t_setting.sigma_gyro = 0.5 * np.ones([3,1]) *np.pi / 180.0

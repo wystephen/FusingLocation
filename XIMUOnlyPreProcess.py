@@ -71,8 +71,8 @@ if __name__ == '__main__':
     # t_setting.Ts = 1.0/400.0
     t_setting.Ts = 1.0 / 128.0
 
-    t_setting.sigma_a *= 0.8
-    t_setting.sigma_g *= 0.8
+    t_setting.sigma_a *= 1.8
+    t_setting.sigma_g *= 1.8
 
     # t_setting.sigma_acc = 0.5 * np.ones([3,1])
     # t_setting.sigma_gyro = 0.5 * np.ones([3,1]) *np.pi / 180.0

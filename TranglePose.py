@@ -38,8 +38,9 @@ class trianglepose:
         val = 0.0
         for j in range(self.range_list.shape[0]):
             for i in range(self.beaconset.shape[0]):
-                val += np.abs(np.linalg.norm(self.beaconset[i, :] - pose)
-                              - self.range_list[j, i])
+                if self.range_list[j, i] > 0:
+                    val += np.abs(np.linalg.norm(self.beaconset[i, :] - pose)
+                                  - self.range_list[j, i])
         return (val * 1.0
                 / float(self.range_list.shape[0])
                 / float(self.beaconset.shape[0]))
